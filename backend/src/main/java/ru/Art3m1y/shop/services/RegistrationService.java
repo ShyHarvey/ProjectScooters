@@ -2,6 +2,7 @@ package ru.Art3m1y.shop.services;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.Art3m1y.shop.models.Person;
 import ru.Art3m1y.shop.repositories.PersonRepository;
 
@@ -17,10 +18,12 @@ public class RegistrationService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional(readOnly = true)
     public boolean findByName(String username) {
         return personRepository.findByUsername(username).isPresent() ? true : false;
     }
 
+    @Transactional()
     public void save(Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         person.setRole("ROLE_USER");
