@@ -9,6 +9,10 @@ public class ResponseWithTokensDTO {
         this.refreshToken = refreshToken;
     }
 
+    public ResponseWithTokensDTO(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     public String getAccessToken() {
         return accessToken;
     }

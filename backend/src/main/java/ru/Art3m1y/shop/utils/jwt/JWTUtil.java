@@ -3,7 +3,9 @@ package ru.Art3m1y.shop.utils.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.persistence.Version;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,6 +91,10 @@ public class JWTUtil {
 
     public long getIdFromRefreshToken(String token) {
         return verifierForRefreshToken.verify(token).getClaim("id").asLong();
+    }
+
+    public String getRoleFromRefreshToken(String token) {
+        return verifierForRefreshToken.verify(token).getClaim("role").asString();
     }
 
 }

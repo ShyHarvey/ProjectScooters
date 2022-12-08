@@ -43,6 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/showuserinfo").fullyAuthenticated()
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement()

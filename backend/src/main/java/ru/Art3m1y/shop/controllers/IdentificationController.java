@@ -22,14 +22,12 @@ import ru.Art3m1y.shop.security.PersonDetails;
 import ru.Art3m1y.shop.services.AuthenticationService;
 import ru.Art3m1y.shop.services.RefreshTokenService;
 import ru.Art3m1y.shop.services.RegistrationService;
-import ru.Art3m1y.shop.utils.exceptions.AuthenticationPersonException;
-import ru.Art3m1y.shop.utils.exceptions.ErrorResponse;
-import ru.Art3m1y.shop.utils.exceptions.LogoutPersonException;
-import ru.Art3m1y.shop.utils.exceptions.RegistrationPersonException;
+import ru.Art3m1y.shop.utils.exceptions.*;
 import ru.Art3m1y.shop.utils.jwt.JWTUtil;
 import ru.Art3m1y.shop.utils.validators.RegistrationValidator;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -110,6 +108,24 @@ public class IdentificationController {
         throw new LogoutPersonException();
     }
 
+    @GetMapping("/showuserinfo")
+    public Person showUserInfo() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return ((PersonDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
+    }
+
+    @GetMapping("/refreshtoken")
+    public ResponseEntity<ResponseWithTokensDTO> refreshToken(@CookieValue Optional<String> refreshToken) {
+        if (refreshToken.isPresent() && jwtUtil.verifyRefreshToken(refreshToken.get()) && refreshTokenService.existsById(jwtUtil.getIdFromRefreshToken(refreshToken.get()))) {
+            String refreshTokenPresented = refreshToken.get();
+            String username = jwtUtil.getUsernameFromRefreshToken(refreshTokenPresented);
+            String role = jwtUtil.getRoleFromRefreshToken(refreshTokenPresented);
+            return new ResponseEntity<>(new ResponseWithTokensDTO(jwtUtil.generateAccessToken(username, role)), HttpStatus.OK);
+        }
+
+        throw new RefreshTokenNotValidException();
+    }
+
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handlerException(RegistrationPersonException e) {
         ErrorResponse response = new ErrorResponse(e.getMessage(), System.currentTimeMillis());
@@ -131,6 +147,12 @@ public class IdentificationController {
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handlerException(LogoutPersonException e) {
         ErrorResponse response = new ErrorResponse("Токен обновления не смог пройти валидацию, либо он уже является не актуальным.", System.currentTimeMillis());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(RefreshTokenNotValidException e) {
+        ErrorResponse response = new ErrorResponse("Токен обновления не смог пройти валидацию, либо он уже является не актуальным", System.currentTimeMillis());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
