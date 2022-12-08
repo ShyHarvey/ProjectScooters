@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.persistence.Version;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,29 +17,78 @@ import java.util.List;
 
 @Component
 public class JWTUtil {
-    @Value("${jwt.secret.key}")
-    private String jwtSecretKey;
+    private String secretKeyForAccess = "ASLJHD123IAD8123I";
+    private String secretKeyForRefresh = "ASLJHD123IAMSDK";
+    private String subject = "Identification details";
+    private String issuer = "Art3m1y";
+    private Algorithm signAccessToken = Algorithm.HMAC256(secretKeyForAccess);
+    private Algorithm signRefreshToken = Algorithm.HMAC256(secretKeyForRefresh);
+    private JWTVerifier verifierForAccessToken = JWT.require(signAccessToken)
+            .withIssuer(issuer)
+            .withSubject(subject)
+            .build();
+    private JWTVerifier verifierForRefreshToken = JWT.require(signRefreshToken)
+            .withIssuer(issuer)
+            .withSubject(subject)
+            .build();
+    private Date expirationAccessDate = Date.from(ZonedDateTime.now().plusMinutes(30).toInstant());
+    private Date expirationRefreshDate = Date.from(ZonedDateTime.now().plusDays(3).toInstant());
 
-    public String generateToken(String username, String role) {
-        Date expirationDate = Date.from(ZonedDateTime.now().plusDays(7).toInstant());
 
+
+    public String generateAccessToken(String username, String role) {
         return JWT.create()
-                .withSubject("Authentication details")
-                .withExpiresAt(expirationDate)
+                .withSubject(subject)
+                .withExpiresAt(expirationAccessDate)
                 .withIssuedAt(new Date())
-                .withIssuer("Art3m1y")
+                .withIssuer(issuer)
                 .withClaim("username", username)
                 .withClaim("role", role)
-                .sign(Algorithm.HMAC256(jwtSecretKey));
+                .sign(signAccessToken);
     }
 
-    public String validateTokenAndGetClaims(String token) throws JWTVerificationException {
-        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(jwtSecretKey))
-                .withSubject("Authentication details")
-                .withIssuer("Art3m1y")
-                .build();
-        DecodedJWT jwtToken = verifier.verify(token);
-        return jwtToken.getClaim("username").asString();
+    public String generateRefreshToken(String username, String role, long id) {
+        return JWT.create()
+                .withSubject(subject)
+                .withExpiresAt(expirationRefreshDate)
+                .withIssuedAt(new Date())
+                .withIssuer(issuer)
+                .withClaim("username", username)
+                .withClaim("role", role)
+                .withClaim("id", id)
+                .sign(signRefreshToken);
+    }
+
+    public boolean verifyAccessToken(String token) {
+        try {
+            verifierForAccessToken.verify(token);
+            return true;
+        } catch (JWTVerificationException e) {
+            System.out.println("Invalid access JWT token");
+            return false;
+        }
+    }
+
+    public boolean verifyRefreshToken(String token) {
+        try {
+            verifierForRefreshToken.verify(token);
+            return true;
+        } catch (JWTVerificationException e) {
+            System.out.println("Invalid refresh JWT token");
+            return false;
+        }
+    }
+
+    public String getUsernameFromAccessToken(String token) {
+        return verifierForAccessToken.verify(token).getClaim("username").asString();
+    }
+
+    public String getUsernameFromRefreshToken(String token) {
+        return verifierForRefreshToken.verify(token).getClaim("username").asString();
+    }
+
+    public long getIdFromRefreshToken(String token) {
+        return verifierForRefreshToken.verify(token).getClaim("id").asLong();
     }
 
 }

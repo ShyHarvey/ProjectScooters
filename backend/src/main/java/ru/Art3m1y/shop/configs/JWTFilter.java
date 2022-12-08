@@ -38,7 +38,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT Token");
             } else {
                 try {
-                    String username = jwtUtil.validateTokenAndGetClaims(JWTToken);
+                    String username = jwtUtil.getUsernameFromAccessToken(JWTToken);
 
                     UserDetails personDetails = personDetailsService.loadUserByUsername(username);
 

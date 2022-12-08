@@ -44,6 +44,8 @@ public class Person {
     private Date createdAt;
     @Column
     private String role;
+    @OneToOne(mappedBy = "person")
+    private RefreshToken refreshToken;
 
     public Person() {
     }
@@ -126,5 +128,13 @@ public class Person {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public RefreshToken getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(RefreshToken refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
