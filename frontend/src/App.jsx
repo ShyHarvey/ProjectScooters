@@ -7,6 +7,7 @@ import Header from './components/header/Header';
 import LoginForm from './components/loginForm/LoginForm';
 import { useDispatch } from 'react-redux';
 import RegistrationForm from './components/registrationForm/registrationForm';
+import Catalog from './components/catalog/Catalog';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route path='/login' element={<LoginForm />} />
           <Route path='/registration' element={<RegistrationForm />} />
+          <Route path='/catalog' element={<Catalog />} />
         </Routes>
       </Router>
     </div>

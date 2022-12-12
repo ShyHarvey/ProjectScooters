@@ -4,14 +4,14 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from "react-bootstrap/esm/Container";
 import './registrationForm.scss'
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import Countries from './countries';
 
 
 
 function RegistrationForm() {
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const {
         register,
         formState: {

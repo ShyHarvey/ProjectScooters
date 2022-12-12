@@ -18,7 +18,7 @@ const Header = () => {
         <Container className='mb-4'>
             <Container className='d-flex justify-content-between pt-3 mb-2'>
                 <p className='logo m-0'>KUGOO</p>
-                <Button className='mx-2 px-3'>Каталог</Button>
+                <NavLink className='navlink px-2 mx-2'  to='/catalog'>Каталог</NavLink>
                 <InputGroup className='searchInput' >
                     <Form.Control
                         placeholder="Поиск"
@@ -36,8 +36,8 @@ const Header = () => {
                     </svg>
                 </Button>
                     : <>
-                    <NavLink className='btn btn-outline-primary vertical-center' to='/login'>Войти</NavLink>
-                    <NavLink className='btn btn-outline-primary vertical-center' to='/registration'>Регистрация</NavLink>
+                    <NavLink className='navlink px-2 mx-2' to='/login'>Войти</NavLink>
+                    <NavLink className='navlink px-2 mx-2' to='/registration'>Регистрация</NavLink>
                     </>}
             </Container>
             <Nav fill variant="tabs" defaultActiveKey="/home">
