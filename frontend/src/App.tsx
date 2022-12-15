@@ -5,19 +5,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.scss'
 import Header from './components/header/Header';
 import LoginForm from './components/loginForm/LoginForm';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from './redux/hooks';
 import RegistrationForm from './components/registrationForm/registrationForm';
 import Catalog from './components/catalog/Catalog';
+import NotFound from './components/notFound/NotFound';
 
-function App() {
+const App: React.FC = () => {
 
-  // const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  // useEffect(()=>{
-  //   if (localStorage.getItem('token')){
-  //     dispatch(checkAuth())
-  //   }
-  // },[dispatch])
+  useEffect(()=>{
+    if (localStorage.getItem('token')){
+      dispatch(checkAuth())
+    }
+  },[dispatch])
 
 
   return (
@@ -25,9 +26,11 @@ function App() {
       <Router>
         <Header />
         <Routes>
+          <Route path='/' element={<Catalog />} />
           <Route path='/login' element={<LoginForm />} />
           <Route path='/registration' element={<RegistrationForm />} />
-          <Route path='/catalog' element={<Catalog />} />
+
+          <Route path='*' element={<NotFound/>} />
         </Routes>
       </Router>
     </div>

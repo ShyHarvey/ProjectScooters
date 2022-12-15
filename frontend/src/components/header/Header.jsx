@@ -18,7 +18,7 @@ const Header = () => {
         <Container className='mb-4'>
             <Container className='d-flex justify-content-between pt-3 mb-2'>
                 <p className='logo m-0'>KUGOO</p>
-                <NavLink className='navlink px-2 mx-2'  to='/catalog'>Каталог</NavLink>
+                <NavLink className='navlink px-2 mx-2'  to='/'>Каталог</NavLink>
                 <InputGroup className='searchInput' >
                     <Form.Control
                         placeholder="Поиск"

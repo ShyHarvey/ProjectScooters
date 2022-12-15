@@ -1,16 +1,18 @@
 import React from 'react';
-import { useForm } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from "react-bootstrap/esm/Container";
 import './loginForm.scss'
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../redux/hooks';
 import { fetchLogin } from '../../redux/authReducer';
+import { LoginData } from '../../http/axios';
 
 
 function LoginForm() {
+    type FormInputs = LoginData
 
-const dispatch = useDispatch()
+const dispatch = useAppDispatch()
     const {
         register,
         formState: {
@@ -18,9 +20,9 @@ const dispatch = useDispatch()
             isValid,
         },
         handleSubmit,
-    } = useForm({ mode: "onBlur" });
+    } = useForm<FormInputs>({ mode: "onBlur" });
 
-    const onSubmit = (data) => {
+    const onSubmit:SubmitHandler<FormInputs> = (data) => {
         console.log(data)
         dispatch(fetchLogin(data))
     }

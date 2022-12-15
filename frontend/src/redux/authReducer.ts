@@ -1,17 +1,25 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { API_URL, authApi } from '../http/axios'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import { API_URL, authApi, LoginData, RegistrationData } from '../http/axios'
 import jwt_decode from "jwt-decode";
 import axios from 'axios';
-const initialState = {
+
+type AuthState = {
+    id: number | null;
+    username: string | null;
+    isAuth: boolean;
+    loading: boolean;
+}
+
+
+const initialState: AuthState = {
     id: null,
     username: null,
     isAuth: false,
     loading: false,
 }
 
-export const fetchRegistration = createAsyncThunk('auth/fetchRegistration',
+export const fetchRegistration = createAsyncThunk<void, RegistrationData>('auth/fetchRegistration',
     async (data, { dispatch }) => {
-        try {
             const response = await authApi.registration(data)
             console.log(response)
             localStorage.setItem('token', response.data.token)
@@ -20,12 +28,9 @@ export const fetchRegistration = createAsyncThunk('auth/fetchRegistration',
             // dispatch(setUsername(response.data.username))
             // dispatch(setUsername(response.data.id))
             // dispatch(setIsAuth(true))
-        } catch (error) {
-            console.log(error)
-        }
     })
 
-export const fetchLogin = createAsyncThunk('auth/fetchLogin',
+export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
     async (data, { dispatch }) => {
         try {
             const response = await authApi.login(data)
@@ -39,9 +44,9 @@ export const fetchLogin = createAsyncThunk('auth/fetchLogin',
         }
     })
 export const fetchLogout = createAsyncThunk('auth/fetchLogout',
-    async (data, {dispatch}) => {
+    async (data, { dispatch }) => {
         try {
-            const response = await authApi.logout(data)
+            const response = await authApi.logout()
             console.log(response)
             localStorage.removeItem('token')
             dispatch(setUsername(null))
@@ -52,7 +57,7 @@ export const fetchLogout = createAsyncThunk('auth/fetchLogout',
         }
     })
 export const checkAuth = createAsyncThunk('auth/checkAuth',
-    async (  _, { dispatch }) => {
+    async (_, { dispatch }) => {
         try {
             const response = await axios.get(`${API_URL}auth/refresh`, { withCredentials: true })
             console.log(response)
@@ -69,13 +74,13 @@ export const authSLice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setIsAuth(state) {
-            state.isAuth = true
+        setIsAuth(state, action: PayloadAction<boolean>) {
+            state.isAuth = action.payload
         },
-        setUserId(state, action) {
+        setUserId(state, action: PayloadAction<number | null>) {
             state.id = action.payload
         },
-        setUsername(state, action) {
+        setUsername(state, action: PayloadAction<string | null>) {
             debugger
             state.username = action.payload
         }

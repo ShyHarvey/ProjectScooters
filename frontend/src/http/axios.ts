@@ -7,7 +7,7 @@ const apiInstance = axios.create({
     baseURL: API_URL,
 })
 
-apiInstance.interceptors.request.use((config) => {
+apiInstance.interceptors.request.use((config:any) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
     return config;
 })
@@ -23,21 +23,33 @@ apiInstance.interceptors.response.use((config)=> {
             localStorage.setItem('token', response.data.accessToken);
             return apiInstance.request(originalRequest);
         }
-    } catch (error) {
-        console.log(error?.response?.status);
+    } catch (error: any) {
+        console.log(error);
     }
     throw error;
 })
 
+export interface LoginData{
+    username: string;
+    password: string;
+}
+
+export interface RegistrationData{
+    email: string;
+    username: string;
+    password: string;
+}
+
+
 export const authApi = {
-    login(data) {
+    login(data: LoginData) {
         return apiInstance.post('/login', { data })
             .then(response => response.data)
     },
     logout() {
         return apiInstance.delete('/logout')
     },
-    registration(data) {
+    registration(data: RegistrationData) {
         return apiInstance.post('/register', { data })
             .then(response => response.data)
     },
