@@ -7,8 +7,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Nav from 'react-bootstrap/Nav';
 import { useAppSelector } from '../../redux/hooks';
 import { NavLink } from "react-router-dom";
-// import { HandySvg } from 'handy-svg';
-// import SearchSVG from '../../assets/search.svg'
+
 
 const Header = () => {
 
