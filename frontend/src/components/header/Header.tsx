@@ -5,14 +5,14 @@ import { Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Nav from 'react-bootstrap/Nav';
-import { useSelector } from "react-redux";
+import { useAppSelector } from '../../redux/hooks';
 import { NavLink } from "react-router-dom";
 // import { HandySvg } from 'handy-svg';
 // import SearchSVG from '../../assets/search.svg'
 
 const Header = () => {
 
-    const isAuth = useSelector(store => store.auth.isAuth)
+    const isAuth = useAppSelector(store => store.auth.isAuth)
 
     return (
         <Container className='mb-4'>

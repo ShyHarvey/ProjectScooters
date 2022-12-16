@@ -8,9 +8,9 @@ import { useAppDispatch } from '../../redux/hooks';
 import { fetchLogin } from '../../redux/authReducer';
 import { LoginData } from '../../http/axios';
 
+type FormInputs = LoginData
 
 function LoginForm() {
-    type FormInputs = LoginData
 
 const dispatch = useAppDispatch()
     const {

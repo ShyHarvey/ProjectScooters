@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from "react-bootstrap/esm/Container";
@@ -7,7 +7,9 @@ import './registrationForm.scss'
 // import { useDispatch } from 'react-redux';
 import Countries from './countries';
 
+import { RegistrationData } from '../../http/axios';
 
+type RegistrationFormData = RegistrationData;
 
 function RegistrationForm() {
 
@@ -19,11 +21,10 @@ function RegistrationForm() {
             isValid,
         },
         handleSubmit,
-    } = useForm({ mode: "onBlur" });
+    } = useForm<RegistrationFormData>({ mode: "onBlur" });
 
-    const onSubmit = (data) => {
+    const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
         console.log(data)
-
     }
 
     return (
@@ -46,7 +47,7 @@ function RegistrationForm() {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicDate">
                     <Form.Label className='me-3'>Date of birth</Form.Label>
-                    <input className='form-control' type="date"  {...register("date")} />
+                    <input className='form-control' type="date"  {...register("yearOfBirth")} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email</Form.Label>
@@ -60,6 +61,13 @@ function RegistrationForm() {
                     <Form.Select aria-label="Default select example" {...register("country")}>
                         <Countries />
                     </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicUsername">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" placeholder="username" {...register('username', { required: true })} />
+                    <Form.Text className="text-muted">
+                        {errors?.name && "Обязательное поле"}
+                    </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>

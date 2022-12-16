@@ -29,13 +29,17 @@ apiInstance.interceptors.response.use((config)=> {
     throw error;
 })
 
-export interface LoginData{
+export type LoginData = {
     username: string;
     password: string;
 }
 
-export interface RegistrationData{
+export type RegistrationData = {
+    name: string;
+    surname: string;
+    yearOfBirth: string;
     email: string;
+    country: string;
     username: string;
     password: string;
 }
