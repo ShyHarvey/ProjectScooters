@@ -4,16 +4,24 @@ import jwt_decode from "jwt-decode";
 import axios from 'axios';
 
 type AuthState = {
-    id: number | null;
-    username: string | null;
-    isAuth: boolean;
-    loading: boolean;
+    id: number | null,
+    username: string | null,
+    role: 'ROLE_USER'| 'ROLE_ADMIN' | null,
+    isAuth: boolean,
+    loading: boolean,
+}
+
+type AccessTokenDecoded ={
+    email: string,
+    iss: string,
+    role: 'ROLE_USER'| 'ROLE_ADMIN',
 }
 
 
 const initialState: AuthState = {
     id: null,
     username: null,
+    role: null,
     isAuth: false,
     loading: false,
 }
@@ -22,22 +30,21 @@ export const fetchRegistration = createAsyncThunk<void, RegistrationData>('auth/
     async (data, { dispatch }) => {
             const response = await authApi.registration(data)
             console.log(response)
-            localStorage.setItem('token', response.data.token)
-            let userData = jwt_decode(response.data.token)
-            console.log(userData)
-            // dispatch(setUsername(response.data.username))
-            // dispatch(setUsername(response.data.id))
-            // dispatch(setIsAuth(true))
+            localStorage.setItem('token', response.data.accessToken)
+            let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
+            dispatch(setUsername(userData.iss))
+            dispatch(setRole(userData.role))
+            dispatch(setIsAuth(true))
     })
 
 export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
     async (data, { dispatch }) => {
         try {
-            const response = await authApi.login(data)
-            console.log(response)
-            localStorage.setItem('token', response.data.token)
-            dispatch(setUsername(response.data.username))
-            dispatch(setUsername(response.data.id))
+            const response = await authApi.login(data.email, data.password)
+            localStorage.setItem('token', response.data.accessToken)
+            let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
+            dispatch(setUsername(userData.iss))
+            dispatch(setRole(userData.role))
             dispatch(setIsAuth(true))
         } catch (error) {
             console.log(error)
@@ -51,6 +58,7 @@ export const fetchLogout = createAsyncThunk('auth/fetchLogout',
             localStorage.removeItem('token')
             dispatch(setUsername(null))
             dispatch(setUsername(null))
+            dispatch(setRole(null))
             dispatch(setIsAuth(false))
         } catch (error) {
             console.log(error)
@@ -59,11 +67,11 @@ export const fetchLogout = createAsyncThunk('auth/fetchLogout',
 export const checkAuth = createAsyncThunk('auth/checkAuth',
     async (_, { dispatch }) => {
         try {
-            const response = await axios.get(`${API_URL}auth/refresh`, { withCredentials: true })
-            console.log(response)
+            const response = await axios.get(`${API_URL}auth/refreshtoken`, { withCredentials: true })
             localStorage.setItem('token', response.data.token)
-            dispatch(setUsername(response.data.username))
-            dispatch(setUsername(response.data.id))
+            let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
+            dispatch(setUsername(userData.iss))
+            dispatch(setRole(userData.role))
             dispatch(setIsAuth(true))
         } catch (error) {
             console.log(error)
@@ -81,8 +89,10 @@ export const authSLice = createSlice({
             state.id = action.payload
         },
         setUsername(state, action: PayloadAction<string | null>) {
-            debugger
             state.username = action.payload
+        },
+        setRole(state, action: PayloadAction<'ROLE_USER'| 'ROLE_ADMIN' | null>) {
+            state.role = action.payload
         }
     },
     extraReducers: builder => {
@@ -109,4 +119,4 @@ export const authSLice = createSlice({
 
 
 export default authSLice.reducer
-export const { setIsAuth, setUserId, setUsername } = authSLice.actions
+export const { setIsAuth, setUserId, setUsername, setRole } = authSLice.actions
