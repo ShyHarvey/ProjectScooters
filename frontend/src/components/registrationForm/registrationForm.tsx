@@ -4,16 +4,19 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from "react-bootstrap/esm/Container";
 import './registrationForm.scss'
-// import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../redux/hooks';
 import Countries from './countries';
+import { fetchRegistration } from '../../redux/authReducer';
+import { useAppSelector } from '../../redux/hooks';
+import { Navigate } from 'react-router-dom';
 
 import { RegistrationData } from '../../http/axios';
 
 type RegistrationFormData = RegistrationData;
 
 function RegistrationForm() {
-
-    // const dispatch = useDispatch()
+    const isAuth = useAppSelector(state=> state.auth.isAuth)
+    const dispatch = useAppDispatch()
     const {
         register,
         formState: {
@@ -25,14 +28,19 @@ function RegistrationForm() {
 
     const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
         console.log(data)
+        data.yearOfBirth = 2015;
+        dispatch(fetchRegistration(data))
     }
+    if(isAuth){
+        return <Navigate to='/'/>
+     } 
 
     return (
-        <Container className='loginFormContainer'>
+        <Container>
             <h2>Registration</h2>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="mb-3" controlId="formBasicName">
-                    <Form.Label>Username</Form.Label>
+                    <Form.Label>Name</Form.Label>
                     <Form.Control type="text" placeholder="name" {...register('name', { required: true })} />
                     <Form.Text className="text-muted">
                         {errors?.name && "Обязательное поле"}

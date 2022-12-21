@@ -1,25 +1,27 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
-export const API_URL = 'http://localhost:5000/'
+export const API_URL = 'http://localhost:7574/'
 
 const apiInstance = axios.create({
     withCredentials: true,
     baseURL: API_URL,
 })
 
-apiInstance.interceptors.request.use((config:any) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+apiInstance.interceptors.request.use((config) => {
+    if (config.headers){
+        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+    }
     return config;
 })
 
-apiInstance.interceptors.response.use((config)=> {
+apiInstance.interceptors.response.use((config) => {
     return config;
 }, async (error) => {
     try {
         const originalRequest = error.config;
-        if (error.response.status === 401 && error.config && !error.config._isRetry){
+        if (error.response.status === 401 && error.config && !error.config._isRetry) {
             originalRequest._isRetry = true;
-            const response = await axios.get(`${API_URL}auth/refresh`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}auth/refreshtoken`, { withCredentials: true });
             localStorage.setItem('token', response.data.accessToken);
             return apiInstance.request(originalRequest);
         }
@@ -30,32 +32,34 @@ apiInstance.interceptors.response.use((config)=> {
 })
 
 export type LoginData = {
-    username: string;
-    password: string;
+    email: string,
+    password: string,
 }
 
 export type RegistrationData = {
-    name: string;
-    surname: string;
-    yearOfBirth: string;
-    email: string;
-    country: string;
-    username: string;
-    password: string;
+    name: string,
+    surname: string,
+    yearOfBirth: number,
+    email: string,
+    country: string,
+    username: string,
+    password: string,
+}
+
+type AuthResponse = {
+    accessToken: string;
 }
 
 
 export const authApi = {
-    login(data: LoginData) {
-        return apiInstance.post('/login', { data })
-            .then(response => response.data)
+   async login(email: string, password: string ): Promise<AxiosResponse<AuthResponse>>{
+        return apiInstance.post<AuthResponse>('auth/login', { email, password })
     },
-    logout() {
-        return apiInstance.delete('/logout')
+    logout(): Promise<void>  {
+        return apiInstance.get('/auth/logout')
     },
-    registration(data: RegistrationData) {
-        return apiInstance.post('/register', { data })
-            .then(response => response.data)
+    registration(data: RegistrationData): Promise<AxiosResponse<AuthResponse>>  {
+        return apiInstance.post<AuthResponse>('auth/registration', { ...data })
     },
 
-}
+} 

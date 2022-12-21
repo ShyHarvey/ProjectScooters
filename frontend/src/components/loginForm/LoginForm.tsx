@@ -7,10 +7,13 @@ import './loginForm.scss'
 import { useAppDispatch } from '../../redux/hooks';
 import { fetchLogin } from '../../redux/authReducer';
 import { LoginData } from '../../http/axios';
+import { Navigate } from 'react-router-dom';
+import { useAppSelector } from '../../redux/hooks';
 
-type FormInputs = LoginData
 
 function LoginForm() {
+
+    const isAuth = useAppSelector(state=> state.auth.isAuth)
 
 const dispatch = useAppDispatch()
     const {
@@ -20,22 +23,25 @@ const dispatch = useAppDispatch()
             isValid,
         },
         handleSubmit,
-    } = useForm<FormInputs>({ mode: "onBlur" });
+    } = useForm<LoginData>({ mode: "onBlur" });
 
-    const onSubmit:SubmitHandler<FormInputs> = (data) => {
+    const onSubmit:SubmitHandler<LoginData> = (data) => {
         console.log(data)
         dispatch(fetchLogin(data))
     }
 
+    if(isAuth){
+       return <Navigate to='/'/>
+    } 
     return (
         <Container className='loginFormContainer'>
             <h2>Log in</h2>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="mb-3" controlId="formBasicUsername">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter username" {...register('username', { required: true })} />
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="text" placeholder="Email" {...register('email', { required: true })} />
                     <Form.Text className="text-muted">
-                        {errors?.username && "Обязательное поле"}
+                        {errors?.email && "Обязательное поле"}
                     </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
