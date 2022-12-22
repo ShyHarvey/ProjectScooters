@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { NavLink } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Box, TextField, IconButton } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, TextField, IconButton, Badge } from '@mui/material'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -24,7 +24,7 @@ export const HeaderMUI: React.FC<{}> = () => {
     return (
         <AppBar sx={{ mb: 2 }} position='static' color='secondary'>
             <Container>
-                <Toolbar sx={{px: 0}}>
+                <Toolbar sx={{ px: 0 }}>
 
                     <Typography
                         variant='h4'
@@ -47,8 +47,10 @@ export const HeaderMUI: React.FC<{}> = () => {
 
                     {isAuth ?
                         <>
-                            <IconButton color="primary" aria-label="add to shopping cart">
-                                <ShoppingCartIcon />
+                            <IconButton color="primary" aria-label="open shopping cart">
+                                <Badge  badgeContent={100} max={99} color="primary">
+                                    <ShoppingCartIcon fontSize="large" />
+                                </Badge>
                             </IconButton>
                             <Button onClick={logout} variant="contained" sx={{ mx: 2 }}>
                                 Выйти

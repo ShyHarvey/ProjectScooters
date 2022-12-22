@@ -5,7 +5,7 @@ import "@fontsource/jost/400.css"
 import "@fontsource/jost/500.css"
 import "@fontsource/jost/600.css"
 import "@fontsource/jost/700.css"
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import './app.scss'
 import { useAppDispatch } from './redux/hooks';
 import Catalog from './components/catalog/Catalog';

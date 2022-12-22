@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container } from 'react-bootstrap'
+import { Container } from '@mui/material';
 import notFoundImg from '../../assets/NotFound.jpg'
 import styles from './notFound.module.scss'
 
