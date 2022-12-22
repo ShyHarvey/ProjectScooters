@@ -1,9 +1,7 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
-import { Container, TextField } from '@mui/material'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
+import { Container, TextField, Alert, Box, Typography } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { useAppDispatch } from '../../redux/hooks';
 import { useAppSelector } from '../../redux/hooks';
@@ -12,13 +10,17 @@ import { fetchLogin } from '../../redux/authReducer';
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 
+
 const formSchema = z.object({
     email: z.string().email('Введите корректный email'),
     password: z.string().min(1, { message: "Обязательное поле" })
 })
 
 export const LoginFormMUI: React.FC<{}> = () => {
+
     const isAuth = useAppSelector(state => state.auth.isAuth)
+    let axiosError = useAppSelector(state => state.auth.axiosError)
+    let loading = useAppSelector(state=>state.auth.loading)
     const dispatch = useAppDispatch()
     const {
         control,
@@ -35,9 +37,9 @@ export const LoginFormMUI: React.FC<{}> = () => {
     });
 
     const onSubmit: SubmitHandler<LoginData> = (data) => {
-        console.log(data)
         dispatch(fetchLogin(data))
     }
+
     if (isAuth) {
         return <Navigate to='/' />
     }
@@ -69,7 +71,8 @@ export const LoginFormMUI: React.FC<{}> = () => {
                         margin='dense' />}
                 />
 
-                <Button type='submit' variant='contained' sx={{ mt: 2 }}>Login</Button>
+                <LoadingButton loading={loading} type='submit' variant='contained' sx={{ mt: 2 }}>Login</LoadingButton>
+                {axiosError && <Alert severity="error">Неверный логин или пароль</Alert>}
             </Box>
         </Container>
     )

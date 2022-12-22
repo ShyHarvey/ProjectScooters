@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { API_URL, authApi, LoginData, RegistrationData } from '../http/axios'
 import jwt_decode from "jwt-decode";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 type AuthState = {
     id: number | null,
@@ -9,6 +9,7 @@ type AuthState = {
     role: 'ROLE_USER'| 'ROLE_ADMIN' | null,
     isAuth: boolean,
     loading: boolean,
+    axiosError: boolean,
 }
 
 type AccessTokenDecoded ={
@@ -24,12 +25,12 @@ const initialState: AuthState = {
     role: null,
     isAuth: false,
     loading: false,
+    axiosError: false,
 }
 
 export const fetchRegistration = createAsyncThunk<void, RegistrationData>('auth/fetchRegistration',
     async (data, { dispatch }) => {
             const response = await authApi.registration(data)
-            console.log(response)
             localStorage.setItem('token', response.data.accessToken)
             let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
             dispatch(setUsername(userData.iss))
@@ -46,15 +47,16 @@ export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
             dispatch(setUsername(userData.iss))
             dispatch(setRole(userData.role))
             dispatch(setIsAuth(true))
-        } catch (error) {
-            console.log(error)
+            dispatch(setError(false))
+        } catch (err: any|unknown) {
+            let error : AxiosError = err
+            dispatch(setError(error.isAxiosError))
         }
     })
 export const fetchLogout = createAsyncThunk('auth/fetchLogout',
     async (data, { dispatch }) => {
         try {
-            const response = await authApi.logout()
-            console.log(response)
+            await authApi.logout()
             localStorage.removeItem('token')
             dispatch(setUsername(null))
             dispatch(setUsername(null))
@@ -93,6 +95,9 @@ export const authSLice = createSlice({
         },
         setRole(state, action: PayloadAction<'ROLE_USER'| 'ROLE_ADMIN' | null>) {
             state.role = action.payload
+        },
+        setError(state, action:PayloadAction<boolean>){
+            state.axiosError = action.payload
         }
     },
     extraReducers: builder => {
@@ -119,4 +124,4 @@ export const authSLice = createSlice({
 
 
 export default authSLice.reducer
-export const { setIsAuth, setUserId, setUsername, setRole } = authSLice.actions
+export const { setIsAuth, setUserId, setUsername, setRole, setError } = authSLice.actions
