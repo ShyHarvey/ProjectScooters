@@ -1,7 +1,6 @@
 import React from 'react'
 import Container from "react-bootstrap/esm/Container";
 import './header.scss'
-import Nav from 'react-bootstrap/Nav';
 import { useAppSelector } from '../../redux/hooks';
 import { NavLink } from "react-router-dom";
 import { useAppDispatch } from '../../redux/hooks';
@@ -41,27 +40,6 @@ const Header = () => {
                         <NavLink className='navlink px-2 mx-2' to='/registration'>Регистрация</NavLink>
                     </>}
             </Container>
-            <Nav fill variant="tabs" defaultActiveKey="/home">
-                <Nav.Item>
-                    <Nav.Link onClick={(e) => e.preventDefault()} href="/home">О магазине</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="link-1">Доставка и оплата</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="link-2">Тест-драйв</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="link-3">Блог</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="link-4">Контакты</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="link-5">Акции</Nav.Link>
-                </Nav.Item>
-            </Nav>
-
         </Container>
 
     )
