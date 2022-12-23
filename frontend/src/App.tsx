@@ -17,6 +17,7 @@ import { HeaderMUI } from './components/header/HeaderMUI';
 import { LoginFormMUI } from './components/loginForm/LoginFormMUI';
 import { RegistrationFormMUI } from './components/registrationForm/RegistrationFormMUI';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Cart } from './components/cart/Cart';
 
 
 const theme = createTheme({
@@ -51,11 +52,12 @@ const App: React.FC = () => {
             <Route path='/' element={<Catalog />} />
             <Route path='/login' element={<LoginFormMUI />} />
             <Route path='/registration' element={<RegistrationFormMUI />} />
+            <Route path='/cart' element={<Cart />} />
 
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Router>
-      </ThemeProvider>;
+      </ThemeProvider>
     </div>
   );
 }

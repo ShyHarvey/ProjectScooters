@@ -6,7 +6,7 @@ import './catalog.scss'
 
 const Catalog = () => {
     return (
-        <Container className='catalog' sx={{display:'flex'}}>
+        <Container maxWidth='xl' className='catalog' sx={{display:'flex'}}>
             <ProductCardMUI/>
             <ProductCardMUI/>
             <ProductCardMUI/>
