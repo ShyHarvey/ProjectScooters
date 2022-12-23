@@ -30,7 +30,7 @@ export default function ProductCardMUI() {
             <CardMedia
                 sx={{ height: 175 }}
                 image={scooterImage}
-                title="green iguana"
+                title="scooter"
             />
             <CardContent sx={{padding: 0, px: 3}}>
                 <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>

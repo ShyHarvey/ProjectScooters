@@ -22,9 +22,9 @@ export const HeaderMUI: React.FC<{}> = () => {
     const isAuth = useAppSelector(store => store.auth.isAuth)
 
     return (
-        <AppBar sx={{ mb: 2 }} position='static' color='secondary'>
-            <Container>
-                <Toolbar sx={{ px: 0 }}>
+        <AppBar sx={{ mb: 2}} position='static' color='secondary'>
+            <Container maxWidth='xl'>
+                <Toolbar sx={{ padding: 0 }}>
 
                     <Typography
                         variant='h4'
@@ -47,11 +47,13 @@ export const HeaderMUI: React.FC<{}> = () => {
 
                     {isAuth ?
                         <>
-                            <IconButton color="primary" aria-label="open shopping cart">
-                                <Badge  badgeContent={100} max={99} color="primary">
-                                    <ShoppingCartIcon fontSize="large" />
-                                </Badge>
-                            </IconButton>
+                            <NavLink to='/cart'>
+                                <IconButton color="primary" aria-label="open shopping cart">
+                                    <Badge badgeContent={100} max={99} color="primary">
+                                        <ShoppingCartIcon fontSize="large" />
+                                    </Badge>
+                                </IconButton>
+                            </NavLink>
                             <Button onClick={logout} variant="contained" sx={{ mx: 2 }}>
                                 Выйти
                             </Button>
