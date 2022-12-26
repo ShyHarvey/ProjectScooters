@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper, Grid } from '@mui/material';
+// import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import scooterImage from '../../assets/scooter-2.webp'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -12,7 +12,7 @@ import { styled } from '@mui/material/styles';
 
 
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    backgroundColor:'#fff',
     ...theme.typography.body2,
     padding: 0,
     display: 'flex',
@@ -26,7 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function ProductCardMUI() {
     return (
-        <Card sx={{ width: 245, padding: 1,   boxShadow: 'none' }}>
+        <Card sx={{ width: 229, padding: 1,   boxShadow: 'none' }}>
             <CardMedia
                 sx={{ height: 175 }}
                 image={scooterImage}
