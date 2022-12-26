@@ -1,18 +1,34 @@
 import React from 'react'
-import { Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import ProductCardMUI from '../productCard/ProductCardMUI';
 import ProductCardSceleton from '../productCardSceleton/ProductCardSceleton';
-import './catalog.scss'
 
 const Catalog = () => {
     return (
-        <Container maxWidth='xl' className='catalog' sx={{display:'flex'}}>
-            <ProductCardMUI/>
-            <ProductCardMUI/>
-            <ProductCardMUI/>
-            <ProductCardMUI/>
-            <ProductCardSceleton/>
-            <ProductCardSceleton/>
+        <Container maxWidth='xl' >
+            <Typography gutterBottom variant='h4'>Каталог</Typography>
+            <Container maxWidth='xl' sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1 }}>
+                <ProductCardMUI />
+                <ProductCardMUI />
+                <ProductCardMUI />
+                <ProductCardMUI />
+                <ProductCardSceleton />
+                <ProductCardSceleton />
+                <ProductCardMUI />
+                <ProductCardMUI />
+                <ProductCardMUI />
+                <ProductCardSceleton />
+                <ProductCardSceleton />
+                <ProductCardMUI />
+                <ProductCardMUI />
+                <ProductCardMUI />
+                <ProductCardMUI />
+                <ProductCardSceleton />
+                <ProductCardSceleton />
+                <ProductCardMUI />
+                <ProductCardSceleton />
+                <ProductCardSceleton />
+            </Container>
         </Container>
     )
 }

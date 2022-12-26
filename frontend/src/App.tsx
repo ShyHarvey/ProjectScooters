@@ -6,13 +6,9 @@ import "@fontsource/jost/500.css"
 import "@fontsource/jost/600.css"
 import "@fontsource/jost/700.css"
 
-import './app.scss'
 import { useAppDispatch } from './redux/hooks';
 import Catalog from './components/catalog/Catalog';
 import NotFound from './components/notFound/NotFound';
-// import RegistrationForm from './components/registrationForm/registrationForm';
-// import LoginForm from './components/loginForm/LoginForm';
-// import Header from './components/header/Header';
 import { HeaderMUI } from './components/header/HeaderMUI';
 import { LoginFormMUI } from './components/loginForm/LoginFormMUI';
 import { RegistrationFormMUI } from './components/registrationForm/RegistrationFormMUI';

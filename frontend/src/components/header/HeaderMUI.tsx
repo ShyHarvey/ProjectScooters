@@ -1,77 +1,48 @@
 import React from 'react'
 
 import { NavLink } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Box, TextField, IconButton, Badge } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, TextField, IconButton, Badge, } from '@mui/material'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { fetchLogout } from '../../redux/authReducer';
-import { useAppDispatch } from '../../redux/hooks';
-import { useAppSelector } from '../../redux/hooks';
-import { Container } from '@mui/system';
 
+import { Container } from '@mui/system';
+import { UserMenu } from './UserMenu';
+import { BurgerMenu } from './BurgerMenu';
 
 export const HeaderMUI: React.FC<{}> = () => {
 
-
-    const dispatch = useAppDispatch()
-    const logout = () => {
-        dispatch(fetchLogout())
-    }
-
-    const isAuth = useAppSelector(store => store.auth.isAuth)
-
     return (
-        <AppBar sx={{ mb: 2}} position='static' color='secondary'>
+        <AppBar position='sticky' color='secondary'>
             <Container maxWidth='xl'>
                 <Toolbar sx={{ padding: 0 }}>
-
+                   <BurgerMenu/>
                     <Typography
                         variant='h4'
                         component='span'
-                        sx={{ fontWeight: 'bold' }}
+                        sx={{ fontWeight: 'bold', flexGrow: { xs: 1, md: 0 } }}
                     >
                         KUGOO
                     </Typography>
                     <NavLink to='/'>
-                        <Button variant="contained" endIcon={<MenuOpenIcon />} sx={{ mx: 3 }}>
+                        <Button variant="contained" endIcon={<MenuOpenIcon />} sx={{ mx: 3, display: { xs: 'none', md: 'inline-flex' } }}>
                             Каталог
                         </Button>
                     </NavLink>
-                    <Box sx={{ flexGrow: 1 }} component="form" >
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} component="form" >
                         <TextField label="Поиск" size="small" />
                         <IconButton type='submit' >
                             <SearchIcon />
                         </IconButton>
                     </Box>
-
-                    {isAuth ?
-                        <>
-                            <NavLink to='/cart'>
-                                <IconButton color="primary" aria-label="open shopping cart">
-                                    <Badge badgeContent={100} max={99} color="primary">
-                                        <ShoppingCartIcon fontSize="large" />
-                                    </Badge>
-                                </IconButton>
-                            </NavLink>
-                            <Button onClick={logout} variant="contained" sx={{ mx: 2 }}>
-                                Выйти
-                            </Button>
-                        </>
-                        :
-                        <>
-                            <NavLink to='/login'>
-                                <Button variant="contained" sx={{ mx: 2 }}>
-                                    Войти
-                                </Button>
-                            </NavLink>
-                            <NavLink to='/registration'>
-                                <Button variant="contained" sx={{ mx: 2 }}>
-                                    Регистрация
-                                </Button>
-                            </NavLink>
-                        </>
-                    }
+                    <NavLink to='/cart'>
+                        <IconButton color="primary" aria-label="open shopping cart">
+                            <Badge badgeContent={100} max={99} color="error">
+                                <ShoppingCartIcon fontSize="large" />
+                            </Badge>
+                        </IconButton>
+                    </NavLink>
+                    <UserMenu />
                 </Toolbar>
             </Container>
         </AppBar>
