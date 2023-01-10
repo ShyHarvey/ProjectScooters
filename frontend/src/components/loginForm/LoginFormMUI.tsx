@@ -2,11 +2,11 @@ import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { Container, TextField, Alert, Box, Typography } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { useAppDispatch } from '../../redux/hooks';
 import { useAppSelector } from '../../redux/hooks';
 import { LoginData } from '../../http/axios';
 import { fetchLogin } from '../../redux/authReducer';
+import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -20,7 +20,7 @@ export const LoginFormMUI: React.FC<{}> = () => {
 
     const isAuth = useAppSelector(state => state.auth.isAuth)
     let axiosError = useAppSelector(state => state.auth.axiosError)
-    let loading = useAppSelector(state=>state.auth.loading)
+    let loading = useAppSelector(state => state.auth.loading)
     const dispatch = useAppDispatch()
     const {
         control,
@@ -46,8 +46,7 @@ export const LoginFormMUI: React.FC<{}> = () => {
     return (
         <Container maxWidth="sm">
             <Typography variant='h4'>Вход</Typography>
-            <Box
-                component="form" onSubmit={handleSubmit(onSubmit)}>
+            <Box component="form" onSubmit={handleSubmit(onSubmit)}>
                 <Controller
                     name="email"
                     control={control}

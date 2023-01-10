@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { memo } from 'react'
 import {  Button, Box, TextField, IconButton, Menu, MenuItem } from '@mui/material'
 import { NavLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import SearchIcon from '@mui/icons-material/Search';
 
-export const BurgerMenu: React.FC<{}> = () => {
+export const BurgerMenu: React.FC<{}> = memo(() => {
     const [anchorElBurgerMenu, setAnchorElBurgerMenu] = React.useState<null | HTMLElement>(null);
     const openBurgerMenu = Boolean(anchorElBurgerMenu);
     const handleOpenBurgerMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -46,4 +46,4 @@ export const BurgerMenu: React.FC<{}> = () => {
                     </Menu>
         </>
     )
-}
+})

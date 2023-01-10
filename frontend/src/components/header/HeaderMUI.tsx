@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { NavLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, TextField, IconButton, Badge, } from '@mui/material'
@@ -10,13 +10,13 @@ import { Container } from '@mui/system';
 import { UserMenu } from './UserMenu';
 import { BurgerMenu } from './BurgerMenu';
 
-export const HeaderMUI: React.FC<{}> = () => {
+export const HeaderMUI: React.FC<{}> = memo(() => {
 
     return (
         <AppBar position='sticky' color='secondary'>
             <Container maxWidth='xl'>
                 <Toolbar sx={{ padding: 0 }}>
-                   <BurgerMenu/>
+                    <BurgerMenu />
                     <Typography
                         variant='h4'
                         component='span'
@@ -47,4 +47,4 @@ export const HeaderMUI: React.FC<{}> = () => {
             </Container>
         </AppBar>
     )
-}
+})

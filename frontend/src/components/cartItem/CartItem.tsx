@@ -12,11 +12,11 @@ export const CartItem: React.FC<{}> = () => {
 
     const dispatch = useAppDispatch()
 
-    let cost = 10000
+    const cost = 10000
 
-    useEffect (()=>{
+    useEffect(() => {
         dispatch(increaseTotalCost(cost))
-        return ()=>{
+        return () => {
             dispatch(decreaseTotalCost(cost))
         }
     }, [dispatch, cost])
@@ -32,14 +32,14 @@ export const CartItem: React.FC<{}> = () => {
     }
 
     return (
-        <Card sx={{position:'relative', display: 'flex', justifyContent:'center',  mb: 2, flexWrap:'wrap' }}>
+        <Card sx={{ position: 'relative', display: 'flex', justifyContent: 'center', mb: 2, flexWrap: 'wrap' }}>
             <CardMedia
-                sx={{ height: {xs: 175,sm:110}, width: {xs:245,sm:110}, marginRight: 1 }}
+                sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1 }}
                 image={scooterImage}
                 title="scooter"
             />
-            <Box sx={{ display: 'flex', flexDirection:{xs:'column', sm: 'row'} }}>
-                <CardContent sx={{ px: 1, py: 0, minWidth:'222px' }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>
+                <CardContent sx={{ px: 1, py: 0, minWidth: '222px' }}>
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                         Kugoo Kirin M4
                     </Typography>
@@ -56,7 +56,7 @@ export const CartItem: React.FC<{}> = () => {
                         Работа без подзарядки: 5 ч
                     </Typography>
                 </CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mx: 2, justifyContent:'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mx: 2, justifyContent: 'center' }}>
                     <IconButton onClick={decrement} disabled={sum === 1} color="primary">
                         <RemoveIcon />
                     </IconButton>
@@ -68,15 +68,15 @@ export const CartItem: React.FC<{}> = () => {
                     </IconButton>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mx: 2 }}>
-                    <Typography gutterBottom variant="h6" component="div" align='center' sx={{ fontWeight: 'bold', width: '100px', margin:'0 auto'}}>
+                    <Typography gutterBottom variant="h6" component="div" align='center' sx={{ fontWeight: 'bold', width: '100px', margin: '0 auto' }}>
                         {cost * sum}₽
                     </Typography>
                 </Box>
-                
-                    <IconButton color="primary" sx={{position:'absolute', top:0, right: 0}}>
-                        <ClearIcon />
-                    </IconButton>
-                
+
+                <IconButton color="primary" sx={{ position: 'absolute', top: 0, right: 0 }}>
+                    <ClearIcon />
+                </IconButton>
+
             </Box>
         </Card>
     )

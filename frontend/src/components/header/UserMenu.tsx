@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Box, Menu, MenuItem, IconButton, Avatar } from '@mui/material'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { fetchLogout } from '../../redux/authReducer';
 import { NavLink } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
 
-export const UserMenu: React.FC<{}> = () => {
+export const UserMenu: React.FC<{}> = memo(() => {
 
     const isAuth = useAppSelector(store => store.auth.isAuth)
 
@@ -61,4 +61,4 @@ export const UserMenu: React.FC<{}> = () => {
             </Menu>
         </>
     )
-}
+})
