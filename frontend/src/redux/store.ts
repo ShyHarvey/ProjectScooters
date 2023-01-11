@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authReducer";
 import cartReducer from "./cartReducer";
-import scootersCatalogReducer from "./sccotersCatalogReducer";
+import scootersCatalogReducer from "./scootersCatalogReducer";
 
 
 const rootReducer = combineReducers({

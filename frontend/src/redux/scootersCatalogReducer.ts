@@ -4,22 +4,32 @@ import { catalogApi } from '../http/axios'
 export type Scooter = {
     name: string,
     cost: string,
+    image: string,
     id: number
 }
 type ScooterState = {
     scooters: Scooter[],
-    loading: boolean
+    loading: boolean,
+    query: string,
+    pageNumber: number,
 }
 
 let initialState: ScooterState = {
     scooters: [],
-    loading: true
+    loading: true,
+    query: '',
+    pageNumber: 1
 }
 
-export const getScooters = createAsyncThunk<void>('scootersCatalog/getScooters',
+type GetScootersData = {
+    page: number,
+    query: string
+}
+
+export const getScooters = createAsyncThunk<void, GetScootersData>('scootersCatalog/getScooters',
     async (data, { dispatch }) => {
-        const response = await catalogApi.getScooters()
-        dispatch(setScootersBase(response))
+        const response = await catalogApi.getScooters(data.page, data.query)
+        dispatch(setScootersBase(response.data))
     })
 
 export const scootersCatalogReducer = createSlice({
@@ -28,6 +38,12 @@ export const scootersCatalogReducer = createSlice({
     reducers: {
         setScootersBase(state, action: PayloadAction<Scooter[]>) {
             state.scooters = [...action.payload]
+        },
+        setPage(state, action: PayloadAction<number>) {
+            state.pageNumber = action.payload
+        },
+        setQuery(state, action: PayloadAction<string>) {
+            state.query = action.payload
         },
     },
     extraReducers: builder => {
@@ -41,4 +57,4 @@ export const scootersCatalogReducer = createSlice({
 })
 
 export default scootersCatalogReducer.reducer
-export const { setScootersBase } = scootersCatalogReducer.actions
+export const { setScootersBase, setPage, setQuery } = scootersCatalogReducer.actions
