@@ -1,14 +1,14 @@
 import React, { memo } from 'react'
 
 import { NavLink } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Box, TextField, IconButton, Badge, } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, IconButton, Badge, } from '@mui/material'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import { Container } from '@mui/system';
 import { UserMenu } from './UserMenu';
 import { BurgerMenu } from './BurgerMenu';
+import { FindForm } from '../findForm/FindForm';
 
 export const HeaderMUI: React.FC<{}> = memo(() => {
 
@@ -29,11 +29,8 @@ export const HeaderMUI: React.FC<{}> = memo(() => {
                             Каталог
                         </Button>
                     </NavLink>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} component="form" >
-                        <TextField label="Поиск" size="small" />
-                        <IconButton type='submit' >
-                            <SearchIcon />
-                        </IconButton>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} >
+                        <FindForm />
                     </Box>
                     <NavLink to='/cart'>
                         <IconButton color="primary" aria-label="open shopping cart">

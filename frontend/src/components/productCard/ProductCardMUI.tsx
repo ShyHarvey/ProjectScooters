@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper, Grid } from '@mui/material';
-import scooterImage from '../../assets/scooter-2.webp'
+// import scooterImage from '../../assets/scooter-2.webp'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
@@ -8,6 +8,7 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import SpeedIcon from '@mui/icons-material/Speed';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import { styled } from '@mui/material/styles';
+import { Scooter } from '../../redux/scootersCatalogReducer';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -22,17 +23,13 @@ const Item = styled(Paper)(({ theme }) => ({
     boxShadow: 'none',
 }));
 
-type ScooterInfo = {
-    name: string,
-    cost: string
-}
 
-export const ProductCardMUI: React.FC<ScooterInfo> = ({ name, cost }) => {
+export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image }) => {
     return (
         <Card sx={{ width: 245, boxShadow: 'none' }}>
             <CardMedia
                 sx={{ height: 175 }}
-                image={scooterImage}
+                image={image}
                 title="scooter"
             />
             <CardContent sx={{ padding: 0, px: 3 }}>
