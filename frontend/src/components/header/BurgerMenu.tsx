@@ -3,7 +3,7 @@ import { Button, Box, IconButton, Menu, MenuItem } from '@mui/material'
 import { NavLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import { FindForm } from '../findForm/FindForm';
+import { FindForm } from '../findForm/SearchForm';
 
 export const BurgerMenu: React.FC<{}> = () => {
 
