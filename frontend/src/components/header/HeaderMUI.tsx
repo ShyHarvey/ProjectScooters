@@ -8,7 +8,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Container } from '@mui/system';
 import { UserMenu } from './UserMenu';
 import { BurgerMenu } from './BurgerMenu';
-import { FindForm } from '../findForm/FindForm';
+import { FindForm } from '../findForm/SearchForm';
 
 export const HeaderMUI: React.FC<{}> = memo(() => {
 

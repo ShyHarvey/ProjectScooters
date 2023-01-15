@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getScooters, setPage } from '../../redux/scootersCatalogReducer';
 import { ProductCardMUI } from '../productCard/ProductCardMUI';
 import ProductCardSceleton from '../productCardSceleton/ProductCardSceleton';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
 const Catalog = () => {
     let page = useAppSelector(state => state.catalog.pageNumber)
@@ -40,7 +41,11 @@ const Catalog = () => {
 
             <Container maxWidth='xl' sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1, minHeight: '70vh' }}>
 
-                {catalogBody.length === 0 && loading === false && <Typography variant='h2'>Not found :(</Typography>}
+                {catalogBody.length === 0 && loading === false &&
+                    <>
+                        <Typography color='primary' variant='h2'>Not found </Typography>
+                        <SentimentVeryDissatisfiedIcon color='primary' sx={{ fontSize: 55, pt: 1 }} />
+                    </>}
 
                 {loading ?
                     preloader
