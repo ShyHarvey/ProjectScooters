@@ -1,18 +1,13 @@
 import React from 'react'
-import { Container } from '@mui/material';
-import notFoundImg from '../../assets/NotFound.jpg'
-import styles from './notFound.module.scss'
+import { Container, Typography } from '@mui/material';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+
 
 const NotFound = () => {
     return (
-        <Container className={styles.notFoundPage}>
-            <img className={styles.notFoundImg} src={notFoundImg} alt="Not Found" />
-            <div className={styles.content}>
-                <p className={styles.head}>Страница не найдена</p>
-                <p>Кажется, что-то пошло не так!<br/>
-                    Запрашиваемая страница не существует.<br/>
-                    Возможно, она устарела или была удалена.</p>
-            </div>
+        <Container maxWidth='xl' sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1, minHeight: '70vh', mt: 5 }}>
+            <Typography color='primary' variant='h2'>404 Not found </Typography>
+            <SentimentVeryDissatisfiedIcon color='primary' sx={{ fontSize: 55, pt: 1 }} />
         </Container>
     )
 }

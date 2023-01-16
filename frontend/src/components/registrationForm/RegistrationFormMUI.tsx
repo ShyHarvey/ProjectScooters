@@ -30,7 +30,7 @@ const formSchema = z.object({
 })
 
 
-export const RegistrationFormMUI: React.FC<{}> = () => {
+const RegistrationFormMUI: React.FC<{}> = () => {
 
 
     const isAuth = useAppSelector(state => state.auth.isAuth)
@@ -186,3 +186,5 @@ export const RegistrationFormMUI: React.FC<{}> = () => {
         </Container>
     )
 }
+
+export default RegistrationFormMUI;
