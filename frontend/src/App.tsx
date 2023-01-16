@@ -7,15 +7,17 @@ import "@fontsource/jost/600.css"
 import "@fontsource/jost/700.css"
 
 import { useAppDispatch } from './redux/hooks';
-import Catalog from './components/catalog/Catalog';
 import { HeaderMUI } from './components/header/HeaderMUI';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ScooterPage } from './components/scooterPage/ScooterPage';
+
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
 const LoginFormMUI = lazy(() => import("./components/loginForm/LoginFormMUI"));
 const RegistrationFormMUI = lazy(() => import("./components/registrationForm/RegistrationFormMUI"));
 const Cart = lazy(() => import("./components/cart/Cart"));
 const Admin = lazy(() => import("./components/admin/admin"));
+const Catalog = lazy(() => import("./components/catalog/Catalog"));
 
 const theme = createTheme({
   palette: {
@@ -52,6 +54,7 @@ const App: React.FC = () => {
               <Route path='/registration' element={<RegistrationFormMUI />} />
               <Route path='/cart' element={<Cart />} />
               <Route path='/admin' element={<Admin />} />
+              <Route path='/catalog/:id' element={<ScooterPage />} />
 
               <Route path='*' element={<NotFound />} />
             </Routes>

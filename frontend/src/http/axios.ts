@@ -71,5 +71,8 @@ export const authApi = {
 export const catalogApi = {
     async getScooters(page: number, query: string = ''): Promise<AxiosResponse<Scooter[]>> {
         return axios.get<Scooter[]>(`https://63be716bf5cfc0949b5795e9.mockapi.io/mock/scooters?search=${query}&page=${page}&limit=20`)
-    }
+    },
+    async getOneScooter(id: string): Promise<AxiosResponse<Scooter>> {
+        return axios.get<Scooter>(`https://63be716bf5cfc0949b5795e9.mockapi.io/mock/scooters/${id}`)
+    },
 }

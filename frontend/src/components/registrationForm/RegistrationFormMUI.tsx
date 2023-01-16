@@ -63,9 +63,11 @@ const RegistrationFormMUI: React.FC<{}> = () => {
     }
 
     return (
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" sx={{ height: '90vh' }}>
+
             <Typography variant='h4'>Регистрация</Typography>
             <Box
+                sx={{ verticalAlign: 'middle' }}
                 component="form" onSubmit={handleSubmit(onSubmit)}>
                 <Controller
                     name="name"
