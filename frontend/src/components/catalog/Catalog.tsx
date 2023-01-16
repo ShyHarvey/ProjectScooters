@@ -20,7 +20,7 @@ const Catalog = () => {
         dispatch(getScooters({ page, query }))
     }, [dispatch, page, query])
 
-    let catalogBody = scooters.map(item => <ProductCardMUI name={item.name} cost={item.cost} key={item.id} id={item.id} image={item.image} />)
+    let catalogBody = scooters.map(item => <ProductCardMUI key={item.id} {...item} />)
     let preloader = []
     for (let i = 0; i < 20; i++) {
         preloader.push(<ProductCardSceleton key={i} />)
@@ -39,7 +39,7 @@ const Catalog = () => {
                 onChange={(_, num) => dispatch(setPage(num))}
                 sx={{ width: 'fit-content', mx: 'auto', my: 2 }} />
 
-            <Container maxWidth='xl' sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1, minHeight: '70vh' }}>
+            <Container maxWidth='xl' sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3, minHeight: '70vh' }}>
 
                 {catalogBody.length === 0 && loading === false &&
                     <>

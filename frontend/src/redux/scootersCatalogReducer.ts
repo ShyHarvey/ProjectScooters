@@ -5,6 +5,8 @@ export type Scooter = {
     name: string,
     cost: string,
     image: string,
+    description: string,
+    rating: string,
     id: number
 }
 type ScooterState = {
@@ -32,6 +34,12 @@ export const getScooters = createAsyncThunk<void, GetScootersData>('scootersCata
         dispatch(setScootersBase(response.data))
     })
 
+export const getOneScooterData = createAsyncThunk<void, string>('scootersCatalog/getOneScooterData',
+    async (data, { dispatch }) => {
+        const response = await catalogApi.getOneScooter(data)
+        dispatch(setScootersBase([response.data]))
+    })
+
 export const scootersCatalogReducer = createSlice({
     name: 'scootersCatalog',
     initialState,
@@ -51,6 +59,12 @@ export const scootersCatalogReducer = createSlice({
             state.loading = true
         })
         builder.addCase(getScooters.fulfilled, state => {
+            state.loading = false
+        })
+        builder.addCase(getOneScooterData.pending, state => {
+            state.loading = true
+        })
+        builder.addCase(getOneScooterData.fulfilled, state => {
             state.loading = false
         })
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper, Grid } from '@mui/material';
+import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper, Grid, Rating } from '@mui/material';
 // import scooterImage from '../../assets/scooter-2.webp'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -25,10 +25,10 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image }) => {
+export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, rating }) => {
     return (
         <Card sx={{ width: 245, boxShadow: 'none' }}>
-            <NavLink to={`/catalog/${name}`}>
+            <NavLink to={`/catalog/${id}`}>
                 <CardMedia
                     sx={{ height: 175 }}
                     image={image}
@@ -39,6 +39,7 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image }) => {
                 <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                     {name}
                 </Typography>
+                <Rating defaultValue={+rating / 2} readOnly />
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
                         <Item>
