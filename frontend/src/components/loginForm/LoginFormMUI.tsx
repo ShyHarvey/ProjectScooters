@@ -16,7 +16,7 @@ const formSchema = z.object({
     password: z.string().min(1, { message: "Обязательное поле" })
 })
 
-export const LoginFormMUI: React.FC<{}> = () => {
+const LoginFormMUI = () => {
 
     const isAuth = useAppSelector(state => state.auth.isAuth)
     let axiosError = useAppSelector(state => state.auth.axiosError)
@@ -76,3 +76,4 @@ export const LoginFormMUI: React.FC<{}> = () => {
         </Container>
     )
 }
+export default LoginFormMUI;

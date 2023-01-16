@@ -9,6 +9,7 @@ import SpeedIcon from '@mui/icons-material/Speed';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import { styled } from '@mui/material/styles';
 import { Scooter } from '../../redux/scootersCatalogReducer';
+import { NavLink } from 'react-router-dom';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -27,11 +28,13 @@ const Item = styled(Paper)(({ theme }) => ({
 export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image }) => {
     return (
         <Card sx={{ width: 245, boxShadow: 'none' }}>
-            <CardMedia
-                sx={{ height: 175 }}
-                image={image}
-                title="scooter"
-            />
+            <NavLink to={`/catalog/${name}`}>
+                <CardMedia
+                    sx={{ height: 175 }}
+                    image={image}
+                    title={`${name}`}
+                />
+            </NavLink>
             <CardContent sx={{ padding: 0, px: 3 }}>
                 <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                     {name}
