@@ -39,7 +39,7 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
                 <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                     {name}
                 </Typography>
-                <Rating defaultValue={+rating / 2} readOnly />
+                <Rating defaultValue={+rating / 2} precision={0.5} readOnly />
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
                         <Item>

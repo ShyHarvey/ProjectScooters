@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Container, CardMedia, Rating, Stack, Button, Box } from '@mui/material'
+import { Container, CardMedia, Rating, Stack, Button, Box, TextField } from '@mui/material'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
@@ -9,6 +9,8 @@ import ProductCardSceleton from '../productCardSceleton/ProductCardSceleton'
 
 
 export const ScooterPage: React.FC<{}> = () => {
+
+    const [value, setValue] = React.useState<number | null>(null);
 
     const loading = useAppSelector(state => state.catalog.loading)
 
@@ -27,8 +29,8 @@ export const ScooterPage: React.FC<{}> = () => {
     }
 
     return (
-        <Container sx={{ mt: 2 }}>
-            <Stack spacing={3} justifyContent="center" alignItems="center" direction={{ xs: 'column', md: 'row' }}>
+        <Container sx={{ my: 2 }}>
+            <Stack spacing={3} justifyContent="center" alignItems={{ xs: 'center', md: 'start' }} direction={{ xs: 'column', md: 'row' }} sx={{ mb: 2 }}>
                 <Box sx={{ height: 400, maxWidth: 580, width: '100%' }}>
                     <CardMedia
                         sx={{ height: '100%', maxHeight: 400, maxWidth: 580, borderRadius: 3 }}
@@ -39,7 +41,7 @@ export const ScooterPage: React.FC<{}> = () => {
                     <Typography variant="h4" component="p" sx={{ fontWeight: 'bold', mb: 2 }}>
                         {scooter.name}
                     </Typography>
-                    <Rating defaultValue={+scooter.rating / 2} readOnly size='large' />
+                    <Rating defaultValue={+scooter.rating / 2} precision={0.5} readOnly size='large' />
                     <Typography variant="h4" component='p' sx={{ fontWeight: 'bold', my: 3 }}>
                         {scooter.cost}₽
                     </Typography>
@@ -52,7 +54,29 @@ export const ScooterPage: React.FC<{}> = () => {
                     </Stack>
                 </Box>
             </Stack>
-
-        </Container>
+            <Typography gutterBottom variant='h5' component='p'>Give feedback</Typography>
+            <Box
+                component='form'
+                onSubmit={(e) => e.preventDefault()}
+                sx={{ verticalAlign: 'middle' }}
+            >
+                <Rating
+                    precision={0.5}
+                    name="simple-controlled"
+                    value={value}
+                    onChange={(event, newValue) => {
+                        setValue(newValue);
+                    }}
+                />
+                <TextField
+                    id="outlined-multiline-flexible"
+                    label="Feedback"
+                    fullWidth
+                    multiline
+                    maxRows={10}
+                />
+                <Button sx={{ mt: 2 }} type='submit' variant='contained'>Submit</Button>
+            </Box>
+        </Container >
     )
 }

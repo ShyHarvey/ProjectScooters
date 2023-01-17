@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Box, TextField, InputAdornment, CardMedia, Stack, Button } from '@mui/material'
+import { Box, TextField, InputAdornment, CardMedia, Stack, Button, Typography, Alert } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton';
 import CurrencyRubleIcon from '@mui/icons-material/CurrencyRuble';
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
+import DownloadIcon from '@mui/icons-material/Download';
 
 
-const MAX_FILE_SIZE = 500000000;
+const MAX_FILE_SIZE = 524000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 
@@ -16,7 +17,8 @@ const formSchema = z.object({
     cost: z.string().min(1, { message: "Обязательное поле" }),
     image: z
         .any()
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+        .refine((files) => files?.[0]?.size > 0, `Upload image`)
+        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 500KB.`)
         .refine(
             (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
             "Only .jpg, .jpeg, .png and .webp formats are supported."
@@ -46,8 +48,9 @@ export const NewItemAdding: React.FC<{}> = () => {
     }
 
 
-    const [selectedFile, setSelectedFile] = useState()
+    const [selectedFile, setSelectedFile] = useState<any>()
     const [preview, setPreview] = useState<string>()
+    const [selectedFileName, setSelectedFileName] = useState('')
 
     // create a preview as a side effect, whenever selected file is changed
     useEffect(() => {
@@ -55,6 +58,7 @@ export const NewItemAdding: React.FC<{}> = () => {
             setPreview(undefined)
             return
         }
+        setSelectedFileName(selectedFile.name)
         const objectUrl = URL.createObjectURL(selectedFile)
         setPreview(objectUrl)
 
@@ -71,24 +75,37 @@ export const NewItemAdding: React.FC<{}> = () => {
 
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={2}>
-                <Grid item xs={3}>
-                    <>
-                        <CardMedia
-                            sx={{ height: 175, width: 245, border: 'dashed 3px black' }}
-                            image={preview}
-                            title="scooter"
-                        />
-                        <Stack alignItems="center">
-                            <Button sx={{ mt: 2 }} variant="contained" component="label">
-                                Upload image
-                                <input hidden onChangeCapture={onSelectFile} accept="image/*" multiple type="file" {...register("image")} />
-                            </Button>
-                        </Stack>
-                    </>
-
-                </Grid>
-                <Grid item xs={9}>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
+                <Stack alignItems="center" justifyContent='center'>
+                    {preview ?
+                        <>
+                            <CardMedia
+                                component='img'
+                                sx={{ height: 175, width: 245, border: 'dashed 3px black' }}
+                                image={preview}
+                                title="scooter"
+                            />
+                            <Typography>{selectedFileName}</Typography>
+                        </>
+                        :
+                        <>
+                            <DownloadIcon color='primary' sx={{ width: 245, height: 175, border: 'dashed 3px black' }} />
+                            <Typography>Upload image</Typography>
+                        </>
+                    }
+                    <Stack alignItems="center" justifyContent='center'>
+                        <Button sx={{ mt: 2 }} variant="contained" component="label">
+                            Upload image
+                            <input hidden onChangeCapture={onSelectFile} accept="image/*" multiple type="file" {...register("image")} />
+                        </Button>
+                        {errors.image &&
+                            <Alert sx={{ mt: 2 }} variant="outlined" severity="error">
+                                {`${errors.image?.message}`}
+                            </Alert>
+                        }
+                    </Stack>
+                </Stack>
+                <Stack sx={{ width: '100%' }}>
                     <Controller
                         name='name'
                         control={control}
@@ -115,9 +132,9 @@ export const NewItemAdding: React.FC<{}> = () => {
                             fullWidth
                             margin='dense' />}
                     />
-                </Grid>
-                <LoadingButton loading={false} type='submit' variant='contained' sx={{ mt: 2, marginLeft: 'auto' }}>Submit</LoadingButton>
-            </Grid>
+                    <LoadingButton loading={false} type='submit' variant='contained' sx={{ mt: 2, marginLeft: 'auto' }}>Submit</LoadingButton>
+                </Stack>
+            </Stack>
         </Box>
     )
 }
