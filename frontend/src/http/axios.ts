@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Scooter } from "../redux/scootersCatalogReducer";
+import { Scooter, Comment } from "../redux/scootersCatalogReducer";
 
 export const API_URL = process.env.REACT_APP_API_URL
 
@@ -75,4 +75,7 @@ export const catalogApi = {
     async getOneScooter(id: string): Promise<AxiosResponse<Scooter>> {
         return axios.get<Scooter>(`https://63be716bf5cfc0949b5795e9.mockapi.io/mock/scooters/${id}`)
     },
+    async getComments(): Promise<AxiosResponse<Comment[]>> {
+        return axios.get<Comment[]>(`https://63be716bf5cfc0949b5795e9.mockapi.io/mock/comments`)
+    }
 }
