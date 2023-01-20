@@ -3,25 +3,31 @@ import { Container, CardMedia, Rating, Stack, Button, Box, TextField } from '@mu
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
-import { getOneScooterData } from '../../redux/scootersCatalogReducer'
+import { getComments, getOneScooterData } from '../../redux/scootersCatalogReducer'
 import Typography from '@mui/material/Typography'
 import ProductCardSceleton from '../productCardSceleton/ProductCardSceleton'
+import { Comment } from './Comment'
 
 
 export const ScooterPage: React.FC<{}> = () => {
+    let { id } = useParams<{ id: string }>()
 
     const [value, setValue] = React.useState<number | null>(null);
 
     const loading = useAppSelector(state => state.catalog.loading)
+    const comment = useAppSelector(state => id ? state.catalog.comments[+id] : null)
+
+
 
     const dispatch = useAppDispatch()
 
-    let { id } = useParams<{ id: string }>()
     useEffect(() => {
         if (id !== undefined) {
             dispatch(getOneScooterData(id))
         }
+        dispatch(getComments())
     }, [dispatch, id])
+
 
     const scooter = useAppSelector(state => state.catalog.scooters[0])
     if (loading) {
@@ -77,6 +83,7 @@ export const ScooterPage: React.FC<{}> = () => {
                 />
                 <Button sx={{ mt: 2 }} type='submit' variant='contained'>Submit</Button>
             </Box>
+            {comment !== null && <Comment {...comment} />}
         </Container >
     )
 }
