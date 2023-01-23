@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { catalogApi } from '../http/axios'
 
-export type Scooter = {
+export interface Scooter {
     name: string,
     cost: string,
     image: string,
-    description: string,
+    description?: string,
     rating: string,
     id: number
 }

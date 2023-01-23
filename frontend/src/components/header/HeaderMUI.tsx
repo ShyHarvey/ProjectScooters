@@ -9,8 +9,10 @@ import { Container } from '@mui/system';
 import { UserMenu } from './UserMenu';
 import { BurgerMenu } from './BurgerMenu';
 import { FindForm } from '../findForm/SearchForm';
+import { useAppSelector } from '../../redux/hooks';
 
 export const HeaderMUI: React.FC<{}> = memo(() => {
+    let cartCount = useAppSelector(state => state.cart.totalNumber)
 
     return (
         <AppBar position='sticky' color='secondary'>
@@ -34,7 +36,7 @@ export const HeaderMUI: React.FC<{}> = memo(() => {
                     </Box>
                     <NavLink to='/cart'>
                         <IconButton color="primary" aria-label="open shopping cart">
-                            <Badge badgeContent={100} max={99} color="error">
+                            <Badge badgeContent={cartCount} max={99} color="error">
                                 <ShoppingCartIcon fontSize="large" />
                             </Badge>
                         </IconButton>

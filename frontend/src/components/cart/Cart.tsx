@@ -6,6 +6,7 @@ import { useAppSelector } from '../../redux/hooks'
 const Cart: React.FC<{}> = () => {
 
     let totalCost = useAppSelector(state => state.cart.totalCost)
+    let cartItems = useAppSelector(state => state.cart.cartItems)
 
 
     return (
@@ -13,10 +14,8 @@ const Cart: React.FC<{}> = () => {
             <Typography gutterBottom variant='h4'>Корзина</Typography>
             <Grid container spacing={2}>
                 <Grid item sx={{ mb: 2 }} xs={12} md={9}>
-                    <CartItem />
-                    <CartItem />
-                    <CartItem />
-                    <CartItem />
+                    {cartItems.map(item => <CartItem key={item.id}  {...item} />)}
+
                 </Grid>
                 <Grid item sx={{ mb: 4 }} xs={12} md={3}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mx: 2 }}>
