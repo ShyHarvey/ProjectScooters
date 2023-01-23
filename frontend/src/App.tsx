@@ -10,6 +10,7 @@ import { useAppDispatch } from './redux/hooks';
 import { HeaderMUI } from './components/header/HeaderMUI';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ScooterPage } from './components/scooterPage/ScooterPage';
+import { getCartFromLocalStorage } from './redux/cartReducer';
 
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
@@ -38,6 +39,9 @@ const App: React.FC = () => {
   useEffect(() => {
     if (localStorage.getItem('token')) {
       dispatch(checkAuth())
+    }
+    if (localStorage.getItem('scootersCart')) {
+      dispatch(getCartFromLocalStorage())
     }
   }, [dispatch])
 

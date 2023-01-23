@@ -31,6 +31,7 @@ export const cartReducer = createSlice({
             }
             state.totalNumber = state.totalNumber + 1
             state.totalCost = state.totalCost + +action.payload.cost
+            localStorage.setItem('scootersCart', JSON.stringify(state))
         },
         reduceItemCountInCart(state, action: PayloadAction<ScooterForCart>) {
             let index = state.cartItems.findIndex(item => item.id === action.payload.id)
@@ -41,16 +42,27 @@ export const cartReducer = createSlice({
             }
             state.totalNumber = state.totalNumber - 1
             state.totalCost = state.totalCost - +action.payload.cost
+            localStorage.setItem('scootersCart', JSON.stringify(state))
         },
         deleteItemFromCart(state, action: PayloadAction<{ id: number, cost: string, number: number }>) {
             let index = state.cartItems.findIndex(item => item.id === action.payload.id)
             state.cartItems.splice(index, 1)
             state.totalCost = state.totalCost - (+action.payload.cost * action.payload.number)
             state.totalNumber = state.totalNumber - action.payload.number
+            localStorage.setItem('scootersCart', JSON.stringify(state))
+        },
+        getCartFromLocalStorage(state) {
+            let cartData = localStorage.getItem('scootersCart')
+            if (cartData !== null) {
+                let data: CartState = JSON.parse(cartData)
+                state.cartItems = data.cartItems
+                state.totalCost = data.totalCost
+                state.totalNumber = data.totalNumber
+            }
         }
 
     }
 })
 
 export default cartReducer.reducer
-export const { addItemToCart, reduceItemCountInCart, deleteItemFromCart } = cartReducer.actions
+export const { addItemToCart, reduceItemCountInCart, deleteItemFromCart, getCartFromLocalStorage } = cartReducer.actions
