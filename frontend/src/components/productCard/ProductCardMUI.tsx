@@ -36,7 +36,7 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
                 />
             </NavLink>
             <CardContent sx={{ padding: 0, px: 3 }}>
-                <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold', height: '64px' }}>
                     {name}
                 </Typography>
                 <Rating defaultValue={+rating / 2} precision={0.5} readOnly />
