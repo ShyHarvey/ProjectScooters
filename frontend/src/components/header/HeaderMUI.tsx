@@ -5,16 +5,23 @@ import { AppBar, Toolbar, Typography, Button, Box, IconButton, Badge, } from '@m
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
 import { Container } from '@mui/system';
 import { UserMenu } from './UserMenu';
 import { BurgerMenu } from './BurgerMenu';
 import { FindForm } from '../findForm/SearchForm';
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { ThemeSwitch } from './ThemeSwitch'
+import { toggleTheme } from '../../redux/appReducer';
+
 
 export const HeaderMUI: React.FC<{}> = memo(() => {
+    const dispatch = useAppDispatch()
     let cartCount = useAppSelector(state => state.cart.totalNumber)
     let nav = useNavigate()
+
+    const changeTheme = () => {
+        dispatch(toggleTheme())
+    }
 
     return (
         <AppBar position='sticky' color='secondary'>
@@ -36,6 +43,7 @@ export const HeaderMUI: React.FC<{}> = memo(() => {
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} >
                         <FindForm />
                     </Box>
+                    <ThemeSwitch onChange={changeTheme} sx={{ m: 1 }} defaultChecked={false} />
                     <IconButton onClick={() => nav('/cart')} color="primary" aria-label="open shopping cart">
                         <Badge badgeContent={cartCount} max={99} color="error">
                             <ShoppingCartIcon fontSize="large" />
