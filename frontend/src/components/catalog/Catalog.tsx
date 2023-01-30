@@ -28,7 +28,7 @@ const Catalog = () => {
 
     return (
         <>
-            <Container >
+            <Container sx={{ mt: 3 }}>
                 <Typography gutterBottom variant='h4'>Каталог</Typography>
             </Container>
 

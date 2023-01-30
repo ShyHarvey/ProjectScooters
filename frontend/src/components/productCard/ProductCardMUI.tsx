@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper, Grid, Rating } from '@mui/material';
-// import scooterImage from '../../assets/scooter-2.webp'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
 import BoltIcon from '@mui/icons-material/Bolt';
 import SpeedIcon from '@mui/icons-material/Speed';
@@ -10,7 +10,9 @@ import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import { styled } from '@mui/material/styles';
 import { Scooter } from '../../redux/scootersCatalogReducer';
 import { NavLink } from 'react-router-dom';
-
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { addItemToCart } from '../../redux/cartReducer';
+import { addItemToFavorites } from '../../redux/favoritesReducer';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -26,6 +28,17 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, rating }) => {
+
+    const dispatch = useAppDispatch()
+    const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === id))
+    let number = 1
+    let sendToCart = () => {
+        dispatch(addItemToCart({ name, cost, image, id, rating, number }))
+    }
+    let sendToFavorites = () => {
+        dispatch(addItemToFavorites({ name, cost, image, id, rating }))
+    }
+
     return (
         <Card sx={{ width: 245, boxShadow: 'none' }}>
             <NavLink to={`/catalog/${id}`}>
@@ -36,7 +49,7 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
                 />
             </NavLink>
             <CardContent sx={{ padding: 0, px: 3 }}>
-                <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold', height: '64px' }}>
                     {name}
                 </Typography>
                 <Rating defaultValue={+rating / 2} precision={0.5} readOnly />
@@ -66,11 +79,14 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
                     <Typography variant="h6" component='p' sx={{ fontWeight: 'bold', flexGrow: 1 }}>
                         {cost}₽
                     </Typography>
-                    <IconButton color="primary" aria-label="add to shopping cart">
+                    <IconButton onClick={sendToCart} color="primary" aria-label="add to shopping cart">
                         <AddShoppingCartIcon />
                     </IconButton>
-                    <IconButton color="primary" aria-label="add favorite">
-                        <FavoriteBorderIcon />
+                    <IconButton onClick={sendToFavorites} color="primary" aria-label="add favorite">
+                        {inFavorites !== -1 ?
+                            <FavoriteIcon /> :
+                            <FavoriteBorderIcon />
+                        }
                     </IconButton>
                 </CardActions>
             </CardContent>

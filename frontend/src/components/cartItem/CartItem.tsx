@@ -1,47 +1,50 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Box, Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
-import scooterImage from '../../assets/scooter-2.webp'
+
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useAppDispatch } from '../../redux/hooks'
-import { increaseTotalCost, decreaseTotalCost } from '../../redux/cartReducer'
+import { useNavigate } from 'react-router-dom';
+import { addItemToCart, reduceItemCountInCart, deleteItemFromCart } from '../../redux/cartReducer'
+
+import { ScooterForCart } from '../../redux/cartReducer';
 
 
-export const CartItem: React.FC<{}> = () => {
+
+
+
+export const CartItem: React.FC<ScooterForCart> = ({ cost, id, image, name, number, rating }) => {
 
     const dispatch = useAppDispatch()
-
-    const cost = 10000
-
-    useEffect(() => {
-        dispatch(increaseTotalCost(cost))
-        return () => {
-            dispatch(decreaseTotalCost(cost))
-        }
-    }, [dispatch, cost])
-
-    const [sum, setSum] = useState(1)
-    const increment = () => {
-        setSum(sum + 1)
-        dispatch(increaseTotalCost(cost))
+    const add = () => {
+        dispatch(addItemToCart({ cost, id, image, name, number, rating }))
     }
-    const decrement = () => {
-        setSum(sum - 1)
-        dispatch(decreaseTotalCost(cost))
+    const reduce = () => {
+        dispatch(reduceItemCountInCart({ cost, id, image, name, number, rating }))
     }
+    const deleteItem = () => {
+        dispatch(deleteItemFromCart({ id, cost, number }))
+    }
+
+    const nav = useNavigate()
+
 
     return (
         <Card sx={{ position: 'relative', display: 'flex', justifyContent: 'center', mb: 2, flexWrap: 'wrap' }}>
             <CardMedia
-                sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1 }}
-                image={scooterImage}
+                sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1, cursor: 'pointer' }}
+                onClick={() => nav(`/catalog/${id}`)}
+                image={image}
                 title="scooter"
             />
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>
                 <CardContent sx={{ px: 1, py: 0, minWidth: '222px' }}>
-                    <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                        Kugoo Kirin M4
+                    <Typography onClick={() => nav(`/catalog/${id}`)}
+                        variant="h6"
+                        component="div"
+                        sx={{ fontWeight: 'bold', cursor: 'pointer', '&:hover': { color: `primary.main` } }}>
+                        {name}
                     </Typography>
                     <Typography variant="body2" component="div" >
                         Ёмкость аккумулятора: 2000 mAh
@@ -57,23 +60,23 @@ export const CartItem: React.FC<{}> = () => {
                     </Typography>
                 </CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mx: 2, justifyContent: 'center' }}>
-                    <IconButton onClick={decrement} disabled={sum === 1} color="primary">
+                    <IconButton onClick={reduce} disabled={number === 1} color="primary">
                         <RemoveIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', width: '35px', textAlign: 'center' }}>
-                        {sum}
+                        {number}
                     </Typography>
-                    <IconButton onClick={increment} color="primary">
+                    <IconButton onClick={add} color="primary">
                         <AddIcon />
                     </IconButton>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mx: 2 }}>
                     <Typography gutterBottom variant="h6" component="div" align='center' sx={{ fontWeight: 'bold', width: '100px', margin: '0 auto' }}>
-                        {cost * sum}₽
+                        {+cost * number}₽
                     </Typography>
                 </Box>
 
-                <IconButton color="primary" sx={{ position: 'absolute', top: 0, right: 0 }}>
+                <IconButton onClick={deleteItem} color="primary" sx={{ position: 'absolute', top: -10, right: -10 }}>
                     <ClearIcon />
                 </IconButton>
 

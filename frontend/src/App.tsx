@@ -1,15 +1,18 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, } from "react-router-dom";
+import CssBaseline from '@mui/material/CssBaseline';
 import { checkAuth } from './redux/authReducer';
 import "@fontsource/jost/400.css"
 import "@fontsource/jost/500.css"
 import "@fontsource/jost/600.css"
 import "@fontsource/jost/700.css"
 
-import { useAppDispatch } from './redux/hooks';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { HeaderMUI } from './components/header/HeaderMUI';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ScooterPage } from './components/scooterPage/ScooterPage';
+import { getCartFromLocalStorage } from './redux/cartReducer';
+import { getFavoritesFromLocalStorage } from './redux/favoritesReducer';
 
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
@@ -18,20 +21,23 @@ const RegistrationFormMUI = lazy(() => import("./components/registrationForm/Reg
 const Cart = lazy(() => import("./components/cart/Cart"));
 const Admin = lazy(() => import("./components/admin/admin"));
 const Catalog = lazy(() => import("./components/catalog/Catalog"));
+const Favorites = lazy(() => import("./components/favorites/Favorites"));
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#6F73EE',
-    },
-    secondary: { main: '#fff' }
-  },
-  typography: {
-    fontFamily: "'Jost', sans-serif"
-  }
-});
 
 const App: React.FC = () => {
+  const mode = useAppSelector(store => store.app.theme)
+  const theme = createTheme({
+    palette: {
+      mode: mode,
+      primary: {
+        main: '#6F73EE',
+      },
+      secondary: { main: '#fff' }
+    },
+    typography: {
+      fontFamily: "'Jost', sans-serif"
+    }
+  });
 
   const dispatch = useAppDispatch()
 
@@ -39,12 +45,15 @@ const App: React.FC = () => {
     if (localStorage.getItem('token')) {
       dispatch(checkAuth())
     }
+    dispatch(getCartFromLocalStorage())
+    dispatch(getFavoritesFromLocalStorage())
   }, [dispatch])
 
 
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Router>
           <HeaderMUI />
           <Suspense>
@@ -55,6 +64,7 @@ const App: React.FC = () => {
               <Route path='/cart' element={<Cart />} />
               <Route path='/admin' element={<Admin />} />
               <Route path='/catalog/:id' element={<ScooterPage />} />
+              <Route path='/favorites' element={<Favorites />} />
 
               <Route path='*' element={<NotFound />} />
             </Routes>
