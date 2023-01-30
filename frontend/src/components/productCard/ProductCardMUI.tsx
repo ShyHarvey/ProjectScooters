@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper, Grid, Rating } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
 import BoltIcon from '@mui/icons-material/Bolt';
 import SpeedIcon from '@mui/icons-material/Speed';
@@ -9,8 +10,9 @@ import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import { styled } from '@mui/material/styles';
 import { Scooter } from '../../redux/scootersCatalogReducer';
 import { NavLink } from 'react-router-dom';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addItemToCart } from '../../redux/cartReducer';
+import { addItemToFavorites } from '../../redux/favoritesReducer';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -28,9 +30,13 @@ const Item = styled(Paper)(({ theme }) => ({
 export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, rating }) => {
 
     const dispatch = useAppDispatch()
+    const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === id))
     let number = 1
     let sendToCart = () => {
         dispatch(addItemToCart({ name, cost, image, id, rating, number }))
+    }
+    let sendToFavorites = () => {
+        dispatch(addItemToFavorites({ name, cost, image, id, rating }))
     }
 
     return (
@@ -76,8 +82,11 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
                     <IconButton onClick={sendToCart} color="primary" aria-label="add to shopping cart">
                         <AddShoppingCartIcon />
                     </IconButton>
-                    <IconButton color="primary" aria-label="add favorite">
-                        <FavoriteBorderIcon />
+                    <IconButton onClick={sendToFavorites} color="primary" aria-label="add favorite">
+                        {inFavorites !== -1 ?
+                            <FavoriteIcon /> :
+                            <FavoriteBorderIcon />
+                        }
                     </IconButton>
                 </CardActions>
             </CardContent>

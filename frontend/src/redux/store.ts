@@ -2,12 +2,14 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authReducer";
 import cartReducer from "./cartReducer";
 import scootersCatalogReducer from "./scootersCatalogReducer";
+import favoritesReducer from "./favoritesReducer";
 
 
 const rootReducer = combineReducers({
     auth: authReducer,
     cart: cartReducer,
-    catalog: scootersCatalogReducer
+    catalog: scootersCatalogReducer,
+    favorites: favoritesReducer
 })
 
 const store = configureStore({

@@ -11,6 +11,7 @@ import { HeaderMUI } from './components/header/HeaderMUI';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ScooterPage } from './components/scooterPage/ScooterPage';
 import { getCartFromLocalStorage } from './redux/cartReducer';
+import { getFavoritesFromLocalStorage } from './redux/favoritesReducer';
 
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
@@ -19,6 +20,7 @@ const RegistrationFormMUI = lazy(() => import("./components/registrationForm/Reg
 const Cart = lazy(() => import("./components/cart/Cart"));
 const Admin = lazy(() => import("./components/admin/admin"));
 const Catalog = lazy(() => import("./components/catalog/Catalog"));
+const Favorites = lazy(() => import("./components/favorites/Favorites"));
 
 const theme = createTheme({
   palette: {
@@ -40,9 +42,8 @@ const App: React.FC = () => {
     if (localStorage.getItem('token')) {
       dispatch(checkAuth())
     }
-    if (localStorage.getItem('scootersCart')) {
-      dispatch(getCartFromLocalStorage())
-    }
+    dispatch(getCartFromLocalStorage())
+    dispatch(getFavoritesFromLocalStorage())
   }, [dispatch])
 
 
@@ -59,6 +60,7 @@ const App: React.FC = () => {
               <Route path='/cart' element={<Cart />} />
               <Route path='/admin' element={<Admin />} />
               <Route path='/catalog/:id' element={<ScooterPage />} />
+              <Route path='/favorites' element={<Favorites />} />
 
               <Route path='*' element={<NotFound />} />
             </Routes>

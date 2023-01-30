@@ -1,9 +1,10 @@
 import React, { memo } from 'react'
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Badge, } from '@mui/material'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import { Container } from '@mui/system';
 import { UserMenu } from './UserMenu';
@@ -13,6 +14,7 @@ import { useAppSelector } from '../../redux/hooks';
 
 export const HeaderMUI: React.FC<{}> = memo(() => {
     let cartCount = useAppSelector(state => state.cart.totalNumber)
+    let nav = useNavigate()
 
     return (
         <AppBar position='sticky' color='secondary'>
@@ -34,13 +36,14 @@ export const HeaderMUI: React.FC<{}> = memo(() => {
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} >
                         <FindForm />
                     </Box>
-                    <NavLink to='/cart'>
-                        <IconButton color="primary" aria-label="open shopping cart">
-                            <Badge badgeContent={cartCount} max={99} color="error">
-                                <ShoppingCartIcon fontSize="large" />
-                            </Badge>
-                        </IconButton>
-                    </NavLink>
+                    <IconButton onClick={() => nav('/cart')} color="primary" aria-label="open shopping cart">
+                        <Badge badgeContent={cartCount} max={99} color="error">
+                            <ShoppingCartIcon fontSize="large" />
+                        </Badge>
+                    </IconButton>
+                    <IconButton onClick={() => nav('/favorites')} color="primary" aria-label="open favorites">
+                        <FavoriteIcon fontSize="large" />
+                    </IconButton>
                     <UserMenu />
                 </Toolbar>
             </Container>

@@ -5,9 +5,14 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useAppDispatch } from '../../redux/hooks'
+import { useNavigate } from 'react-router-dom';
 import { addItemToCart, reduceItemCountInCart, deleteItemFromCart } from '../../redux/cartReducer'
 
 import { ScooterForCart } from '../../redux/cartReducer';
+
+
+
+
 
 export const CartItem: React.FC<ScooterForCart> = ({ cost, id, image, name, number, rating }) => {
 
@@ -22,19 +27,23 @@ export const CartItem: React.FC<ScooterForCart> = ({ cost, id, image, name, numb
         dispatch(deleteItemFromCart({ id, cost, number }))
     }
 
-
+    const nav = useNavigate()
 
 
     return (
         <Card sx={{ position: 'relative', display: 'flex', justifyContent: 'center', mb: 2, flexWrap: 'wrap' }}>
             <CardMedia
-                sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1 }}
+                sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1, cursor: 'pointer' }}
+                onClick={() => nav(`/catalog/${id}`)}
                 image={image}
                 title="scooter"
             />
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>
                 <CardContent sx={{ px: 1, py: 0, minWidth: '222px' }}>
-                    <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                    <Typography onClick={() => nav(`/catalog/${id}`)}
+                        variant="h6"
+                        component="div"
+                        sx={{ fontWeight: 'bold', cursor: 'pointer', '&:hover': { color: `primary.main` } }}>
                         {name}
                     </Typography>
                     <Typography variant="body2" component="div" >
@@ -67,7 +76,7 @@ export const CartItem: React.FC<ScooterForCart> = ({ cost, id, image, name, numb
                     </Typography>
                 </Box>
 
-                <IconButton onClick={deleteItem} color="primary" sx={{ position: 'absolute', top: 0, right: 0 }}>
+                <IconButton onClick={deleteItem} color="primary" sx={{ position: 'absolute', top: -10, right: -10 }}>
                     <ClearIcon />
                 </IconButton>
 
