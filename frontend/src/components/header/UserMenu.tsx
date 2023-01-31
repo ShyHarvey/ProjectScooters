@@ -1,9 +1,10 @@
 import React, { memo } from 'react'
-import { Box, Menu, MenuItem, IconButton, Avatar } from '@mui/material'
+import { Box, Menu, MenuItem, IconButton, Avatar, Link, Typography } from '@mui/material'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { fetchLogout } from '../../redux/authReducer';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 export const UserMenu: React.FC<{}> = memo(() => {
 
@@ -13,6 +14,7 @@ export const UserMenu: React.FC<{}> = memo(() => {
     const logout = () => {
         dispatch(fetchLogout())
     }
+    let nav = useNavigate()
 
     const [anchorElUserMenu, setAnchorElUserMenu] = React.useState<null | HTMLElement>(null);
     const openUserMenu = Boolean(anchorElUserMenu);
@@ -35,27 +37,43 @@ export const UserMenu: React.FC<{}> = memo(() => {
                 open={openUserMenu}
                 onClose={handleCloseUserMenu}
             >
+                <MenuItem
+                    onClick={() => nav('/favorites')}
+                    sx={{ display: { xs: 'inline-flex', md: 'none' } }}
+                >
+                    <Typography>Favorites</Typography>
+                    <IconButton
+                        color="primary"
+                        aria-label="open favorites"
+                    >
+                        <FavoriteIcon fontSize="large" />
+                    </IconButton>
+                </MenuItem>
                 {isAuth ?
 
                     <MenuItem onClick={() => {
                         handleCloseUserMenu()
                         logout()
                     }}>
-                        Выйти
+                        <Link>Выйти</Link>
                     </MenuItem>
 
                     :
                     <Box>
-                        <NavLink to='/login'>
-                            <MenuItem onClick={handleCloseUserMenu} >
-                                Войти
-                            </MenuItem>
-                        </NavLink>
-                        <NavLink to='/registration'>
-                            <MenuItem onClick={handleCloseUserMenu}>
-                                Регистрация
-                            </MenuItem>
-                        </NavLink>
+                        <MenuItem onClick={() => {
+                            handleCloseUserMenu()
+                            nav('/login')
+                        }} >
+                            <Link>Войти</Link>
+                        </MenuItem>
+
+
+                        <MenuItem onClick={() => {
+                            handleCloseUserMenu()
+                            nav('/registration')
+                        }}>
+                            <Link>Регистрация</Link>
+                        </MenuItem>
                     </Box>
                 }
             </Menu>

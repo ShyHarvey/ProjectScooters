@@ -15,7 +15,7 @@ import { addItemToCart } from '../../redux/cartReducer';
 import { addItemToFavorites } from '../../redux/favoritesReducer';
 
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.background.paper,
     ...theme.typography.body2,
     padding: 0,
     display: 'flex',
@@ -40,7 +40,7 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
     }
 
     return (
-        <Card sx={{ width: 245, boxShadow: 'none' }}>
+        <Card sx={{ width: 245, height: 396.5, boxShadow: 'none' }}>
             <NavLink to={`/catalog/${id}`}>
                 <CardMedia
                     sx={{ height: 175 }}
