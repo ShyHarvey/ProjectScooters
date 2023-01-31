@@ -3,7 +3,7 @@ import { Container, Typography, Pagination } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getScooters, setPage } from '../../redux/scootersCatalogReducer';
 import { ProductCardMUI } from '../productCard/ProductCardMUI';
-import ProductCardSceleton from '../productCardSceleton/ProductCardSceleton';
+import ProductCardSkeleton from '../productCardSceleton/ProductCardSceleton';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
 const Catalog = () => {
@@ -23,7 +23,7 @@ const Catalog = () => {
     let catalogBody = scooters.map(item => <ProductCardMUI key={item.id} {...item} />)
     let preloader = []
     for (let i = 0; i < 20; i++) {
-        preloader.push(<ProductCardSceleton key={i} />)
+        preloader.push(<ProductCardSkeleton key={i} />)
     }
 
     return (
@@ -40,13 +40,11 @@ const Catalog = () => {
                 sx={{ width: 'fit-content', mx: 'auto', my: 2 }} />
 
             <Container maxWidth='xl' sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3, minHeight: '70vh' }}>
-
                 {catalogBody.length === 0 && loading === false &&
                     <>
                         <Typography color='primary' variant='h2'>Not found </Typography>
                         <SentimentVeryDissatisfiedIcon color='primary' sx={{ fontSize: 55, pt: 1 }} />
                     </>}
-
                 {loading ?
                     preloader
                     :

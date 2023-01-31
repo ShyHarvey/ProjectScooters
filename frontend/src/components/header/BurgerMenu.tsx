@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
-import { Button, Box, IconButton, Menu, MenuItem } from '@mui/material'
-import { NavLink } from 'react-router-dom';
+import { Button, Box, IconButton, Menu, MenuItem, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import { FindForm } from '../findForm/SearchForm';
+import { SearchForm } from '../searchForm/SearchForm';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { toggleTheme } from '../../redux/appReducer';
+import { ThemeSwitch } from './ThemeSwitch';
 
 export const BurgerMenu: React.FC<{}> = () => {
 
+    const mod = useAppSelector(store => store.app.theme)
+    const nav = useNavigate()
+    const dispatch = useAppDispatch()
 
     const [anchorElBurgerMenu, setAnchorElBurgerMenu] = useState<null | HTMLElement>(null);
     const openBurgerMenu = Boolean(anchorElBurgerMenu);
@@ -17,6 +23,9 @@ export const BurgerMenu: React.FC<{}> = () => {
         setAnchorElBurgerMenu(null);
     };
 
+    const changeTheme = () => {
+        dispatch(toggleTheme())
+    }
 
 
 
@@ -34,14 +43,17 @@ export const BurgerMenu: React.FC<{}> = () => {
             >
                 <Box>
                     <MenuItem>
-                        <FindForm />
+                        <SearchForm />
                     </MenuItem>
                     <MenuItem onClick={handleCloseBurgerMenu}>
-                        <NavLink to='/'>
-                            <Button variant="contained" endIcon={<MenuOpenIcon />}>
-                                Каталог
-                            </Button>
-                        </NavLink>
+                        <Button onClick={() => nav('/')} variant="contained" fullWidth endIcon={<MenuOpenIcon />}>
+                            Каталог
+                        </Button>
+                    </MenuItem>
+                    <MenuItem sx={{ justifyContent: 'center' }}>
+                        <Typography>Light</Typography>
+                        <ThemeSwitch onChange={changeTheme} sx={{ m: 1 }} checked={mod === 'light' ? false : true} />
+                        <Typography>Dark</Typography>
                     </MenuItem>
                 </Box>
             </Menu>

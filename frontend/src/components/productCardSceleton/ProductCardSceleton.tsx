@@ -1,23 +1,17 @@
-import React from "react"
-import ContentLoader from "react-content-loader"
+import { Stack, Skeleton } from '@mui/material'
 
-const ProductCardSceleton = () => (
-  <ContentLoader 
-    speed={2}
-    width={245}
-    height={332}
-    viewBox="0 0 245 332"
-    backgroundColor="#e0e0e0"
-    foregroundColor="#d1d2fa"
 
-  >
-    <rect x="3" y="7" rx="21" ry="21" width="232" height="175" /> 
-    <rect x="6" y="191" rx="11" ry="11" width="227" height="36" /> 
-    <rect x="5" y="235" rx="21" ry="21" width="230" height="49" /> 
-    <rect x="6" y="292" rx="13" ry="13" width="113" height="30" /> 
-    <rect x="130" y="292" rx="17" ry="17" width="98" height="31" />
-  </ContentLoader>
+const ProductCardSkeleton = () => (
+  <Stack sx={{ height: 396.5 }} spacing={1}>
+    <Skeleton animation='wave' variant='rounded' width={245} height={175} />
+    <Skeleton animation='wave' variant='rounded' width={245} height={64} />
+    <Skeleton animation='wave' variant='rounded' width={245} height={88} />
+    <Stack flexDirection='row'>
+      <Skeleton animation='wave' sx={{ mr: 3 }} variant='rounded' width={110} height={30} />
+      <Skeleton animation='wave' variant='rounded' width={110} height={30} />
+    </Stack>
+  </Stack>
 )
 
-export default ProductCardSceleton
+export default ProductCardSkeleton
 

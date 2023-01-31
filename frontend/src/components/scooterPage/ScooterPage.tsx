@@ -5,8 +5,8 @@ import { useParams } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { getComments, getOneScooterData } from '../../redux/scootersCatalogReducer'
 import Typography from '@mui/material/Typography'
-import ProductCardSceleton from '../productCardSceleton/ProductCardSceleton'
 import { Comment } from './Comment'
+import { ProductPageSkeleton } from '../productPageSkeleton/ProductPageSkeleton'
 
 
 export const ScooterPage: React.FC<{}> = () => {
@@ -16,7 +16,7 @@ export const ScooterPage: React.FC<{}> = () => {
 
     const loading = useAppSelector(state => state.catalog.loading)
     const comment = useAppSelector(state => id ? state.catalog.comments[+id] : null)
-
+    const scooter = useAppSelector(state => state.catalog.scooters[0])
 
 
     const dispatch = useAppDispatch()
@@ -29,13 +29,13 @@ export const ScooterPage: React.FC<{}> = () => {
     }, [dispatch, id])
 
 
-    const scooter = useAppSelector(state => state.catalog.scooters[0])
+
     if (loading) {
-        return <ProductCardSceleton />
+        return <ProductPageSkeleton />
     }
 
     return (
-        <Container sx={{ my: 2 }}>
+        <Container sx={{ my: 2, p: 0 }}>
             <Stack spacing={3} justifyContent="center" alignItems={{ xs: 'center', md: 'start' }} direction={{ xs: 'column', md: 'row' }} sx={{ mb: 2 }}>
                 <Box sx={{ height: 400, maxWidth: 580, width: '100%' }}>
                     <CardMedia
