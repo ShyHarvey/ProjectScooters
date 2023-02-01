@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper, Grid, Rating } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -27,7 +27,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, rating }) => {
+export const ProductCardMUI: React.FC<Scooter> = memo(({ name, cost, image, id, rating }) => {
 
     const dispatch = useAppDispatch()
     const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === id))
@@ -92,4 +92,4 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
             </CardContent>
         </Card>
     );
-}
+})
