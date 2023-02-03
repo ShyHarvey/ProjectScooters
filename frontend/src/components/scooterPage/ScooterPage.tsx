@@ -36,18 +36,22 @@ export const ScooterPage: React.FC<{}> = () => {
 
     return (
         <Container sx={{ my: 2, p: 0 }}>
-            <Stack spacing={3} justifyContent="center" alignItems={{ xs: 'center', md: 'start' }} direction={{ xs: 'column', md: 'row' }} sx={{ mb: 2 }}>
+            <Stack spacing={3}
+                justifyContent="center"
+                alignItems={{ xs: 'center', md: 'start' }}
+                direction={{ xs: 'column', md: 'row' }}
+                sx={{ mb: 2 }}>
                 <Box sx={{ height: 400, maxWidth: 580, width: '100%' }}>
                     <CardMedia
                         sx={{ height: '100%', maxHeight: 400, maxWidth: 580, borderRadius: 3 }}
-                        image={scooter.image}
+                        image={scooter.images[0].link}
                     />
                 </Box>
                 <Box sx={{ width: { xs: '100%', sm: 500, md: '100%' } }}>
                     <Typography variant="h4" component="p" sx={{ fontWeight: 'bold', mb: 2 }}>
                         {scooter.name}
                     </Typography>
-                    <Rating defaultValue={+scooter.rating / 2} precision={0.5} readOnly size='large' />
+                    <Rating defaultValue={scooter.rating ? +scooter.rating / 2 : 0} precision={0.5} readOnly size='large' />
                     <Typography variant="h4" component='p' sx={{ fontWeight: 'bold', my: 3 }}>
                         {scooter.cost}₽
                     </Typography>

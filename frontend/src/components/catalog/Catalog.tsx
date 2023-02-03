@@ -21,10 +21,8 @@ const Catalog = () => {
     }, [dispatch, page, query])
 
     let catalogBody = scooters.map(item => <ProductCardMUI key={item.id} {...item} />)
-    let preloader = []
-    for (let i = 0; i < 10; i++) {
-        preloader.push(<ProductCardSkeleton key={i} />)
-    }
+
+    let preloader = Array(10).fill(1).map((item, i) => <ProductCardSkeleton key={i} />)
 
     return (
         <>

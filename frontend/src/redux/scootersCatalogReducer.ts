@@ -1,10 +1,14 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { catalogApi } from '../http/axios'
 
+
+type Images = {
+    link: string
+}
 export interface Scooter {
     name: string,
     cost: string,
-    image: string,
+    images: Images[],
     description?: string,
     rating: string,
     id: number
@@ -21,6 +25,7 @@ type ScooterState = {
     loading: boolean,
     query: string,
     pageNumber: number,
+    totalItems: number
 }
 
 let initialState: ScooterState = {
@@ -28,7 +33,8 @@ let initialState: ScooterState = {
     comments: [],
     loading: true,
     query: '',
-    pageNumber: 1
+    pageNumber: 1,
+    totalItems: 0
 }
 
 type GetScootersData = {
@@ -45,7 +51,7 @@ export const getScooters = createAsyncThunk<void, GetScootersData>('scootersCata
 export const getOneScooterData = createAsyncThunk<void, string>('scootersCatalog/getOneScooterData',
     async (data, { dispatch }) => {
         const response = await catalogApi.getOneScooter(data)
-        dispatch(setScootersBase([response.data]))
+        dispatch(setOneScooter(response.data))
     })
 export const getComments = createAsyncThunk<void, void>('scootersCatalog/getComments',
     async (_, { dispatch }) => {
@@ -58,8 +64,12 @@ export const scootersCatalogReducer = createSlice({
     name: 'scootersCatalog',
     initialState,
     reducers: {
-        setScootersBase(state, action: PayloadAction<Scooter[]>) {
-            state.scooters = [...action.payload]
+        setScootersBase(state, action: PayloadAction<{ amount: number, products: Scooter[] }>) {
+            state.scooters = [...action.payload.products]
+            state.totalItems = action.payload.amount
+        },
+        setOneScooter(state, action: PayloadAction<Scooter>) {
+            state.scooters[0] = action.payload
         },
         setPage(state, action: PayloadAction<number>) {
             state.pageNumber = action.payload
@@ -94,4 +104,4 @@ export const scootersCatalogReducer = createSlice({
 })
 
 export default scootersCatalogReducer.reducer
-export const { setScootersBase, setPage, setQuery, setComments } = scootersCatalogReducer.actions
+export const { setScootersBase, setPage, setQuery, setComments, setOneScooter } = scootersCatalogReducer.actions
