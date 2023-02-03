@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Container, Typography, Pagination } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getScooters, setPage } from '../../redux/scootersCatalogReducer';
@@ -21,10 +21,8 @@ const Catalog = () => {
     }, [dispatch, page, query])
 
     let catalogBody = scooters.map(item => <ProductCardMUI key={item.id} {...item} />)
-    let preloader = []
-    for (let i = 0; i < 20; i++) {
-        preloader.push(<ProductCardSkeleton key={i} />)
-    }
+
+    let preloader = Array(10).fill(1).map((item, i) => <ProductCardSkeleton key={i} />)
 
     return (
         <>

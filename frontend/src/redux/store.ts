@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
     auth: authReducer,
     cart: cartReducer,
     catalog: scootersCatalogReducer,
-    favorites: favoritesReducer
+    favorites: favoritesReducer,
 })
 
 const store = configureStore({

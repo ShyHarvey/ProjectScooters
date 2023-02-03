@@ -55,7 +55,7 @@ export const UserMenu: React.FC<{}> = memo(() => {
                         handleCloseUserMenu()
                         logout()
                     }}>
-                        <Link>Выйти</Link>
+                        <Link underline="hover" color='inherit'>Выйти</Link>
                     </MenuItem>
 
                     :
@@ -64,7 +64,7 @@ export const UserMenu: React.FC<{}> = memo(() => {
                             handleCloseUserMenu()
                             nav('/login')
                         }} >
-                            <Link>Войти</Link>
+                            <Link underline="hover" color='inherit'>Войти</Link>
                         </MenuItem>
 
 
@@ -72,10 +72,16 @@ export const UserMenu: React.FC<{}> = memo(() => {
                             handleCloseUserMenu()
                             nav('/registration')
                         }}>
-                            <Link>Регистрация</Link>
+                            <Link underline="hover" color='inherit'>Регистрация</Link>
                         </MenuItem>
                     </Box>
                 }
+                <MenuItem onClick={() => {
+                    handleCloseUserMenu()
+                    nav('/admin')
+                }}>
+                    <Link underline="hover" color='inherit'>Admin panel</Link>
+                </MenuItem>
             </Menu>
         </>
     )

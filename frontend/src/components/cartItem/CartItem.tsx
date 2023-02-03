@@ -14,14 +14,14 @@ import { ScooterForCart } from '../../redux/cartReducer';
 
 
 
-export const CartItem: React.FC<ScooterForCart> = ({ cost, id, image, name, number, rating }) => {
+export const CartItem: React.FC<ScooterForCart> = ({ cost, id, images, name, number, rating }) => {
 
     const dispatch = useAppDispatch()
     const add = () => {
-        dispatch(addItemToCart({ cost, id, image, name, number, rating }))
+        dispatch(addItemToCart({ cost, id, images, name, number, rating }))
     }
     const reduce = () => {
-        dispatch(reduceItemCountInCart({ cost, id, image, name, number, rating }))
+        dispatch(reduceItemCountInCart({ cost, id, images, name, number, rating }))
     }
     const deleteItem = () => {
         dispatch(deleteItemFromCart({ id, cost, number }))
@@ -35,7 +35,7 @@ export const CartItem: React.FC<ScooterForCart> = ({ cost, id, image, name, numb
             <CardMedia
                 sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1, cursor: 'pointer' }}
                 onClick={() => nav(`/catalog/${id}`)}
-                image={image}
+                image={images[0].link}
                 title="scooter"
             />
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>

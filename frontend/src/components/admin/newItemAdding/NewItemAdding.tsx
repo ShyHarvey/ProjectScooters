@@ -81,7 +81,7 @@ export const NewItemAdding: React.FC<{}> = () => {
                         <>
                             <CardMedia
                                 component='img'
-                                sx={{ height: 175, width: 245, border: 'dashed 3px black' }}
+                                sx={{ height: 175, width: 245, border: 'dashed 3px ', borderColor: 'text.primary' }}
                                 image={preview}
                                 title="scooter"
                             />
@@ -89,7 +89,7 @@ export const NewItemAdding: React.FC<{}> = () => {
                         </>
                         :
                         <>
-                            <DownloadIcon color='primary' sx={{ width: 245, height: 175, border: 'dashed 3px black' }} />
+                            <DownloadIcon color='primary' sx={{ width: 245, height: 175, border: 'dashed 3px', borderColor: 'text.primary' }} />
                             <Typography>Upload image</Typography>
                         </>
                     }

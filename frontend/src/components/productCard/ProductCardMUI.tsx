@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Paper, Grid, Rating } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -27,16 +27,16 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, rating }) => {
+export const ProductCardMUI: React.FC<Scooter> = memo(({ name, cost, images, id, rating }) => {
 
     const dispatch = useAppDispatch()
     const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === id))
     let number = 1
     let sendToCart = () => {
-        dispatch(addItemToCart({ name, cost, image, id, rating, number }))
+        dispatch(addItemToCart({ name, cost, images, id, rating, number }))
     }
     let sendToFavorites = () => {
-        dispatch(addItemToFavorites({ name, cost, image, id, rating }))
+        dispatch(addItemToFavorites({ name, cost, images, id, rating }))
     }
 
     return (
@@ -44,7 +44,7 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
             <NavLink to={`/catalog/${id}`}>
                 <CardMedia
                     sx={{ height: 175 }}
-                    image={image}
+                    image={images[0].link}
                     title={`${name}`}
                 />
             </NavLink>
@@ -52,7 +52,7 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
                 <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold', height: '64px' }}>
                     {name}
                 </Typography>
-                <Rating defaultValue={+rating / 2} precision={0.5} readOnly />
+                <Rating defaultValue={rating ? +rating / 2 : 2.5} precision={0.5} readOnly />
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
                         <Item>
@@ -92,4 +92,4 @@ export const ProductCardMUI: React.FC<Scooter> = ({ name, cost, image, id, ratin
             </CardContent>
         </Card>
     );
-}
+})
