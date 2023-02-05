@@ -9,7 +9,7 @@ import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDiss
 const Catalog = () => {
     let page = useAppSelector(state => state.catalog.pageNumber)
     let query = useAppSelector(state => state.catalog.query)
-    const pageQty = useAppSelector(state => state.catalog.totalItems / 10);
+    const pageQty = Math.ceil(useAppSelector(state => state.catalog.totalItems / 10));
 
     const dispatch = useAppDispatch()
 
