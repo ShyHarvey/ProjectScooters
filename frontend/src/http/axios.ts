@@ -23,7 +23,7 @@ type AuthResponse = {
 }
 
 
-
+axios.defaults.withCredentials = true
 
 const apiInstance = axios.create({
     withCredentials: true,
@@ -45,7 +45,7 @@ apiInstance.interceptors.response.use((config) => {
         const originalRequest = error.config;
         if (error.response.status === 401 && error.config && !error.config._isRetry) {
             originalRequest._isRetry = true;
-            const response = await axios.get(`${API_URL}auth/refreshtoken`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}auth/getnewaccesstoken`, { withCredentials: true });
             localStorage.setItem('token', response.data.accessToken);
             return apiInstance.request(originalRequest);
         }

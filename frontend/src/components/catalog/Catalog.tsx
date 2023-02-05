@@ -9,7 +9,7 @@ import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDiss
 const Catalog = () => {
     let page = useAppSelector(state => state.catalog.pageNumber)
     let query = useAppSelector(state => state.catalog.query)
-    const pageQty = 5;
+    const pageQty = useAppSelector(state => state.catalog.totalItems / 10);
 
     const dispatch = useAppDispatch()
 
@@ -30,12 +30,12 @@ const Catalog = () => {
                 <Typography gutterBottom variant='h4'>Каталог</Typography>
             </Container>
 
-            <Pagination
+            {pageQty >= 1 && <Pagination
                 count={pageQty}
                 color="primary"
                 page={page}
                 onChange={(_, num) => dispatch(setPage(num))}
-                sx={{ width: 'fit-content', mx: 'auto', my: 2 }} />
+                sx={{ width: 'fit-content', mx: 'auto', my: 2 }} />}
 
             <Container maxWidth='xl' sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3, minHeight: '70vh' }}>
                 {catalogBody.length === 0 && loading === false &&
@@ -50,12 +50,12 @@ const Catalog = () => {
                 }
             </Container>
 
-            <Pagination
+            {pageQty >= 1 && <Pagination
                 count={pageQty}
                 color="primary"
                 page={page}
                 onChange={(_, num) => dispatch(setPage(num))}
-                sx={{ width: 'fit-content', mx: 'auto', my: 2 }} />
+                sx={{ width: 'fit-content', mx: 'auto', my: 2 }} />}
 
         </>
     )
