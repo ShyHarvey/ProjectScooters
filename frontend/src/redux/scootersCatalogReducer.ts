@@ -1,27 +1,35 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { catalogApi } from '../http/axios'
+import { AddCommentData, catalogApi } from '../http/axios'
 
 
 type Images = {
     link: string
 }
-export interface Scooter {
+export type Person = {
     name: string,
-    cost: string,
-    images: Images[],
-    description?: string,
-    rating: string,
-    id: number
+    surname: string
 }
 export type Comment = {
-    name: string,
-    avatar: string,
-    body: string,
-    rating: string,
+    person: Person,
+    text: string,
+    mark: number
 }
+export interface Scooter {
+    id: number
+    name: string,
+    batteryCapacity: string,
+    power: number,
+    speed: string,
+    time: string,
+    cost: string,
+    description?: string,
+    mark: number,
+    images: Images[],
+    comments?: Comment[]
+}
+
 type ScooterState = {
     scooters: Scooter[],
-    comments: Comment[],
     loading: boolean,
     query: string,
     pageNumber: number,
@@ -30,7 +38,6 @@ type ScooterState = {
 
 let initialState: ScooterState = {
     scooters: [],
-    comments: [],
     loading: true,
     query: '',
     pageNumber: 1,
@@ -48,17 +55,22 @@ export const getScooters = createAsyncThunk<void, GetScootersData>('scootersCata
         dispatch(setScootersBase(response.data))
     })
 
-export const getOneScooterData = createAsyncThunk<void, string>('scootersCatalog/getOneScooterData',
+export const getOneScooterData = createAsyncThunk<void, number>('scootersCatalog/getOneScooterData',
     async (data, { dispatch }) => {
         const response = await catalogApi.getOneScooter(data)
         dispatch(setOneScooter(response.data))
     })
-export const getComments = createAsyncThunk<void, void>('scootersCatalog/getComments',
-    async (_, { dispatch }) => {
-        const response = await catalogApi.getComments()
-        dispatch(setComments(response.data))
-    }
-)
+// export const getComments = createAsyncThunk<void, void>('scootersCatalog/getComments',
+//     async (_, { dispatch }) => {
+//         const response = await catalogApi.getComments()
+//         dispatch(setComments(response.data))
+//     }
+// )
+export const addComment = createAsyncThunk<void, AddCommentData>('scootersCatalog/addComment',
+    async (data, { dispatch }) => {
+        await catalogApi.addComment(data)
+        dispatch(getOneScooterData(data.id))
+    })
 
 export const scootersCatalogReducer = createSlice({
     name: 'scootersCatalog',
@@ -69,7 +81,7 @@ export const scootersCatalogReducer = createSlice({
             state.totalItems = action.payload.amount
         },
         setOneScooter(state, action: PayloadAction<Scooter>) {
-            state.scooters[0] = action.payload
+            state.scooters = [action.payload]
         },
         setPage(state, action: PayloadAction<number>) {
             state.pageNumber = action.payload
@@ -77,9 +89,9 @@ export const scootersCatalogReducer = createSlice({
         setQuery(state, action: PayloadAction<string>) {
             state.query = action.payload
         },
-        setComments(state, action: PayloadAction<Comment[]>) {
-            state.comments = action.payload
-        }
+        // setComments(state, action: PayloadAction<Comment[]>) {
+        //     state.comments = action.payload
+        // }
     },
     extraReducers: builder => {
         builder.addCase(getScooters.pending, state => {
@@ -94,14 +106,14 @@ export const scootersCatalogReducer = createSlice({
         builder.addCase(getOneScooterData.fulfilled, state => {
             state.loading = false
         })
-        builder.addCase(getComments.pending, state => {
-            state.loading = true
-        })
-        builder.addCase(getComments.fulfilled, state => {
-            state.loading = false
-        })
+        // builder.addCase(getComments.pending, state => {
+        //     state.loading = true
+        // })
+        // builder.addCase(getComments.fulfilled, state => {
+        //     state.loading = false
+        // })
     }
 })
 
 export default scootersCatalogReducer.reducer
-export const { setScootersBase, setPage, setQuery, setComments, setOneScooter } = scootersCatalogReducer.actions
+export const { setScootersBase, setPage, setQuery, setOneScooter } = scootersCatalogReducer.actions

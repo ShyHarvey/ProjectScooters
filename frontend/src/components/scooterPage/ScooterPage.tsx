@@ -1,21 +1,24 @@
 import { useEffect } from 'react'
-import { Container, CardMedia, Rating, Stack, Button, Box, TextField } from '@mui/material'
+import { Container, CardMedia, Rating, Stack, Button, Box, Link } from '@mui/material'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
-import { getComments, getOneScooterData } from '../../redux/scootersCatalogReducer'
+import { getOneScooterData } from '../../redux/scootersCatalogReducer'
 import Typography from '@mui/material/Typography'
 import { Comment } from './Comment'
+import { useNavigate } from 'react-router-dom';
 import { ProductPageSkeleton } from '../productPageSkeleton/ProductPageSkeleton'
+import { AddCommentForm } from './AddCommentForm'
 
 
 export const ScooterPage: React.FC<{}> = () => {
     let { id } = useParams<{ id: string }>()
+    let nav = useNavigate()
 
     const [value, setValue] = React.useState<number | null>(null);
 
+    const isAuth = useAppSelector(state => state.auth.isAuth)
     const loading = useAppSelector(state => state.catalog.loading)
-    const comment = useAppSelector(state => id ? state.catalog.comments[+id] : null)
     const scooter = useAppSelector(state => state.catalog.scooters[0])
 
 
@@ -23,9 +26,8 @@ export const ScooterPage: React.FC<{}> = () => {
 
     useEffect(() => {
         if (id !== undefined) {
-            dispatch(getOneScooterData(id))
+            dispatch(getOneScooterData(+id))
         }
-        dispatch(getComments())
     }, [dispatch, id])
 
 
@@ -51,7 +53,7 @@ export const ScooterPage: React.FC<{}> = () => {
                     <Typography variant="h4" component="p" sx={{ fontWeight: 'bold', mb: 2 }}>
                         {scooter.name}
                     </Typography>
-                    <Rating defaultValue={scooter.rating ? +scooter.rating / 2 : 0} precision={0.5} readOnly size='large' />
+                    <Rating defaultValue={scooter.mark} precision={0.5} readOnly size='large' />
                     <Typography variant="h4" component='p' sx={{ fontWeight: 'bold', my: 3 }}>
                         {scooter.cost}₽
                     </Typography>
@@ -64,30 +66,10 @@ export const ScooterPage: React.FC<{}> = () => {
                     </Stack>
                 </Box>
             </Stack>
-            <Typography gutterBottom variant='h5' component='p'>Give feedback</Typography>
-            <Box
-                component='form'
-                onSubmit={(e) => e.preventDefault()}
-                sx={{ verticalAlign: 'middle' }}
-            >
-                <Rating
-                    precision={0.5}
-                    name="simple-controlled"
-                    value={value}
-                    onChange={(event, newValue) => {
-                        setValue(newValue);
-                    }}
-                />
-                <TextField
-                    id="outlined-multiline-flexible"
-                    label="Feedback"
-                    fullWidth
-                    multiline
-                    maxRows={10}
-                />
-                <Button sx={{ mt: 2 }} type='submit' variant='contained'>Submit</Button>
-            </Box>
-            {comment !== null && <Comment {...comment} />}
+            {isAuth === true ? <AddCommentForm id={id ? +id : 1} /> :
+                <Link sx={{ fontSize: '1.5rem', cursor: 'pointer' }} underline="hover" color='inherit' onClick={() => nav('/login')}>Login to leave a review</Link>
+            }
+            {scooter.comments && scooter.comments.map((item, index) => <Comment {...item} key={index} />)}
         </Container >
     )
 }

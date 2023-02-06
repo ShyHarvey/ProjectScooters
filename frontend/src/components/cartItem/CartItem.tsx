@@ -11,17 +11,14 @@ import { addItemToCart, reduceItemCountInCart, deleteItemFromCart } from '../../
 import { ScooterForCart } from '../../redux/cartReducer';
 
 
-
-
-
-export const CartItem: React.FC<ScooterForCart> = ({ cost, id, images, name, number, rating }) => {
+export const CartItem: React.FC<ScooterForCart> = ({ cost, id, images, name, number, mark, batteryCapacity, power, speed, time }) => {
 
     const dispatch = useAppDispatch()
     const add = () => {
-        dispatch(addItemToCart({ cost, id, images, name, number, rating }))
+        dispatch(addItemToCart({ cost, id, images, name, number, mark, batteryCapacity, power, speed, time }))
     }
     const reduce = () => {
-        dispatch(reduceItemCountInCart({ cost, id, images, name, number, rating }))
+        dispatch(reduceItemCountInCart({ cost, id, images, name, number, mark, batteryCapacity, power, speed, time }))
     }
     const deleteItem = () => {
         dispatch(deleteItemFromCart({ id, cost, number }))
@@ -47,16 +44,16 @@ export const CartItem: React.FC<ScooterForCart> = ({ cost, id, images, name, num
                         {name}
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Ёмкость аккумулятора: 2000 mAh
+                        Ёмкость аккумулятора: {batteryCapacity} Ah
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Максимальная скорость: 60 км/ч
+                        Максимальная скорость: {speed} км/ч
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Мощьность двигателя: 1.2 л/с
+                        Мощьность двигателя: {power} л/с
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Работа без подзарядки: 5 ч
+                        Работа без подзарядки: {time} ч
                     </Typography>
                 </CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mx: 2, justifyContent: 'center' }}>

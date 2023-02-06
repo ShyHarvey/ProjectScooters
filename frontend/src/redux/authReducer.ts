@@ -13,8 +13,10 @@ type AuthState = {
 }
 
 type AccessTokenDecoded = {
+    id: number,
+    name: string,
+    surname: string,
     email: string,
-    iss: string,
     role: 'ROLE_USER' | 'ROLE_ADMIN',
 }
 
@@ -33,8 +35,9 @@ export const fetchRegistration = createAsyncThunk<void, RegistrationData>('auth/
         const response = await authApi.registration(data)
         localStorage.setItem('token', response.data.accessToken)
         let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
-        dispatch(setUsername(userData.iss))
+        dispatch(setUsername(userData.name))
         dispatch(setRole(userData.role))
+        dispatch(setUserId(userData.id))
         dispatch(setIsAuth(true))
     })
 
@@ -44,8 +47,9 @@ export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
             const response = await authApi.login(data.email, data.password)
             localStorage.setItem('token', response.data.accessToken)
             let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
-            dispatch(setUsername(userData.iss))
+            dispatch(setUsername(userData.name))
             dispatch(setRole(userData.role))
+            dispatch(setUserId(userData.id))
             dispatch(setIsAuth(true))
             dispatch(setError(false))
         } catch (err: any | unknown) {
@@ -60,6 +64,7 @@ export const fetchLogout = createAsyncThunk('auth/fetchLogout',
             localStorage.removeItem('token')
             dispatch(setUsername(null))
             dispatch(setUsername(null))
+            dispatch(setUserId(null))
             dispatch(setRole(null))
             dispatch(setIsAuth(false))
         } catch (error) {
@@ -72,7 +77,7 @@ export const checkAuth = createAsyncThunk('auth/checkAuth',
             const response = await axios.get(`${API_URL}auth/getnewaccesstoken`, { withCredentials: true })
             localStorage.setItem('token', response.data.accessToken)
             let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
-            dispatch(setUsername(userData.iss))
+            dispatch(setUsername(userData.name))
             dispatch(setRole(userData.role))
             dispatch(setIsAuth(true))
         } catch (error: any) {

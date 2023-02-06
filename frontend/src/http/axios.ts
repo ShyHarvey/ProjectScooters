@@ -18,6 +18,12 @@ export type RegistrationData = {
     password: string,
 }
 
+export type AddCommentData = {
+    id: number,
+    mark: number,
+    text: string
+}
+
 type AuthResponse = {
     accessToken: string;
 }
@@ -74,12 +80,12 @@ export const authApi = {
 
 export const catalogApi = {
     async getScooters(page: number, query: string = ''): Promise<AxiosResponse<{ amount: number, products: Scooter[] }>> {
-        return axios.get<{ amount: number, products: Scooter[] }>(`https://shop.javaspringbackend.software/catalog?page=${page}&itemsPerPage=10`)
+        return apiInstance.get<{ amount: number, products: Scooter[] }>(`catalog?page=${page}&itemsPerPage=10`)
     },
-    async getOneScooter(id: string): Promise<AxiosResponse<Scooter>> {
-        return axios.get<Scooter>(`https://shop.javaspringbackend.software/catalog/${id}`)
+    async getOneScooter(id: number): Promise<AxiosResponse<Scooter>> {
+        return apiInstance.get<Scooter>(`catalog/${id}`)
     },
-    async getComments(): Promise<AxiosResponse<Comment[]>> {
-        return axios.get<Comment[]>(`https://63be716bf5cfc0949b5795e9.mockapi.io/mock/comments`)
+    async addComment(data: AddCommentData): Promise<AxiosResponse<void>> {
+        return apiInstance.post<void>(`comment/add`, { ...data })
     }
 }

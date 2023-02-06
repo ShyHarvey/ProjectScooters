@@ -27,16 +27,16 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-export const ProductCardMUI: React.FC<Scooter> = memo(({ name, cost, images, id, rating }) => {
+export const ProductCardMUI: React.FC<Scooter> = memo(({ cost, id, images, name, mark, batteryCapacity, power, speed, time }) => {
 
     const dispatch = useAppDispatch()
     const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === id))
     let number = 1
     let sendToCart = () => {
-        dispatch(addItemToCart({ name, cost, images, id, rating, number }))
+        dispatch(addItemToCart({ cost, id, images, name, number, mark, batteryCapacity, power, speed, time }))
     }
     let sendToFavorites = () => {
-        dispatch(addItemToFavorites({ name, cost, images, id, rating }))
+        dispatch(addItemToFavorites({ cost, id, images, name, mark, batteryCapacity, power, speed, time }))
     }
 
     return (
@@ -52,26 +52,26 @@ export const ProductCardMUI: React.FC<Scooter> = memo(({ name, cost, images, id,
                 <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold', height: '64px' }}>
                     {name}
                 </Typography>
-                <Rating defaultValue={rating ? +rating / 2 : 2.5} precision={0.5} readOnly />
+                <Rating defaultValue={+mark} precision={0.5} readOnly />
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
                         <Item>
-                            <BatteryChargingFullIcon /> 2000 mAh
+                            <BatteryChargingFullIcon /> {batteryCapacity} Ah
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
                         <Item>
-                            <BoltIcon /> 1,2 л/c
+                            <BoltIcon /> {power} л/c
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
                         <Item>
-                            <SpeedIcon sx={{ marginRight: '3px' }} /> 60 км/ч
+                            <SpeedIcon sx={{ marginRight: '3px' }} /> {speed} км/ч
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
                         <Item>
-                            <TimerOutlinedIcon sx={{ marginRight: '3px' }} /> 5 ч
+                            <TimerOutlinedIcon sx={{ marginRight: '3px' }} /> {time} ч
                         </Item>
                     </Grid>
                 </Grid>
