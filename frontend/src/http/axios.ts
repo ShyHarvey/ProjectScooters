@@ -89,3 +89,9 @@ export const catalogApi = {
         return apiInstance.post<void>(`comment/add`, { ...data })
     }
 }
+
+export const adminApi = {
+    async addNewItem(data: any): Promise<void> {
+        return apiInstance.post('/admin/product/add', data)
+    }
+}

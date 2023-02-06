@@ -2,10 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { Box, TextField, InputAdornment, CardMedia, Stack, Button, Typography, Alert } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton';
 import CurrencyRubleIcon from '@mui/icons-material/CurrencyRuble';
+import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
+import BoltIcon from '@mui/icons-material/Bolt';
+import SpeedIcon from '@mui/icons-material/Speed';
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 import DownloadIcon from '@mui/icons-material/Download';
+import { useAppDispatch } from '../../../redux/hooks';
+import { fetchAddNewItem } from '../../../redux/adminReducer';
 
 
 const MAX_FILE_SIZE = 524000;
@@ -14,19 +20,26 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 
 const formSchema = z.object({
     name: z.string().min(1, { message: "Обязательное поле" }),
-    cost: z.string().min(1, { message: "Обязательное поле" }),
-    image: z
+    cost: z.number().min(1, { message: "Обязательное поле" }),
+    image1: z
         .any()
         .refine((files) => files?.[0]?.size > 0, `Upload image`)
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 500KB.`)
         .refine(
             (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
             "Only .jpg, .jpeg, .png and .webp formats are supported."
-        )
+        ),
+    description: z.string().min(1, { message: "Обязательное поле" }),
+    batteryCapacity: z.number().positive(),
+    power: z.number().positive(),
+    speed: z.number().positive(),
+    time: z.number().positive(),
 })
 type AddNewItemFormData = z.infer<typeof formSchema>
 
 export const NewItemAdding: React.FC<{}> = () => {
+
+    const dispatch = useAppDispatch()
 
     const {
         control,
@@ -38,13 +51,33 @@ export const NewItemAdding: React.FC<{}> = () => {
     } = useForm<AddNewItemFormData>({
         defaultValues: {
             name: '',
-            cost: '',
+            cost: 0,
+            description: '',
+            batteryCapacity: 0,
+            power: 0,
+            speed: 0,
+            time: 0
         },
         resolver: zodResolver(formSchema)
     });
 
     const onSubmit: SubmitHandler<AddNewItemFormData> = (data) => {
         console.log(data)
+        let product = {
+            name: data.name,
+            cost: data.cost,
+            description: data.description,
+            batteryCapacity: data.batteryCapacity,
+            speed: data.speed,
+            time: data.time,
+            power: data.power
+        }
+        let productData = new Blob([JSON.stringify(product, null, 2)], { type: 'application/json' })
+        let formData = new FormData()
+        formData.append('product', productData)
+        formData.append('image1', data.image1[0])
+        console.log(formData)
+        dispatch(fetchAddNewItem(formData))
     }
 
 
@@ -96,11 +129,11 @@ export const NewItemAdding: React.FC<{}> = () => {
                     <Stack alignItems="center" justifyContent='center'>
                         <Button sx={{ mt: 2 }} variant="contained" component="label">
                             Upload image
-                            <input hidden onChangeCapture={onSelectFile} accept="image/*" multiple type="file" {...register("image")} />
+                            <input hidden onChangeCapture={onSelectFile} accept="image/*" multiple type="file" {...register("image1")} />
                         </Button>
-                        {errors.image &&
+                        {errors.image1 &&
                             <Alert sx={{ mt: 2 }} variant="outlined" severity="error">
-                                {`${errors.image?.message}`}
+                                {`${errors.image1?.message}`}
                             </Alert>
                         }
                     </Stack>
@@ -125,6 +158,7 @@ export const NewItemAdding: React.FC<{}> = () => {
                             InputProps={{
                                 startAdornment: <InputAdornment position="start"><CurrencyRubleIcon /></InputAdornment>,
                             }}
+                            onChange={(event) => field.onChange(+event.target.value)}
                             type="number"
                             error={!!errors.cost}
                             helperText={errors.cost ? errors.cost?.message : ''}
@@ -132,6 +166,76 @@ export const NewItemAdding: React.FC<{}> = () => {
                             fullWidth
                             margin='dense' />}
                     />
+                    <Controller
+                        name='description'
+                        control={control}
+                        render={({ field }) => <TextField {...field}
+                            type="text"
+                            error={!!errors.description}
+                            helperText={errors.description ? errors.description?.message : ''}
+                            label="Item description" variant='outlined'
+                            fullWidth
+                            margin='dense' />}
+                    />
+                    <Stack flexDirection='row' justifyContent='space-around' flexWrap='wrap'>
+                        <Controller
+                            name='batteryCapacity'
+                            control={control}
+                            render={({ field }) => <TextField {...field}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start"><BatteryChargingFullIcon /></InputAdornment>,
+                                }}
+                                onChange={(event) => field.onChange(+event.target.value)}
+                                type="number"
+                                error={!!errors.batteryCapacity}
+                                helperText={errors.batteryCapacity ? errors.batteryCapacity?.message : ''}
+                                label="Battery capacity" variant='outlined'
+                                margin='dense' />}
+                        />
+                        <Controller
+                            name='power'
+                            control={control}
+                            render={({ field }) => <TextField {...field}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start"><BoltIcon /></InputAdornment>,
+                                }}
+                                onChange={(event) => field.onChange(+event.target.value)}
+                                type="number"
+                                error={!!errors.power}
+                                helperText={errors.power ? errors.power?.message : ''}
+                                label="Power" variant='outlined'
+                                margin='dense' />}
+                        />
+                        <Controller
+                            name='speed'
+                            control={control}
+                            render={({ field }) => <TextField {...field}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start"><SpeedIcon /></InputAdornment>,
+                                }}
+                                onChange={(event) => field.onChange(+event.target.value)}
+                                type="number"
+                                error={!!errors.speed}
+                                helperText={errors.speed ? errors.speed?.message : ''}
+                                label="Speed" variant='outlined'
+                                margin='dense' />}
+                        />
+                        <Controller
+                            name='time'
+                            control={control}
+                            render={({ field }) => <TextField {...field}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start"><TimerOutlinedIcon /></InputAdornment>,
+                                }}
+                                onChange={(event) => field.onChange(+event.target.value)}
+                                type="number"
+                                error={!!errors.time}
+                                helperText={errors.time ? errors.time?.message : ''}
+                                label="Time" variant='outlined'
+                                margin='dense' />}
+                        />
+
+                    </Stack>
                     <LoadingButton loading={false} type='submit' variant='contained' sx={{ mt: 2, marginLeft: 'auto' }}>Submit</LoadingButton>
                 </Stack>
             </Stack>

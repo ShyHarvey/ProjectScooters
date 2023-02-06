@@ -7,7 +7,8 @@ type Images = {
 }
 export type Person = {
     name: string,
-    surname: string
+    surname: string,
+    id: number
 }
 export type Comment = {
     person: Person,

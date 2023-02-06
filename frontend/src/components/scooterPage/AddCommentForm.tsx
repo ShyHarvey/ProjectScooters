@@ -27,7 +27,6 @@ export const AddCommentForm: React.FC<{ id: number }> = ({ id }) => {
     const onSubmit: SubmitHandler<AddCommentData> = (data: any) => {
         data.mark = rating
         data.id = id
-        console.log(data);
         dispatch(addComment(data))
         reset()
     };
