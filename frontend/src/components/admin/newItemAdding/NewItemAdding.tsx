@@ -20,7 +20,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 
 const formSchema = z.object({
     name: z.string().min(1, { message: "Обязательное поле" }),
-    cost: z.number().min(1, { message: "Обязательное поле" }),
+    cost: z.number().positive().max(2147483647),
     image1: z
         .any()
         .refine((files) => files?.[0]?.size > 0, `Upload image`)
@@ -30,10 +30,10 @@ const formSchema = z.object({
             "Only .jpg, .jpeg, .png and .webp formats are supported."
         ),
     description: z.string().min(1, { message: "Обязательное поле" }),
-    batteryCapacity: z.number().positive(),
-    power: z.number().positive(),
-    speed: z.number().positive(),
-    time: z.number().positive(),
+    batteryCapacity: z.number().positive().max(50),
+    power: z.number().positive().max(25),
+    speed: z.number().positive().max(100),
+    time: z.number().positive().max(30),
 })
 type AddNewItemFormData = z.infer<typeof formSchema>
 
@@ -62,7 +62,6 @@ export const NewItemAdding: React.FC<{}> = () => {
     });
 
     const onSubmit: SubmitHandler<AddNewItemFormData> = (data) => {
-        console.log(data)
         let product = {
             name: data.name,
             cost: data.cost,
@@ -76,7 +75,6 @@ export const NewItemAdding: React.FC<{}> = () => {
         let formData = new FormData()
         formData.append('product', productData)
         formData.append('image1', data.image1[0])
-        console.log(formData)
         dispatch(fetchAddNewItem(formData))
     }
 

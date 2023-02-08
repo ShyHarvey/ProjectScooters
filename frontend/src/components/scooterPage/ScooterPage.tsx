@@ -15,7 +15,6 @@ export const ScooterPage: React.FC<{}> = () => {
     let { id } = useParams<{ id: string }>()
     let nav = useNavigate()
 
-    const [value, setValue] = React.useState<number | null>(null);
 
     const isAuth = useAppSelector(state => state.auth.isAuth)
     const loading = useAppSelector(state => state.catalog.loading)
@@ -37,7 +36,7 @@ export const ScooterPage: React.FC<{}> = () => {
     }
 
     return (
-        <Container sx={{ my: 2, p: 0 }}>
+        <Container sx={{ my: 2 }}>
             <Stack spacing={3}
                 justifyContent="center"
                 alignItems={{ xs: 'center', md: 'start' }}
@@ -69,7 +68,7 @@ export const ScooterPage: React.FC<{}> = () => {
             {isAuth === true ? <AddCommentForm id={id ? +id : 1} /> :
                 <Link sx={{ fontSize: '1.5rem', cursor: 'pointer' }} underline="hover" color='inherit' onClick={() => nav('/login')}>Login to leave a review</Link>
             }
-            {scooter.comments && scooter.comments.map((item, index) => <Comment {...item} key={index} />)}
+            {scooter.comments && scooter.comments.map((item, index) => <Comment {...item} key={index} productId={id !== undefined ? +id : 0} />)}
         </Container >
     )
 }

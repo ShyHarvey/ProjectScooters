@@ -44,7 +44,7 @@ export const ProductCardMUI: React.FC<Scooter> = memo(({ cost, id, images, name,
             <NavLink to={`/catalog/${id}`}>
                 <CardMedia
                     sx={{ height: 175 }}
-                    image={images[0].link}
+                    image={images[0].link ? images[0].link : 'https://shop.by/images/mizar_senator_sungate_1.jpg'}
                     title={`${name}`}
                 />
             </NavLink>

@@ -10,10 +10,11 @@ export type Person = {
     surname: string,
     id: number
 }
-export type Comment = {
+export interface CommentType {
     person: Person,
     text: string,
-    mark: number
+    mark: number,
+    id: number
 }
 export interface Scooter {
     id: number
@@ -26,7 +27,7 @@ export interface Scooter {
     description?: string,
     mark: number,
     images: Images[],
-    comments?: Comment[]
+    comments?: CommentType[]
 }
 
 type ScooterState = {
@@ -61,16 +62,16 @@ export const getOneScooterData = createAsyncThunk<void, number>('scootersCatalog
         const response = await catalogApi.getOneScooter(data)
         dispatch(setOneScooter(response.data))
     })
-// export const getComments = createAsyncThunk<void, void>('scootersCatalog/getComments',
-//     async (_, { dispatch }) => {
-//         const response = await catalogApi.getComments()
-//         dispatch(setComments(response.data))
-//     }
-// )
+
 export const addComment = createAsyncThunk<void, AddCommentData>('scootersCatalog/addComment',
     async (data, { dispatch }) => {
         await catalogApi.addComment(data)
         dispatch(getOneScooterData(data.id))
+    })
+export const deleteComment = createAsyncThunk<void, { commentId: number, productId: number }>('scootersCatalog/deleteComment',
+    async (data, { dispatch }) => {
+        await catalogApi.deleteComment(data.commentId)
+        dispatch(getOneScooterData(data.productId))
     })
 
 export const scootersCatalogReducer = createSlice({
@@ -89,10 +90,7 @@ export const scootersCatalogReducer = createSlice({
         },
         setQuery(state, action: PayloadAction<string>) {
             state.query = action.payload
-        },
-        // setComments(state, action: PayloadAction<Comment[]>) {
-        //     state.comments = action.payload
-        // }
+        }
     },
     extraReducers: builder => {
         builder.addCase(getScooters.pending, state => {
@@ -107,12 +105,12 @@ export const scootersCatalogReducer = createSlice({
         builder.addCase(getOneScooterData.fulfilled, state => {
             state.loading = false
         })
-        // builder.addCase(getComments.pending, state => {
-        //     state.loading = true
-        // })
-        // builder.addCase(getComments.fulfilled, state => {
-        //     state.loading = false
-        // })
+        builder.addCase(deleteComment.pending, state => {
+            state.loading = true
+        })
+        builder.addCase(deleteComment.fulfilled, state => {
+            state.loading = false
+        })
     }
 })
 

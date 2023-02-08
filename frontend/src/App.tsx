@@ -13,6 +13,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ScooterPage } from './components/scooterPage/ScooterPage';
 import { getCartFromLocalStorage } from './redux/cartReducer';
 import { getFavoritesFromLocalStorage } from './redux/favoritesReducer';
+import { getThemeFromStorage } from './redux/appReducer';
+import { Layout } from './Layout';
 
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
@@ -47,6 +49,7 @@ const App: React.FC = () => {
     }
     dispatch(getCartFromLocalStorage())
     dispatch(getFavoritesFromLocalStorage())
+    dispatch(getThemeFromStorage())
   }, [dispatch])
 
 
@@ -55,18 +58,19 @@ const App: React.FC = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <HeaderMUI />
           <Suspense>
             <Routes>
-              <Route path='/' element={<Catalog />} />
-              <Route path='/login' element={<LoginFormMUI />} />
-              <Route path='/registration' element={<RegistrationFormMUI />} />
-              <Route path='/cart' element={<Cart />} />
-              <Route path='/admin' element={<Admin />} />
-              <Route path='/catalog/:id' element={<ScooterPage />} />
-              <Route path='/favorites' element={<Favorites />} />
+              <Route path='/' element={<Layout />}>
+                <Route path='/' element={<Catalog />} />
+                <Route path='/login' element={<LoginFormMUI />} />
+                <Route path='/registration' element={<RegistrationFormMUI />} />
+                <Route path='/cart' element={<Cart />} />
+                <Route path='/admin' element={<Admin />} />
+                <Route path='/catalog/:id' element={<ScooterPage />} />
+                <Route path='/favorites' element={<Favorites />} />
 
-              <Route path='*' element={<NotFound />} />
+                <Route path='*' element={<NotFound />} />
+              </Route>
             </Routes>
           </Suspense>
         </Router>

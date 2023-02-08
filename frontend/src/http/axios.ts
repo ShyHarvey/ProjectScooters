@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Scooter, Comment } from "../redux/scootersCatalogReducer";
+import { Scooter, CommentType } from "../redux/scootersCatalogReducer";
 
 export const API_URL = process.env.REACT_APP_API_URL
 
@@ -80,18 +80,21 @@ export const authApi = {
 
 export const catalogApi = {
     async getScooters(page: number, query: string = ''): Promise<AxiosResponse<{ amount: number, products: Scooter[] }>> {
-        return apiInstance.get<{ amount: number, products: Scooter[] }>(`catalog?page=${page}&itemsPerPage=10`)
+        return apiInstance.get<{ amount: number, products: Scooter[] }>(`catalog?search=${query}&page=${page}&itemsPerPage=10`)
     },
     async getOneScooter(id: number): Promise<AxiosResponse<Scooter>> {
         return apiInstance.get<Scooter>(`catalog/${id}`)
     },
     async addComment(data: AddCommentData): Promise<AxiosResponse<void>> {
         return apiInstance.post<void>(`comment/add`, { ...data })
+    },
+    async deleteComment(id: number): Promise<void> {
+        return apiInstance.delete('comment/delete', { data: id })
     }
 }
 
 export const adminApi = {
     async addNewItem(data: any): Promise<void> {
-        return apiInstance.post('/admin/product/add', data)
+        return apiInstance.post('admin/product/add', data)
     }
 }

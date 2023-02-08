@@ -5,10 +5,12 @@ import { setPage, setQuery as setQueryGlobal } from '../../redux/scootersCatalog
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import useDebounce from '../../customHooks/useDebounce'
 
+
 export const SearchForm: React.FC<{}> = () => {
     const dispatch = useAppDispatch()
     const queryValue = useAppSelector(state => state.catalog.query)
     const [query, setQuery] = useState(queryValue)
+
     const debouncedQuery = useDebounce(query, 700)
 
     useEffect(() => {
