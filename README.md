@@ -1,11 +1,18 @@
 # ProjectScooters
 
 ## account for testing:
-* mail: ilia.andrejchenko@gmail.com 
+* Email: ilia.andrejchenko@gmail.com 
 * Password: admin
 
 
-## Information:
+## Implemented features:
+
+* JWT authorization
+* addition of new products
+* product search by name
+* shopping cart
+* favorites
+* light and dark themes
 
 
 ## Technologies that I used:
