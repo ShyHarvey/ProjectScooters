@@ -4,6 +4,7 @@ import cartReducer from "./cartReducer";
 import scootersCatalogReducer from "./scootersCatalogReducer";
 import favoritesReducer from "./favoritesReducer";
 import appReducer from "./appReducer";
+import adminReducer from "./adminReducer";
 
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
     cart: cartReducer,
     catalog: scootersCatalogReducer,
     favorites: favoritesReducer,
+    admin: adminReducer
 })
 
 const store = configureStore({

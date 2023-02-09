@@ -19,13 +19,13 @@ export interface CommentType {
 export interface Scooter {
     id: number
     name: string,
+    cost: string,
+    mark: number,
+    description?: string,
     batteryCapacity: string,
     power: number,
     speed: string,
     time: string,
-    cost: string,
-    description?: string,
-    mark: number,
     images: Images[],
     comments?: CommentType[]
 }

@@ -96,5 +96,11 @@ export const catalogApi = {
 export const adminApi = {
     async addNewItem(data: any): Promise<void> {
         return apiInstance.post('admin/product/add', data)
+    },
+    async getScooters(): Promise<AxiosResponse<{ amount: number, products: Scooter[] }>> {
+        return apiInstance.get<{ amount: number, products: Scooter[] }>(`catalog`)
+    },
+    async deleteScooter(id: number): Promise<void> {
+        return apiInstance.delete('admin/product/delete', { data: id })
     }
 }

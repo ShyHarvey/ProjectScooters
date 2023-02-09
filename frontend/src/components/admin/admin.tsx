@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/material';
 import { NewItemAdding } from './newItemAdding/NewItemAdding';
+import { ProductGrid } from './dataGrid/ProductGrid';
 
 
 interface TabPanelProps {
@@ -53,14 +54,14 @@ export default function Admin() {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="Добавление товара" {...a11yProps(0)} />
-                        <Tab label="Статистика" {...a11yProps(1)} />
+                        <Tab label="Product management" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
                     <NewItemAdding />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    Статистика
+                    <ProductGrid />
                 </TabPanel>
             </Container>
         </Box>
