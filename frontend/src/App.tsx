@@ -58,19 +58,18 @@ const App: React.FC = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
+          <HeaderMUI />
           <Suspense>
             <Routes>
-              <Route path='/' element={<Layout />}>
-                <Route path='/' element={<Catalog />} />
-                <Route path='/login' element={<LoginFormMUI />} />
-                <Route path='/registration' element={<RegistrationFormMUI />} />
-                <Route path='/cart' element={<Cart />} />
-                <Route path='/admin' element={<Admin />} />
-                <Route path='/catalog/:id' element={<ScooterPage />} />
-                <Route path='/favorites' element={<Favorites />} />
+              <Route path='/' element={<Catalog />} />
+              <Route path='/login' element={<LoginFormMUI />} />
+              <Route path='/registration' element={<RegistrationFormMUI />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/admin' element={<Admin />} />
+              <Route path='/catalog/:id' element={<ScooterPage />} />
+              <Route path='/favorites' element={<Favorites />} />
 
-                <Route path='*' element={<NotFound />} />
-              </Route>
+              <Route path='*' element={<NotFound />} />
             </Routes>
           </Suspense>
         </Router>

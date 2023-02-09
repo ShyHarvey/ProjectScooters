@@ -5,6 +5,7 @@ import { AppBar, Toolbar, Typography, Button, Box, IconButton, Badge, } from '@m
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { setQuery } from '../../redux/scootersCatalogReducer';
 import { Container } from '@mui/system';
 import { UserMenu } from './UserMenu';
 import { BurgerMenu } from './BurgerMenu';
@@ -37,7 +38,12 @@ export const HeaderMUI: React.FC<{}> = memo(() => {
                         KUGOO
                     </Typography>
 
-                    <Button onClick={() => nav('/')} variant="contained" endIcon={<MenuOpenIcon />} sx={{ mx: 3, display: { xs: 'none', md: 'inline-flex' } }}>
+                    <Button onClick={() => {
+                        nav('/')
+                        dispatch(setQuery(''))
+                    }} variant="contained"
+                        endIcon={<MenuOpenIcon />}
+                        sx={{ mx: 3, display: { xs: 'none', md: 'inline-flex' } }}>
                         Каталог
                     </Button>
 
