@@ -1,6 +1,8 @@
 # ProjectScooters
 
 ## account for testing:
+* mail: ilia.andrejchenko@gmail.com 
+* Password: admin
 
 
 ## Information:
