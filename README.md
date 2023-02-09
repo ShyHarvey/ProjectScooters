@@ -8,7 +8,9 @@
 ## Implemented features:
 
 * JWT authorization
-* addition of new products
+* registration
+* addition of new products with admin panel
+* deleting of products with admin panel
 * product search by name
 * shopping cart
 * favorites
