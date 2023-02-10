@@ -39,11 +39,11 @@ export const ProductCardMUI: React.FC<Scooter> = memo((scooterProps) => {
     }
 
     return (
-        <Card sx={{ width: 245, height: 396.5, boxShadow: 'none' }}>
+        <Card sx={{ width: 245, height: 466.5, boxShadow: 'none' }}>
             <NavLink to={`/catalog/${scooterProps.id}`}>
                 <CardMedia
-                    sx={{ height: 175 }}
-                    image={scooterProps.images[0].link !== undefined ? scooterProps.images[0].link : reserveImage}
+                    sx={{ height: 245 }}
+                    image={scooterProps.images[0] !== undefined ? scooterProps.images[0].link : reserveImage}
                     title={`${scooterProps.name}`}
                 />
             </NavLink>
