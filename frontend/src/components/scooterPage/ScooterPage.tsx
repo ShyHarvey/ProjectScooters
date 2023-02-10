@@ -12,6 +12,7 @@ import { AddCommentForm } from './AddCommentForm'
 
 
 export const ScooterPage: React.FC<{}> = () => {
+    const reserveImage = 'https://shop.by/images/mizar_senator_sungate_1.jpg'
     let { id } = useParams<{ id: string }>()
     let nav = useNavigate()
 
@@ -42,10 +43,10 @@ export const ScooterPage: React.FC<{}> = () => {
                 alignItems={{ xs: 'center', md: 'start' }}
                 direction={{ xs: 'column', md: 'row' }}
                 sx={{ mb: 2 }}>
-                <Box sx={{ height: 400, maxWidth: 580, width: '100%' }}>
+                <Box sx={{ height: 580, maxWidth: 580, width: '100%' }}>
                     <CardMedia
-                        sx={{ height: '100%', maxHeight: 400, maxWidth: 580, borderRadius: 3 }}
-                        image={scooter.images[0].link}
+                        sx={{ height: '100%', maxHeight: 580, maxWidth: 580, borderRadius: 3 }}
+                        image={scooter.images[0] !== undefined ? scooter.images[0].link : reserveImage}
                     />
                 </Box>
                 <Box sx={{ width: { xs: '100%', sm: 500, md: '100%' } }}>
