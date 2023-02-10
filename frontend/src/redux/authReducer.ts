@@ -6,16 +6,18 @@ import axios, { AxiosError } from 'axios';
 type AuthState = {
     id: number | null,
     username: string | null,
-    role: 'ROLE_USER'| 'ROLE_ADMIN' | null,
+    role: 'ROLE_USER' | 'ROLE_ADMIN' | null,
     isAuth: boolean,
     loading: boolean,
     axiosError: boolean,
 }
 
-type AccessTokenDecoded ={
+type AccessTokenDecoded = {
+    id: number,
+    name: string,
+    surname: string,
     email: string,
-    iss: string,
-    role: 'ROLE_USER'| 'ROLE_ADMIN',
+    role: 'ROLE_USER' | 'ROLE_ADMIN',
 }
 
 
@@ -30,12 +32,13 @@ const initialState: AuthState = {
 
 export const fetchRegistration = createAsyncThunk<void, RegistrationData>('auth/fetchRegistration',
     async (data, { dispatch }) => {
-            const response = await authApi.registration(data)
-            localStorage.setItem('token', response.data.accessToken)
-            let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
-            dispatch(setUsername(userData.iss))
-            dispatch(setRole(userData.role))
-            dispatch(setIsAuth(true))
+        const response = await authApi.registration(data)
+        localStorage.setItem('token', response.data.accessToken)
+        let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
+        dispatch(setUsername(userData.name))
+        dispatch(setRole(userData.role))
+        dispatch(setUserId(userData.id))
+        dispatch(setIsAuth(true))
     })
 
 export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
@@ -44,12 +47,13 @@ export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
             const response = await authApi.login(data.email, data.password)
             localStorage.setItem('token', response.data.accessToken)
             let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
-            dispatch(setUsername(userData.iss))
+            dispatch(setUsername(userData.name))
             dispatch(setRole(userData.role))
+            dispatch(setUserId(userData.id))
             dispatch(setIsAuth(true))
             dispatch(setError(false))
-        } catch (err: any|unknown) {
-            let error : AxiosError = err
+        } catch (err: any | unknown) {
+            let error: AxiosError = err
             dispatch(setError(error.isAxiosError))
         }
     })
@@ -60,6 +64,7 @@ export const fetchLogout = createAsyncThunk('auth/fetchLogout',
             localStorage.removeItem('token')
             dispatch(setUsername(null))
             dispatch(setUsername(null))
+            dispatch(setUserId(null))
             dispatch(setRole(null))
             dispatch(setIsAuth(false))
         } catch (error) {
@@ -69,14 +74,14 @@ export const fetchLogout = createAsyncThunk('auth/fetchLogout',
 export const checkAuth = createAsyncThunk('auth/checkAuth',
     async (_, { dispatch }) => {
         try {
-            const response = await axios.get(`${API_URL}auth/refreshtoken`, { withCredentials: true })
-            localStorage.setItem('token', response.data.token)
+            const response = await axios.get(`${API_URL}auth/getnewaccesstoken`, { withCredentials: true })
+            localStorage.setItem('token', response.data.accessToken)
             let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
-            dispatch(setUsername(userData.iss))
+            dispatch(setUsername(userData.name))
             dispatch(setRole(userData.role))
             dispatch(setIsAuth(true))
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            console.log(error?.response)
         }
     })
 
@@ -93,10 +98,10 @@ export const authSLice = createSlice({
         setUsername(state, action: PayloadAction<string | null>) {
             state.username = action.payload
         },
-        setRole(state, action: PayloadAction<'ROLE_USER'| 'ROLE_ADMIN' | null>) {
+        setRole(state, action: PayloadAction<'ROLE_USER' | 'ROLE_ADMIN' | null>) {
             state.role = action.payload
         },
-        setError(state, action:PayloadAction<boolean>){
+        setError(state, action: PayloadAction<boolean>) {
             state.axiosError = action.payload
         }
     },

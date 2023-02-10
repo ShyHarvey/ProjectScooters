@@ -13,6 +13,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ScooterPage } from './components/scooterPage/ScooterPage';
 import { getCartFromLocalStorage } from './redux/cartReducer';
 import { getFavoritesFromLocalStorage } from './redux/favoritesReducer';
+import { getThemeFromStorage } from './redux/appReducer';
+import { Layout } from './Layout';
 
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
@@ -47,6 +49,7 @@ const App: React.FC = () => {
     }
     dispatch(getCartFromLocalStorage())
     dispatch(getFavoritesFromLocalStorage())
+    dispatch(getThemeFromStorage())
   }, [dispatch])
 
 

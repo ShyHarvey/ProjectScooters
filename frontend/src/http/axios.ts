@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Scooter, Comment } from "../redux/scootersCatalogReducer";
+import { Scooter, CommentType } from "../redux/scootersCatalogReducer";
 
 export const API_URL = process.env.REACT_APP_API_URL
 
@@ -18,12 +18,18 @@ export type RegistrationData = {
     password: string,
 }
 
+export type AddCommentData = {
+    id: number,
+    mark: number,
+    text: string
+}
+
 type AuthResponse = {
     accessToken: string;
 }
 
 
-
+axios.defaults.withCredentials = true
 
 const apiInstance = axios.create({
     withCredentials: true,
@@ -45,7 +51,7 @@ apiInstance.interceptors.response.use((config) => {
         const originalRequest = error.config;
         if (error.response.status === 401 && error.config && !error.config._isRetry) {
             originalRequest._isRetry = true;
-            const response = await axios.get(`${API_URL}auth/refreshtoken`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}auth/getnewaccesstoken`, { withCredentials: true });
             localStorage.setItem('token', response.data.accessToken);
             return apiInstance.request(originalRequest);
         }
@@ -74,12 +80,27 @@ export const authApi = {
 
 export const catalogApi = {
     async getScooters(page: number, query: string = ''): Promise<AxiosResponse<{ amount: number, products: Scooter[] }>> {
-        return axios.get<{ amount: number, products: Scooter[] }>(`https://shop.javaspringbackend.software/catalog?page=${page}&itemsPerPage=10`)
+        return apiInstance.get<{ amount: number, products: Scooter[] }>(`catalog?search=${query}&page=${page}&itemsPerPage=10`)
     },
-    async getOneScooter(id: string): Promise<AxiosResponse<Scooter>> {
-        return axios.get<Scooter>(`https://shop.javaspringbackend.software/catalog/${id}`)
+    async getOneScooter(id: number): Promise<AxiosResponse<Scooter>> {
+        return apiInstance.get<Scooter>(`catalog/${id}`)
     },
-    async getComments(): Promise<AxiosResponse<Comment[]>> {
-        return axios.get<Comment[]>(`https://63be716bf5cfc0949b5795e9.mockapi.io/mock/comments`)
+    async addComment(data: AddCommentData): Promise<AxiosResponse<void>> {
+        return apiInstance.post<void>(`comment/add`, { ...data })
+    },
+    async deleteComment(id: number): Promise<void> {
+        return apiInstance.delete('comment/delete', { data: id })
+    }
+}
+
+export const adminApi = {
+    async addNewItem(data: any): Promise<void> {
+        return apiInstance.post('admin/product/add', data)
+    },
+    async getScooters(): Promise<AxiosResponse<{ amount: number, products: Scooter[] }>> {
+        return apiInstance.get<{ amount: number, products: Scooter[] }>(`catalog`)
+    },
+    async deleteScooter(id: number): Promise<void> {
+        return apiInstance.delete('admin/product/delete', { data: id })
     }
 }

@@ -11,20 +11,21 @@ import { addItemToCart, reduceItemCountInCart, deleteItemFromCart } from '../../
 import { ScooterForCart } from '../../redux/cartReducer';
 
 
-
-
-
-export const CartItem: React.FC<ScooterForCart> = ({ cost, id, images, name, number, rating }) => {
+export const CartItem: React.FC<ScooterForCart> = (scooterProps) => {
 
     const dispatch = useAppDispatch()
     const add = () => {
-        dispatch(addItemToCart({ cost, id, images, name, number, rating }))
+        dispatch(addItemToCart({ ...scooterProps }))
     }
     const reduce = () => {
-        dispatch(reduceItemCountInCart({ cost, id, images, name, number, rating }))
+        dispatch(reduceItemCountInCart({ ...scooterProps }))
     }
     const deleteItem = () => {
-        dispatch(deleteItemFromCart({ id, cost, number }))
+        dispatch(deleteItemFromCart({
+            id: scooterProps.scooter.id,
+            cost: scooterProps.scooter.cost,
+            number: scooterProps.amount
+        }))
     }
 
     const nav = useNavigate()
@@ -34,37 +35,37 @@ export const CartItem: React.FC<ScooterForCart> = ({ cost, id, images, name, num
         <Card sx={{ position: 'relative', display: 'flex', justifyContent: 'center', mb: 2, flexWrap: 'wrap' }}>
             <CardMedia
                 sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1, cursor: 'pointer' }}
-                onClick={() => nav(`/catalog/${id}`)}
-                image={images[0].link}
+                onClick={() => nav(`/catalog/${scooterProps.scooter.id}`)}
+                image={scooterProps.scooter.images[0].link}
                 title="scooter"
             />
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>
                 <CardContent sx={{ px: 1, py: 0, minWidth: '222px' }}>
-                    <Typography onClick={() => nav(`/catalog/${id}`)}
+                    <Typography onClick={() => nav(`/catalog/${scooterProps.scooter.id}`)}
                         variant="h6"
                         component="div"
                         sx={{ fontWeight: 'bold', cursor: 'pointer', '&:hover': { color: `primary.main` } }}>
-                        {name}
+                        {scooterProps.scooter.name}
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Ёмкость аккумулятора: 2000 mAh
+                        Ёмкость аккумулятора: {scooterProps.scooter.batteryCapacity} Ah
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Максимальная скорость: 60 км/ч
+                        Максимальная скорость: {scooterProps.scooter.speed} км/ч
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Мощьность двигателя: 1.2 л/с
+                        Мощьность двигателя: {scooterProps.scooter.power} л/с
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Работа без подзарядки: 5 ч
+                        Работа без подзарядки: {scooterProps.scooter.time} ч
                     </Typography>
                 </CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mx: 2, justifyContent: 'center' }}>
-                    <IconButton onClick={reduce} disabled={number === 1} color="primary">
+                    <IconButton onClick={reduce} disabled={scooterProps.amount === 1} color="primary">
                         <RemoveIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', width: '35px', textAlign: 'center' }}>
-                        {number}
+                        {scooterProps.amount}
                     </Typography>
                     <IconButton onClick={add} color="primary">
                         <AddIcon />
@@ -72,7 +73,7 @@ export const CartItem: React.FC<ScooterForCart> = ({ cost, id, images, name, num
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mx: 2 }}>
                     <Typography gutterBottom variant="h6" component="div" align='center' sx={{ fontWeight: 'bold', width: '100px', margin: '0 auto' }}>
-                        {+cost * number}₽
+                        {+scooterProps.scooter.cost * scooterProps.amount}₽
                     </Typography>
                 </Box>
 

@@ -16,9 +16,16 @@ export const appReducer = createSlice({
     reducers: {
         toggleTheme(state) {
             state.theme === 'light' ? state.theme = 'dark' : state.theme = 'light'
+            localStorage.setItem('theme', state.theme)
+        },
+        getThemeFromStorage(state) {
+            let themeFromStorage = localStorage.getItem('theme')
+            if (themeFromStorage === 'light' || themeFromStorage === 'dark') {
+                state.theme = themeFromStorage
+            }
         }
     }
 })
 
 export default appReducer.reducer
-export const { toggleTheme } = appReducer.actions
+export const { toggleTheme, getThemeFromStorage } = appReducer.actions
