@@ -27,57 +27,56 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-export const ProductCardMUI: React.FC<Scooter> = memo(({ cost, id, images, name, mark, batteryCapacity, power, speed, time }) => {
-
+export const ProductCardMUI: React.FC<Scooter> = memo((scooterProps) => {
+    const reserveImage = 'https://shop.by/images/mizar_senator_sungate_1.jpg'
     const dispatch = useAppDispatch()
-    const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === id))
-    let number = 1
+    const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === scooterProps.id))
     let sendToCart = () => {
-        dispatch(addItemToCart({ cost, id, images, name, number, mark, batteryCapacity, power, speed, time }))
+        dispatch(addItemToCart({ scooter: { ...scooterProps }, amount: 1 }))
     }
     let sendToFavorites = () => {
-        dispatch(addItemToFavorites({ cost, id, images, name, mark, batteryCapacity, power, speed, time }))
+        dispatch(addItemToFavorites({ ...scooterProps }))
     }
 
     return (
         <Card sx={{ width: 245, height: 396.5, boxShadow: 'none' }}>
-            <NavLink to={`/catalog/${id}`}>
+            <NavLink to={`/catalog/${scooterProps.id}`}>
                 <CardMedia
                     sx={{ height: 175 }}
-                    image={images[0].link ? images[0].link : 'https://shop.by/images/mizar_senator_sungate_1.jpg'}
-                    title={`${name}`}
+                    image={scooterProps.images[0].link !== undefined ? scooterProps.images[0].link : reserveImage}
+                    title={`${scooterProps.name}`}
                 />
             </NavLink>
             <CardContent sx={{ padding: 0, px: 3 }}>
                 <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold', height: '64px' }}>
-                    {name}
+                    {scooterProps.name}
                 </Typography>
-                <Rating defaultValue={+mark} precision={0.5} readOnly />
+                <Rating defaultValue={+scooterProps.mark} precision={0.5} readOnly />
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
                         <Item>
-                            <BatteryChargingFullIcon /> {batteryCapacity} Ah
+                            <BatteryChargingFullIcon /> {scooterProps.batteryCapacity} Ah
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
                         <Item>
-                            <BoltIcon /> {power} л/c
+                            <BoltIcon /> {scooterProps.power} л/c
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
                         <Item>
-                            <SpeedIcon sx={{ marginRight: '3px' }} /> {speed} км/ч
+                            <SpeedIcon sx={{ marginRight: '3px' }} /> {scooterProps.speed} км/ч
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
                         <Item>
-                            <TimerOutlinedIcon sx={{ marginRight: '3px' }} /> {time} ч
+                            <TimerOutlinedIcon sx={{ marginRight: '3px' }} /> {scooterProps.time} ч
                         </Item>
                     </Grid>
                 </Grid>
                 <CardActions sx={{ padding: 0 }}>
                     <Typography variant="h6" component='p' sx={{ fontWeight: 'bold', flexGrow: 1 }}>
-                        {cost}₽
+                        {scooterProps.cost}₽
                     </Typography>
                     <IconButton onClick={sendToCart} color="primary" aria-label="add to shopping cart">
                         <AddShoppingCartIcon />

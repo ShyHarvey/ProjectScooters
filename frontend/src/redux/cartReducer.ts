@@ -2,8 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Scooter } from './scootersCatalogReducer'
 
 
-export interface ScooterForCart extends Scooter {
-    number: number
+export interface ScooterForCart {
+    scooter: Scooter
+    amount: number
 }
 
 type CartState = {
@@ -23,29 +24,27 @@ export const cartReducer = createSlice({
     initialState,
     reducers: {
         addItemToCart(state, action: PayloadAction<ScooterForCart>) {
-            let index = state.cartItems.findIndex(item => item.id === action.payload.id)
+            let index = state.cartItems.findIndex(item => item.scooter.id === action.payload.scooter.id)
             if (index !== -1) {
-                state.cartItems[index].number = state.cartItems[index].number + 1
+                state.cartItems[index].amount = state.cartItems[index].amount + 1
             } else {
                 state.cartItems.push(action.payload)
             }
             state.totalNumber = state.totalNumber + 1
-            state.totalCost = state.totalCost + +action.payload.cost
+            state.totalCost = state.totalCost + +action.payload.scooter.cost
             localStorage.setItem('scootersCart', JSON.stringify(state))
         },
         reduceItemCountInCart(state, action: PayloadAction<ScooterForCart>) {
-            let index = state.cartItems.findIndex(item => item.id === action.payload.id)
-            if (state.cartItems[index].number > 1) {
-                state.cartItems[index].number = state.cartItems[index].number - 1
-            } else {
-
+            let index = state.cartItems.findIndex(item => item.scooter.id === action.payload.scooter.id)
+            if (state.cartItems[index].amount > 1) {
+                state.cartItems[index].amount = state.cartItems[index].amount - 1
             }
             state.totalNumber = state.totalNumber - 1
-            state.totalCost = state.totalCost - +action.payload.cost
+            state.totalCost = state.totalCost - +action.payload.scooter.cost
             localStorage.setItem('scootersCart', JSON.stringify(state))
         },
         deleteItemFromCart(state, action: PayloadAction<{ id: number, cost: string, number: number }>) {
-            let index = state.cartItems.findIndex(item => item.id === action.payload.id)
+            let index = state.cartItems.findIndex(item => item.scooter.id === action.payload.id)
             state.cartItems.splice(index, 1)
             state.totalCost = state.totalCost - (+action.payload.cost * action.payload.number)
             state.totalNumber = state.totalNumber - action.payload.number

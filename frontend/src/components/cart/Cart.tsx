@@ -14,7 +14,7 @@ const Cart: React.FC<{}> = () => {
             <Typography gutterBottom variant='h4'>Корзина</Typography>
             <Grid container spacing={2}>
                 <Grid item sx={{ mb: 2 }} xs={12} md={9}>
-                    {cartItems.map(item => <CartItem key={item.id}  {...item} />)}
+                    {cartItems.map(item => <CartItem key={item.scooter.id}  {...item} />)}
 
                 </Grid>
                 <Grid item sx={{ mb: 4 }} xs={12} md={3}>
