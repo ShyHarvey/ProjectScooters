@@ -13,8 +13,8 @@
 * deleting of products with admin panel
 * ratings and reviews on products
 * product search by name
-* shopping cart
-* favorites
+* shopping car that is synchronized with the server and linked to the account
+* local favorites
 * light and dark themes
 
 
