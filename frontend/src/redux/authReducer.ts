@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { API_URL, authApi, LoginData, RegistrationData } from '../http/axios'
 import jwt_decode from "jwt-decode";
 import axios, { AxiosError } from 'axios';
+import { clearCartState, getCartAfterLogin, getCartFromServer } from './cartReducer';
 
 type AuthState = {
     id: number | null,
@@ -52,6 +53,7 @@ export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
             dispatch(setUserId(userData.id))
             dispatch(setIsAuth(true))
             dispatch(setError(false))
+            dispatch(getCartAfterLogin())
         } catch (err: any | unknown) {
             let error: AxiosError = err
             dispatch(setError(error.isAxiosError))
@@ -67,6 +69,7 @@ export const fetchLogout = createAsyncThunk('auth/fetchLogout',
             dispatch(setUserId(null))
             dispatch(setRole(null))
             dispatch(setIsAuth(false))
+            dispatch(clearCartState())
         } catch (error) {
             console.log(error)
         }
@@ -80,6 +83,7 @@ export const checkAuth = createAsyncThunk('auth/checkAuth',
             dispatch(setUsername(userData.name))
             dispatch(setRole(userData.role))
             dispatch(setIsAuth(true))
+            dispatch(getCartAfterLogin())
         } catch (error: any) {
             console.log(error?.response)
         }

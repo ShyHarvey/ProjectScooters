@@ -3,7 +3,7 @@ import { Rating, Button, Box, TextField, Typography } from '@mui/material'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { AddCommentData } from '../../http/axios';
 import { useAppDispatch } from '../../redux/hooks';
-import { addComment, getOneScooterData } from '../../redux/scootersCatalogReducer';
+import { addComment } from '../../redux/scootersCatalogReducer';
 
 
 export const AddCommentForm: React.FC<{ id: number }> = ({ id }) => {
@@ -41,7 +41,7 @@ export const AddCommentForm: React.FC<{ id: number }> = ({ id }) => {
                 sx={{ verticalAlign: 'middle' }}
             >
                 <Rating
-                    precision={0.5}
+                    precision={1}
                     name="simple-controlled"
                     value={rating}
                     onChange={(event, newValue) => {

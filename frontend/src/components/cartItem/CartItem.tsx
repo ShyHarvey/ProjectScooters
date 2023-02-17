@@ -4,28 +4,43 @@ import { Box, Card, CardContent, CardMedia, IconButton, Typography } from '@mui/
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useAppDispatch } from '../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { useNavigate } from 'react-router-dom';
-import { addItemToCart, reduceItemCountInCart, deleteItemFromCart } from '../../redux/cartReducer'
+import { addItemToCartLocal, reduceItemCountInCartLocal, deleteItemFromCartLocal, addOneItemToCart, deleteItemFromCart } from '../../redux/cartReducer'
 
 import { ScooterForCart } from '../../redux/cartReducer';
 
 
 export const CartItem: React.FC<ScooterForCart> = (scooterProps) => {
-
+    let isAuth = useAppSelector(state => state.auth.isAuth)
+    const reserveImage = 'https://shop.by/images/mizar_senator_sungate_1.jpg'
     const dispatch = useAppDispatch()
     const add = () => {
-        dispatch(addItemToCart({ ...scooterProps }))
+        if (isAuth) {
+            dispatch(addOneItemToCart({ productId: scooterProps.product.id, amount: 1 }))
+        } else {
+            dispatch(addItemToCartLocal({ ...scooterProps }))
+        }
+
     }
     const reduce = () => {
-        dispatch(reduceItemCountInCart({ ...scooterProps }))
+        if (isAuth) {
+            dispatch(deleteItemFromCart({ productId: scooterProps.product.id, isAll: false }))
+        } else {
+            dispatch(reduceItemCountInCartLocal({ ...scooterProps }))
+        }
     }
     const deleteItem = () => {
-        dispatch(deleteItemFromCart({
-            id: scooterProps.scooter.id,
-            cost: scooterProps.scooter.cost,
-            number: scooterProps.amount
-        }))
+        if (isAuth) {
+            dispatch(deleteItemFromCart({ productId: scooterProps.product.id, isAll: true }))
+        } else {
+            dispatch(deleteItemFromCartLocal({
+                id: scooterProps.product.id,
+                cost: scooterProps.product.cost,
+                number: scooterProps.amount
+            }))
+        }
+
     }
 
     const nav = useNavigate()
@@ -35,29 +50,29 @@ export const CartItem: React.FC<ScooterForCart> = (scooterProps) => {
         <Card sx={{ position: 'relative', display: 'flex', justifyContent: 'center', mb: 2, flexWrap: 'wrap' }}>
             <CardMedia
                 sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1, cursor: 'pointer' }}
-                onClick={() => nav(`/catalog/${scooterProps.scooter.id}`)}
-                image={scooterProps.scooter.images[0].link}
+                onClick={() => nav(`/catalog/${scooterProps.product.id}`)}
+                image={scooterProps.product.images[0] !== undefined ? scooterProps.product.images[0].link : reserveImage}
                 title="scooter"
             />
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>
                 <CardContent sx={{ px: 1, py: 0, minWidth: '222px' }}>
-                    <Typography onClick={() => nav(`/catalog/${scooterProps.scooter.id}`)}
+                    <Typography onClick={() => nav(`/catalog/${scooterProps.product.id}`)}
                         variant="h6"
                         component="div"
                         sx={{ fontWeight: 'bold', cursor: 'pointer', '&:hover': { color: `primary.main` } }}>
-                        {scooterProps.scooter.name}
+                        {scooterProps.product.name}
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Ёмкость аккумулятора: {scooterProps.scooter.batteryCapacity} Ah
+                        Ёмкость аккумулятора: {scooterProps.product.batteryCapacity} Ah
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Максимальная скорость: {scooterProps.scooter.speed} км/ч
+                        Максимальная скорость: {scooterProps.product.speed} км/ч
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Мощьность двигателя: {scooterProps.scooter.power} л/с
+                        Мощьность двигателя: {scooterProps.product.power} л/с
                     </Typography>
                     <Typography variant="body2" component="div" >
-                        Работа без подзарядки: {scooterProps.scooter.time} ч
+                        Работа без подзарядки: {scooterProps.product.time} ч
                     </Typography>
                 </CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mx: 2, justifyContent: 'center' }}>
@@ -73,7 +88,7 @@ export const CartItem: React.FC<ScooterForCart> = (scooterProps) => {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mx: 2 }}>
                     <Typography gutterBottom variant="h6" component="div" align='center' sx={{ fontWeight: 'bold', width: '100px', margin: '0 auto' }}>
-                        {+scooterProps.scooter.cost * scooterProps.amount}₽
+                        {+scooterProps.product.cost * scooterProps.amount}₽
                     </Typography>
                 </Box>
 

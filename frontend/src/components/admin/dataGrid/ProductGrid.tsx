@@ -1,5 +1,5 @@
 import React, { useEffect, memo } from 'react'
-import Box from '@mui/material/Box';
+import { Box, Alert } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid, GridColumns, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
@@ -10,6 +10,7 @@ import { getScootersForAdmin, deleteScooterFromAdmin } from '../../../redux/admi
 
 export const ProductGrid: React.FC<{}> = memo(() => {
 
+    let role = useAppSelector(state => state.auth.role)
     const dispatch = useAppDispatch()
     const [pageSize, setPageSize] = React.useState<number>(5);
 
@@ -96,6 +97,12 @@ export const ProductGrid: React.FC<{}> = memo(() => {
                 checkboxSelection
                 disableSelectionOnClick
             />
+            {role !== 'ROLE_ADMIN' &&
+
+                <Alert sx={{ mt: 3 }} variant="outlined" severity="warning">
+                    Read-only because you are not logged in as an administrator
+                </Alert>
+            }
         </Box>
     )
 })

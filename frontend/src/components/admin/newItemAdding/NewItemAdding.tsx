@@ -10,7 +10,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 import DownloadIcon from '@mui/icons-material/Download';
-import { useAppDispatch } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { fetchAddNewItem } from '../../../redux/adminReducer';
 
 
@@ -37,7 +37,9 @@ const formSchema = z.object({
 })
 type AddNewItemFormData = z.infer<typeof formSchema>
 
+
 export const NewItemAdding: React.FC<{}> = () => {
+    let role = useAppSelector(state => state.auth.role)
 
     const dispatch = useAppDispatch()
 
@@ -237,6 +239,12 @@ export const NewItemAdding: React.FC<{}> = () => {
                     <LoadingButton loading={false} type='submit' variant='contained' sx={{ mt: 2, marginLeft: 'auto' }}>Submit</LoadingButton>
                 </Stack>
             </Stack>
+            {role !== 'ROLE_ADMIN' &&
+
+                <Alert sx={{ mt: 3 }} variant="outlined" severity="warning">
+                    Log in as an administrator, otherwise it won't work
+                </Alert>
+            }
         </Box>
     )
 }

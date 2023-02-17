@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { Scooter, CommentType } from "../redux/scootersCatalogReducer";
+import { ScooterForCart } from "../redux/cartReducer";
+import { Scooter } from "../redux/scootersCatalogReducer";
 
 export const API_URL = process.env.REACT_APP_API_URL
 
@@ -28,6 +29,15 @@ type AuthResponse = {
     accessToken: string;
 }
 
+export type AddOneItemToCartData = {
+    productId: number,
+    amount: number
+}
+
+export type DeleteOneItemFromCartData = {
+    productId: number,
+    isAll: boolean
+}
 
 axios.defaults.withCredentials = true
 
@@ -102,5 +112,22 @@ export const adminApi = {
     },
     async deleteScooter(id: number): Promise<void> {
         return apiInstance.delete('admin/product/delete', { data: id })
+    }
+}
+
+
+
+export const cartApi = {
+    async getCart(): Promise<AxiosResponse<ScooterForCart[]>> {
+        return apiInstance.get('cart/get')
+    },
+    async addOneItem(data: AddOneItemToCartData) {
+        return apiInstance.post('cart/add', data)
+    },
+    async deleteOneItem(deletingData: DeleteOneItemFromCartData) {
+        return apiInstance.delete('cart/delete', { data: deletingData })
+    },
+    async clearCartOnServer() {
+        return apiInstance.delete('cart/deleteCart')
     }
 }
