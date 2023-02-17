@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 import { Scooter } from '../../redux/scootersCatalogReducer';
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { addItemToCart } from '../../redux/cartReducer';
+import { addItemToCartLocal, addOneItemToCart } from '../../redux/cartReducer';
 import { addItemToFavorites } from '../../redux/favoritesReducer';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -30,9 +30,14 @@ const Item = styled(Paper)(({ theme }) => ({
 export const ProductCardMUI: React.FC<Scooter> = memo((scooterProps) => {
     const reserveImage = 'https://shop.by/images/mizar_senator_sungate_1.jpg'
     const dispatch = useAppDispatch()
+    const isAuth = useAppSelector(state => state.auth.isAuth)
     const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === scooterProps.id))
     let sendToCart = () => {
-        dispatch(addItemToCart({ scooter: { ...scooterProps }, amount: 1 }))
+        if (isAuth) {
+            dispatch(addOneItemToCart({ productId: scooterProps.id, amount: 1 }))
+        } else {
+            dispatch(addItemToCartLocal({ product: { ...scooterProps }, amount: 1 }))
+        }
     }
     let sendToFavorites = () => {
         dispatch(addItemToFavorites({ ...scooterProps }))
