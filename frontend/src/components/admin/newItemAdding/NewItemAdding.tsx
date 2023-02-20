@@ -19,7 +19,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 
 
 const formSchema = z.object({
-    name: z.string().min(1, { message: "Обязательное поле" }),
+    name: z.string().min(1, { message: "Обязательное поле" }).max(30, { message: 'max length is 30' }),
     cost: z.number().positive().max(2147483647),
     image1: z
         .any()
@@ -29,7 +29,7 @@ const formSchema = z.object({
             (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
             "Only .jpg, .jpeg, .png and .webp formats are supported."
         ),
-    description: z.string().min(1, { message: "Обязательное поле" }),
+    description: z.string().min(1, { message: "Обязательное поле" }).max(400, { message: 'max length is 400' }),
     batteryCapacity: z.number().positive().max(50),
     power: z.number().positive().max(25),
     speed: z.number().positive().max(100),

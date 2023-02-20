@@ -1,14 +1,19 @@
-import React, { useEffect, memo } from 'react'
-import { Box, Alert } from '@mui/material';
+import React, { useEffect, memo, useState } from 'react'
+import { Box, Alert, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid, GridColumns, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { Scooter } from '../../../redux/scootersCatalogReducer';
 import { getScootersForAdmin, deleteScooterFromAdmin } from '../../../redux/adminReducer';
+import { ProductEditModal } from '../editModal/ProductEditModal';
 
 
 export const ProductGrid: React.FC<{}> = memo(() => {
+    const [openProductEdit, setOpenProductEdit] = useState(false);
+    const handleOpen = () => setOpenProductEdit(true);
+    const handleClose = () => setOpenProductEdit(false);
+    const [editingProduct, setEditingProduct] = useState<Scooter>();
 
     let role = useAppSelector(state => state.auth.role)
     const dispatch = useAppDispatch()
@@ -77,7 +82,10 @@ export const ProductGrid: React.FC<{}> = memo(() => {
                     <GridActionsCellItem
                         icon={<EditIcon />}
                         label="Edit"
-                        onClick={() => console.log('edited', params.id)}
+                        onClick={() => {
+                            setEditingProduct(params.row)
+                            handleOpen()
+                        }}
                     />,
                 ],
             },
@@ -85,24 +93,27 @@ export const ProductGrid: React.FC<{}> = memo(() => {
         ], [dispatch])
 
     return (
-        <Box sx={{ height: '70vh', width: '100%' }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={pageSize}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100, rows.length]}
-                components={{ Toolbar: GridToolbar }}
-                loading={isLoading}
-                checkboxSelection
-                disableSelectionOnClick
-            />
-            {role !== 'ROLE_ADMIN' &&
+        <>
+            <Box sx={{ height: '70vh', width: '100%' }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={pageSize}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                    rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100, rows.length]}
+                    components={{ Toolbar: GridToolbar }}
+                    loading={isLoading}
+                    checkboxSelection
+                    disableSelectionOnClick
+                />
+                {role !== 'ROLE_ADMIN' &&
 
-                <Alert sx={{ mt: 3 }} variant="outlined" severity="warning">
-                    Read-only because you are not logged in as an administrator
-                </Alert>
-            }
-        </Box>
+                    <Alert sx={{ mt: 3 }} variant="outlined" severity="warning">
+                        Read-only because you are not logged in as an administrator
+                    </Alert>
+                }
+            </Box>
+            {editingProduct && <ProductEditModal openProductEdit={openProductEdit} handleClose={handleClose} productData={editingProduct} />}
+        </>
     )
 })

@@ -20,11 +20,11 @@ import MenuItem from '@mui/material/MenuItem'
 
 
 const formSchema = z.object({
-    name: z.string().min(1, { message: 'Обязательное поле' }),
-    surname: z.string().min(1, { message: 'Обязательное поле' }),
+    name: z.string().min(1, { message: 'Обязательное поле' }).max(30, { message: 'max length is 30' }),
+    surname: z.string().min(1, { message: 'Обязательное поле' }).max(30, { message: 'max length is 30' }),
     yearOfBirth: z.number().min(1, { message: 'Обязательное поле' }),
     country: z.string().min(1, { message: 'Обязательное поле' }),
-    email: z.string().email('Введите корректный email'),
+    email: z.string().email('Введите корректный email').max(50, { message: 'max length is 50' }),
     username: z.string().min(1, { message: 'Обязательное поле' }),
     password: z.string().min(1, { message: "Обязательное поле" })
 })
