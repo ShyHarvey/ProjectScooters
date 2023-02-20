@@ -38,6 +38,15 @@ export type DeleteOneItemFromCartData = {
     productId: number,
     isAll: boolean
 }
+export type EditScooterData = {
+    id: number
+    name: string,
+    cost: number,
+    batteryCapacity: number,
+    power: number,
+    speed: number,
+    time: number,
+}
 
 axios.defaults.withCredentials = true
 
@@ -112,6 +121,9 @@ export const adminApi = {
     },
     async deleteScooter(id: number): Promise<void> {
         return apiInstance.delete('admin/product/delete', { data: id })
+    },
+    async editScooter(data: EditScooterData): Promise<void> {
+        return apiInstance.patch('admin/product/update', data)
     }
 }
 
