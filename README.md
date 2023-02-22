@@ -11,6 +11,7 @@
 * registration
 * addition of new products with admin panel
 * deleting of products with admin panel
+* editing of products with admin panel
 * ratings and reviews on products
 * product search by name
 * shopping car that is synchronized with the server and linked to the account
