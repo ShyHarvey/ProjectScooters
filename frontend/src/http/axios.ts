@@ -9,14 +9,18 @@ export type LoginData = {
     password: string,
 }
 
-export type RegistrationData = {
+export type UserDataForRegistration = {
     name: string,
     surname: string,
     yearOfBirth: number,
     email: string,
     country: string,
-    username: string,
     password: string,
+}
+
+export type FetchRegistrationData = {
+    register: UserDataForRegistration
+    avatar: string
 }
 
 export type AddCommentData = {
@@ -89,7 +93,7 @@ export const authApi = {
     async logout(): Promise<void> {
         return apiInstance.get('/auth/logout')
     },
-    async registration(data: RegistrationData): Promise<AxiosResponse<AuthResponse>> {
+    async registration(data: FetchRegistrationData): Promise<AxiosResponse<AuthResponse>> {
         return apiInstance.post<AuthResponse>('auth/registration', { ...data })
     },
 

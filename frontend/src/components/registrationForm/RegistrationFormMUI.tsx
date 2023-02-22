@@ -10,7 +10,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { RegistrationData } from '../../http/axios';
+import { UserDataForRegistration } from '../../http/axios';
 import { fetchRegistration } from '../../redux/authReducer';
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
@@ -25,7 +25,6 @@ const formSchema = z.object({
     yearOfBirth: z.number().min(1, { message: 'Обязательное поле' }),
     country: z.string().min(1, { message: 'Обязательное поле' }),
     email: z.string().email('Введите корректный email').max(50, { message: 'max length is 50' }),
-    username: z.string().min(1, { message: 'Обязательное поле' }),
     password: z.string().min(1, { message: "Обязательное поле" })
 })
 
@@ -41,11 +40,10 @@ const RegistrationFormMUI: React.FC<{}> = () => {
             errors,
         },
         handleSubmit,
-    } = useForm<RegistrationData>({
+    } = useForm<UserDataForRegistration>({
         defaultValues: {
             name: '',
             surname: '',
-            username: '',
             yearOfBirth: 2022,
             country: "",
             email: '',
@@ -54,9 +52,13 @@ const RegistrationFormMUI: React.FC<{}> = () => {
         resolver: zodResolver(formSchema)
     });
 
-    const onSubmit: SubmitHandler<RegistrationData> = (data) => {
-        console.log(data)
-        dispatch(fetchRegistration(data))
+    const onSubmit: SubmitHandler<UserDataForRegistration> = (data) => {
+        let regData = {
+            register: { ...data },
+            avatar: ''
+        }
+        console.log(regData)
+        dispatch(fetchRegistration(regData))
     }
     if (isAuth) {
         return <Navigate to='/' />
@@ -88,18 +90,6 @@ const RegistrationFormMUI: React.FC<{}> = () => {
                         error={!!errors.surname}
                         helperText={errors.surname ? errors.surname?.message : ''}
                         label="Surname" variant='outlined'
-                        fullWidth
-                        margin='dense' />}
-                />
-                <Controller
-                    name="username"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => <TextField {...field}
-                        type="username"
-                        error={!!errors.username}
-                        helperText={errors.username ? errors.username?.message : ''}
-                        label="Username" variant='outlined'
                         fullWidth
                         margin='dense' />}
                 />
