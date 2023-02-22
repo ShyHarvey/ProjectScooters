@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { API_URL, authApi, LoginData, RegistrationData } from '../http/axios'
+import { API_URL, authApi, LoginData, FetchRegistrationData } from '../http/axios'
 import jwt_decode from "jwt-decode";
 import axios, { AxiosError } from 'axios';
 import { clearCartState, getCartAfterLogin, getCartFromServer } from './cartReducer';
@@ -31,7 +31,7 @@ const initialState: AuthState = {
     axiosError: false,
 }
 
-export const fetchRegistration = createAsyncThunk<void, RegistrationData>('auth/fetchRegistration',
+export const fetchRegistration = createAsyncThunk<void, FormData>('auth/fetchRegistration',
     async (data, { dispatch }) => {
         const response = await authApi.registration(data)
         localStorage.setItem('token', response.data.accessToken)

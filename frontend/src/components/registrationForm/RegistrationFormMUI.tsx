@@ -53,12 +53,12 @@ const RegistrationFormMUI: React.FC<{}> = () => {
     });
 
     const onSubmit: SubmitHandler<UserDataForRegistration> = (data) => {
-        let regData = {
-            register: { ...data },
-            avatar: ''
-        }
-        console.log(regData)
-        dispatch(fetchRegistration(regData))
+
+        let regData = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+        let formData = new FormData()
+        formData.append('register', regData)
+        console.log(formData)
+        dispatch(fetchRegistration(formData))
     }
     if (isAuth) {
         return <Navigate to='/' />

@@ -93,8 +93,8 @@ export const authApi = {
     async logout(): Promise<void> {
         return apiInstance.get('/auth/logout')
     },
-    async registration(data: FetchRegistrationData): Promise<AxiosResponse<AuthResponse>> {
-        return apiInstance.post<AuthResponse>('auth/registration', { ...data })
+    async registration(data: FormData): Promise<AxiosResponse<AuthResponse>> {
+        return apiInstance.post<AuthResponse>('auth/registration', data)
     },
 
 }
