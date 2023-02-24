@@ -9,6 +9,7 @@ import { Comment } from './Comment'
 import { useNavigate } from 'react-router-dom';
 import { ProductPageSkeleton } from '../productPageSkeleton/ProductPageSkeleton'
 import { AddCommentForm } from './AddCommentForm'
+import { addItemToCartLocal, addOneItemToCart } from '../../redux/cartReducer'
 
 
 export const ScooterPage: React.FC<{}> = () => {
@@ -20,6 +21,14 @@ export const ScooterPage: React.FC<{}> = () => {
     const isAuth = useAppSelector(state => state.auth.isAuth)
     const loading = useAppSelector(state => state.catalog.loading)
     const scooter = useAppSelector(state => state.catalog.scooters[0])
+
+    let sendToCart = () => {
+        if (isAuth) {
+            dispatch(addOneItemToCart({ productId: scooter.id, amount: 1 }))
+        } else {
+            dispatch(addItemToCartLocal({ product: { ...scooter }, amount: 1 }))
+        }
+    }
 
 
     const dispatch = useAppDispatch()
@@ -62,7 +71,7 @@ export const ScooterPage: React.FC<{}> = () => {
                     </Typography>
                     <Stack spacing={2} justifyContent="center" sx={{ my: 3 }} direction="row">
                         <Button size='large' variant="contained">Buy in one click</Button>
-                        <Button size='large' variant="outlined">Add to cart</Button>
+                        <Button onClick={sendToCart} size='large' variant="outlined">Add to cart</Button>
                     </Stack>
                 </Box>
             </Stack>

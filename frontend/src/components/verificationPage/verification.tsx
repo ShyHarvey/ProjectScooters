@@ -20,8 +20,6 @@ const Verification: React.FC<{}> = () => {
 
     let { key } = useParams<{ key: string }>()
 
-    console.log(key)
-
     useEffect(() => {
         if (key) {
             dispatch(fetchVerification(key))
