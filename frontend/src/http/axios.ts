@@ -96,6 +96,9 @@ export const authApi = {
     async registration(data: FormData): Promise<AxiosResponse<AuthResponse>> {
         return apiInstance.post<AuthResponse>('auth/registration', data)
     },
+    async verification(key: string): Promise<void> {
+        return apiInstance.get(`auth/activateAccount?code=${key}`)
+    },
 
 }
 

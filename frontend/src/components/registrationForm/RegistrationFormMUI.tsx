@@ -1,9 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
-import { Container, TextField } from '@mui/material'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
+import { Container, TextField, Alert, Box, Typography } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { useAppDispatch } from '../../redux/hooks';
 import { useAppSelector } from '../../redux/hooks';
@@ -11,7 +9,7 @@ import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { UserDataForRegistration } from '../../http/axios';
-import { fetchRegistration } from '../../redux/authReducer';
+import { fetchRegistration, setRegistrationError, setRegistrationSuccess } from '../../redux/authReducer';
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select';
@@ -30,9 +28,18 @@ const formSchema = z.object({
 
 
 const RegistrationFormMUI: React.FC<{}> = () => {
+    useEffect(() => {
+        return () => {
+            dispatch(setRegistrationError(null))
+            dispatch(setRegistrationSuccess(true))
+        }
+    }, [])
 
 
     const isAuth = useAppSelector(state => state.auth.isAuth)
+    const axiosError = useAppSelector(state => state.auth.registrationError)
+    const success = useAppSelector(state => state.auth.registrationSuccess)
+    let loading = useAppSelector(state => state.auth.loading)
     const dispatch = useAppDispatch()
     const {
         control,
@@ -57,7 +64,6 @@ const RegistrationFormMUI: React.FC<{}> = () => {
         let regData = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
         let formData = new FormData()
         formData.append('register', regData)
-        console.log(formData)
         dispatch(fetchRegistration(formData))
     }
     if (isAuth) {
@@ -173,8 +179,12 @@ const RegistrationFormMUI: React.FC<{}> = () => {
                 />
 
 
-                <Button type='submit' variant='contained' sx={{ mt: 2 }}>Зарегистрироваться</Button>
+                <LoadingButton loading={loading} type='submit' variant='contained' sx={{ mt: 2 }}>Зарегистрироваться</LoadingButton>
             </Box>
+            {axiosError && <Alert sx={{ mt: 2 }} variant='outlined' severity="error">{axiosError}</Alert>}
+            {success && <Alert sx={{ mt: 2 }} variant='outlined' severity="info">
+                Registration was completed successful, check your email for confirmation
+            </Alert>}
         </Container>
     )
 }

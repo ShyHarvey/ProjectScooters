@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Container, TextField, Alert, Box, Typography } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useAppDispatch } from '../../redux/hooks';
 import { useAppSelector } from '../../redux/hooks';
 import { LoginData } from '../../http/axios';
-import { fetchLogin } from '../../redux/authReducer';
+import { fetchLogin, setLoginError } from '../../redux/authReducer';
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,9 +17,14 @@ const formSchema = z.object({
 })
 
 const LoginFormMUI = () => {
+    useEffect(() => {
+        return () => {
+            dispatch(setLoginError(null))
+        }
+    }, [])
 
     const isAuth = useAppSelector(state => state.auth.isAuth)
-    let axiosError = useAppSelector(state => state.auth.axiosError)
+    let axiosError = useAppSelector(state => state.auth.loginError)
     let loading = useAppSelector(state => state.auth.loading)
     const dispatch = useAppDispatch()
     const {
@@ -71,7 +76,7 @@ const LoginFormMUI = () => {
                 />
 
                 <LoadingButton loading={loading} type='submit' variant='contained' sx={{ mt: 2 }}>Login</LoadingButton>
-                {axiosError && <Alert severity="error">Неверный логин или пароль</Alert>}
+                {axiosError && <Alert sx={{ mt: 2 }} variant='outlined' severity="error">{axiosError}</Alert>}
             </Box>
         </Container>
     )

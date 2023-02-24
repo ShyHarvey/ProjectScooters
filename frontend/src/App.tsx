@@ -23,6 +23,7 @@ const Cart = lazy(() => import("./components/cart/Cart"));
 const Admin = lazy(() => import("./components/admin/admin"));
 const Catalog = lazy(() => import("./components/catalog/Catalog"));
 const Favorites = lazy(() => import("./components/favorites/Favorites"));
+const Verification = lazy(() => import("./components/verificationPage/verification"));
 
 
 const App: React.FC = () => {
@@ -69,6 +70,7 @@ const App: React.FC = () => {
               <Route path='/admin' element={<Admin />} />
               <Route path='/catalog/:id' element={<ScooterPage />} />
               <Route path='/favorites' element={<Favorites />} />
+              <Route path='/verification/:key' element={<Verification />} />
 
               <Route path='*' element={<NotFound />} />
             </Routes>

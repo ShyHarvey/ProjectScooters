@@ -3,6 +3,7 @@ import { API_URL, authApi, LoginData, FetchRegistrationData } from '../http/axio
 import jwt_decode from "jwt-decode";
 import axios, { AxiosError } from 'axios';
 import { clearCartState, getCartAfterLogin, getCartFromServer } from './cartReducer';
+import { setLoading } from './adminReducer';
 
 type AuthState = {
     id: number | null,
@@ -10,7 +11,11 @@ type AuthState = {
     role: 'ROLE_USER' | 'ROLE_ADMIN' | null,
     isAuth: boolean,
     loading: boolean,
-    axiosError: boolean,
+    loginError: string | null,
+    registrationError: string | null,
+    registrationSuccess: boolean,
+    verificationSuccess: boolean | null,
+    verificationErrorMessage: string
 }
 
 type AccessTokenDecoded = {
@@ -28,18 +33,27 @@ const initialState: AuthState = {
     role: null,
     isAuth: false,
     loading: false,
-    axiosError: false,
+    loginError: null,
+    registrationError: null,
+    registrationSuccess: false,
+    verificationSuccess: null,
+    verificationErrorMessage: ''
 }
 
 export const fetchRegistration = createAsyncThunk<void, FormData>('auth/fetchRegistration',
     async (data, { dispatch }) => {
-        const response = await authApi.registration(data)
-        localStorage.setItem('token', response.data.accessToken)
-        let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
-        dispatch(setUsername(userData.name))
-        dispatch(setRole(userData.role))
-        dispatch(setUserId(userData.id))
-        dispatch(setIsAuth(true))
+        try {
+            await authApi.registration(data)
+            dispatch(setRegistrationError(null))
+            dispatch(setRegistrationSuccess(true))
+        } catch (err: any | unknown) {
+            let error: AxiosError<{ message: string, timestamp: number }> = err
+            if (error.response?.data.message) {
+                dispatch(setRegistrationError(error.response?.data.message))
+            }
+            dispatch(setLoading(false))
+        }
+
     })
 
 export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
@@ -52,11 +66,14 @@ export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
             dispatch(setRole(userData.role))
             dispatch(setUserId(userData.id))
             dispatch(setIsAuth(true))
-            dispatch(setError(false))
+            dispatch(setLoginError(null))
             dispatch(getCartAfterLogin())
         } catch (err: any | unknown) {
-            let error: AxiosError = err
-            dispatch(setError(error.isAxiosError))
+            let error: AxiosError<{ message: string, timestamp: number }> = err
+            if (error.response?.data.message) {
+                dispatch(setLoginError(error.response?.data.message))
+            }
+            dispatch(setLoading(false))
         }
     })
 export const fetchLogout = createAsyncThunk('auth/fetchLogout',
@@ -89,6 +106,23 @@ export const checkAuth = createAsyncThunk('auth/checkAuth',
         }
     })
 
+export const fetchVerification = createAsyncThunk<void, string>('auth/fetchVerification',
+    async (key, { dispatch }) => {
+        try {
+            dispatch(setLoading(true))
+            await authApi.verification(key)
+            dispatch(setVerificationSuccess(true))
+            dispatch(setLoading(false))
+        } catch (err: any | unknown) {
+            let error: AxiosError<{ message: string, timestamp: number }> = err
+            if (error.response?.data.message) {
+                dispatch(setVerificationErrorMessage(error.response?.data.message))
+            }
+            dispatch(setVerificationSuccess(false))
+            dispatch(setLoading(false))
+        }
+    })
+
 export const authSLice = createSlice({
     name: 'auth',
     initialState,
@@ -105,8 +139,20 @@ export const authSLice = createSlice({
         setRole(state, action: PayloadAction<'ROLE_USER' | 'ROLE_ADMIN' | null>) {
             state.role = action.payload
         },
-        setError(state, action: PayloadAction<boolean>) {
-            state.axiosError = action.payload
+        setLoginError(state, action: PayloadAction<string | null>) {
+            state.loginError = action.payload
+        },
+        setRegistrationError(state, action: PayloadAction<string | null>) {
+            state.registrationError = action.payload
+        },
+        setRegistrationSuccess(state, action: PayloadAction<boolean>) {
+            state.registrationSuccess = action.payload
+        },
+        setVerificationSuccess(state, action: PayloadAction<boolean>) {
+            state.verificationSuccess = action.payload
+        },
+        setVerificationErrorMessage(state, action: PayloadAction<string>) {
+            state.verificationErrorMessage = action.payload
         }
     },
     extraReducers: builder => {
@@ -133,4 +179,13 @@ export const authSLice = createSlice({
 
 
 export default authSLice.reducer
-export const { setIsAuth, setUserId, setUsername, setRole, setError } = authSLice.actions
+export const {
+    setIsAuth,
+    setUserId,
+    setUsername,
+    setRole,
+    setLoginError,
+    setRegistrationError,
+    setRegistrationSuccess,
+    setVerificationErrorMessage,
+    setVerificationSuccess } = authSLice.actions
