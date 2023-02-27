@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { API_URL, authApi, LoginData, FetchRegistrationData } from '../http/axios'
+import { API_URL, authApi, LoginData, FetchRegistrationData, userApi } from '../http/axios'
 import jwt_decode from "jwt-decode";
 import axios, { AxiosError } from 'axios';
 import { clearCartState, getCartAfterLogin, getCartFromServer } from './cartReducer';
@@ -8,6 +8,8 @@ import { setLoading } from './adminReducer';
 type AuthState = {
     id: number | null,
     username: string | null,
+    surname: string | null,
+    email: string | null,
     role: 'ROLE_USER' | 'ROLE_ADMIN' | null,
     isAuth: boolean,
     loading: boolean,
@@ -30,6 +32,8 @@ type AccessTokenDecoded = {
 const initialState: AuthState = {
     id: null,
     username: null,
+    surname: null,
+    email: null,
     role: null,
     isAuth: false,
     loading: false,
@@ -63,6 +67,8 @@ export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
             localStorage.setItem('token', response.data.accessToken)
             let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
             dispatch(setUsername(userData.name))
+            dispatch(setSurName(userData.surname))
+            dispatch(setEmail(userData.email))
             dispatch(setRole(userData.role))
             dispatch(setUserId(userData.id))
             dispatch(setIsAuth(true))
@@ -82,7 +88,8 @@ export const fetchLogout = createAsyncThunk('auth/fetchLogout',
             await authApi.logout()
             localStorage.removeItem('token')
             dispatch(setUsername(null))
-            dispatch(setUsername(null))
+            dispatch(setSurName(null))
+            dispatch(setEmail(null))
             dispatch(setUserId(null))
             dispatch(setRole(null))
             dispatch(setIsAuth(false))
@@ -98,7 +105,10 @@ export const checkAuth = createAsyncThunk('auth/checkAuth',
             localStorage.setItem('token', response.data.accessToken)
             let userData = jwt_decode<AccessTokenDecoded>(response.data.accessToken)
             dispatch(setUsername(userData.name))
+            dispatch(setSurName(userData.surname))
+            dispatch(setEmail(userData.email))
             dispatch(setRole(userData.role))
+            dispatch(setUserId(userData.id))
             dispatch(setIsAuth(true))
             dispatch(getCartAfterLogin())
         } catch (error: any) {
@@ -122,6 +132,17 @@ export const fetchVerification = createAsyncThunk<void, string>('auth/fetchVerif
             dispatch(setLoading(false))
         }
     })
+export const fetchUpdateProfile = createAsyncThunk<void, FormData>('auth/updateProfile',
+    async (data, { dispatch }) => {
+        try {
+            dispatch(setLoading(true))
+            await userApi.updateProfile(data)
+        } catch (err: any | unknown) {
+            let error: AxiosError<{ message: string, timestamp: number }> = err
+            dispatch(setLoading(false))
+        }
+    })
+
 
 export const authSLice = createSlice({
     name: 'auth',
@@ -135,6 +156,12 @@ export const authSLice = createSlice({
         },
         setUsername(state, action: PayloadAction<string | null>) {
             state.username = action.payload
+        },
+        setSurName(state, action: PayloadAction<string | null>) {
+            state.surname = action.payload
+        },
+        setEmail(state, action: PayloadAction<string | null>) {
+            state.email = action.payload
         },
         setRole(state, action: PayloadAction<'ROLE_USER' | 'ROLE_ADMIN' | null>) {
             state.role = action.payload
@@ -183,6 +210,8 @@ export const {
     setIsAuth,
     setUserId,
     setUsername,
+    setSurName,
+    setEmail,
     setRole,
     setLoginError,
     setRegistrationError,

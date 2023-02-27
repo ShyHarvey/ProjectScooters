@@ -47,7 +47,7 @@ export const BurgerMenu: React.FC<{}> = () => {
                     </MenuItem>
                     <MenuItem onClick={handleCloseBurgerMenu}>
                         <Button onClick={() => nav('/')} variant="contained" fullWidth endIcon={<MenuOpenIcon />}>
-                            Каталог
+                            Catalog
                         </Button>
                     </MenuItem>
                     <MenuItem sx={{ justifyContent: 'center' }}>

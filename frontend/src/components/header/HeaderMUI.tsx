@@ -44,7 +44,7 @@ export const HeaderMUI: React.FC<{}> = memo(() => {
                     }} variant="contained"
                         endIcon={<MenuOpenIcon />}
                         sx={{ mx: 3, display: { xs: 'none', md: 'inline-flex' } }}>
-                        Каталог
+                        Catalog
                     </Button>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} >

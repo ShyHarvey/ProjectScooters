@@ -25,7 +25,7 @@ export const SearchForm: React.FC<{}> = () => {
     }
     return (
         <>
-            <TextField onChange={(e) => { onSearchChange(e) }} value={queryValue} label="Поиск" size="small" />
+            <TextField onChange={(e) => { onSearchChange(e) }} value={queryValue} label="Search" size="small" />
             <IconButton type='submit' >
                 <SearchIcon />
             </IconButton>

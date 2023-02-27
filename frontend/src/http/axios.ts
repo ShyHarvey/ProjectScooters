@@ -150,3 +150,9 @@ export const cartApi = {
         return apiInstance.delete('cart/deleteCart')
     }
 }
+
+export const userApi = {
+    async updateProfile(data: FormData): Promise<void> {
+        return apiInstance.patch('/person/update', data)
+    },
+}
