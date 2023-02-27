@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Container, CardMedia, Rating, Stack, Button, Box, Link } from '@mui/material'
+import { Container, CardMedia, Rating, Stack, Button, Box, Alert } from '@mui/material'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
@@ -76,7 +76,9 @@ export const ScooterPage: React.FC<{}> = () => {
                 </Box>
             </Stack>
             {isAuth === true ? <AddCommentForm id={id ? +id : 1} /> :
-                <Link sx={{ fontSize: '1.5rem', cursor: 'pointer' }} underline="hover" color='inherit' onClick={() => nav('/login')}>Login to leave a review</Link>
+                <Alert variant='outlined' severity='info'>
+                    <Typography variant='h5'>Login to leave a review</Typography>
+                </Alert>
             }
             {scooter.comments && scooter.comments.map((item, index) => <Comment {...item} key={index} productId={id !== undefined ? +id : 0} />)}
         </Container >

@@ -93,11 +93,11 @@ const Profile: React.FC<{}> = () => {
     return (
         <Container>
             <Typography gutterBottom sx={{ mt: 3 }} variant='h4'> Profile</Typography>
-            <Stack spacing={4} sx={{ width: 'fit-content', m: '0 auto' }} direction='row'>
+            <Stack spacing={4} sx={{ width: 'fit-content', m: '0 auto' }} justifyContent='center' direction={{ xs: 'column', sm: 'row' }}>
 
-                <Box>
+                <Stack>
                     <Avatar
-                        sx={{ width: 250, height: 250 }}
+                        sx={{ width: 250, height: 250, m: '0 auto' }}
                         src={preview ? preview : `https://shop.javaspringbackend.software/avatar/${userData.id}`}
                         variant='rounded'></Avatar>
                     <Stack alignItems="center">
@@ -106,7 +106,7 @@ const Profile: React.FC<{}> = () => {
                             <input hidden onChangeCapture={onSelectFile} accept="image/*" multiple type="file" {...register("avatar")} />
                         </Button>
                     </Stack>
-                </Box>
+                </Stack>
                 <Box
                     component="form"
                     onSubmit={handleSubmit(onSubmit)}
@@ -136,7 +136,7 @@ const Profile: React.FC<{}> = () => {
                             margin='dense' />}
                     />
 
-                    <Button type='submit' variant='outlined' >Save</Button>
+                    <Button type='submit' sx={{ mt: 2 }} variant='contained' >Save</Button>
 
                 </Box>
             </Stack>
