@@ -84,7 +84,7 @@ export const ProductEditModal: React.FC<ProductEditModalProps> = ({ openProductE
             setValue('speed', +productData.speed);
             setValue('time', +productData.time);
         }
-    }, [productData]);
+    }, [productData, setValue]);
 
     return (
         <Modal

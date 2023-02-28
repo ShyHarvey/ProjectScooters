@@ -105,12 +105,6 @@ export const scootersCatalogReducer = createSlice({
         builder.addCase(getOneScooterData.fulfilled, state => {
             state.loading = false
         })
-        builder.addCase(deleteComment.pending, state => {
-            state.loading = true
-        })
-        builder.addCase(deleteComment.fulfilled, state => {
-            state.loading = false
-        })
     }
 })
 

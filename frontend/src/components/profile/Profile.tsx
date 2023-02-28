@@ -52,7 +52,7 @@ const Profile: React.FC<{}> = () => {
             setValue('name', userData.username ? userData.username : '');
             setValue('surname', userData.surname ? userData.surname : '');
         }
-    }, [userData]);
+    }, [userData, setValue]);
 
     const onSubmit: SubmitHandler<UpdateProfileFormData> = (data) => {
         let product = {

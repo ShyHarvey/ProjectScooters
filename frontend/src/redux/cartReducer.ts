@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { Scooter } from './scootersCatalogReducer'
 import { AddOneItemToCartData, cartApi, DeleteOneItemFromCartData } from '../http/axios'
-import { useAppSelector } from './hooks'
+
 
 
 export interface ScooterForCart {

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { TextField, IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import { setPage, setQuery as setQueryGlobal } from '../../redux/scootersCatalogReducer';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
 import useDebounce from '../../customHooks/useDebounce'
 import { useSearchParams } from 'react-router-dom';
 

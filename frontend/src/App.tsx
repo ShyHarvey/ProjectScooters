@@ -11,9 +11,10 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { HeaderMUI } from './components/header/HeaderMUI';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ScooterPage } from './components/scooterPage/ScooterPage';
-import { getCartAfterLogin, getCartFromLocalStorage, getCartFromServer } from './redux/cartReducer';
+import { getCartAfterLogin, getCartFromLocalStorage } from './redux/cartReducer';
 import { getFavoritesFromLocalStorage } from './redux/favoritesReducer';
 import { getThemeFromStorage } from './redux/appReducer';
+import { Analytics } from '@vercel/analytics/react';
 
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
@@ -58,29 +59,33 @@ const App: React.FC = () => {
 
 
   return (
-    <div className="App">
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <HeaderMUI />
-          <Suspense>
-            <Routes>
-              <Route path='/' element={<Catalog />} />
-              <Route path='/login' element={<LoginFormMUI />} />
-              <Route path='/registration' element={<RegistrationFormMUI />} />
-              <Route path='/cart' element={<Cart />} />
-              <Route path='/admin' element={<Admin />} />
-              <Route path='/catalog/:id' element={<ScooterPage />} />
-              <Route path='/favorites' element={<Favorites />} />
-              <Route path='/verification/:key' element={<Verification />} />
-              <Route path='/profile' element={<Profile />} />
+    <>
+      <div className="App">
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Router>
+            <HeaderMUI />
+            <Suspense>
+              <Routes>
+                <Route path='/' element={<Catalog />} />
+                <Route path='/login' element={<LoginFormMUI />} />
+                <Route path='/registration' element={<RegistrationFormMUI />} />
+                <Route path='/cart' element={<Cart />} />
+                <Route path='/admin' element={<Admin />} />
+                <Route path='/catalog/:id' element={<ScooterPage />} />
+                <Route path='/favorites' element={<Favorites />} />
+                <Route path='/verification/:key' element={<Verification />} />
+                <Route path='/profile' element={<Profile />} />
 
-              <Route path='*' element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </Router>
-      </ThemeProvider>
-    </div>
+                <Route path='*' element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </Router>
+        </ThemeProvider>
+      </div>
+      <Analytics />
+    </>
+
   );
 }
 

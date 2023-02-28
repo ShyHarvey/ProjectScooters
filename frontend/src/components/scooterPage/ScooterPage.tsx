@@ -6,7 +6,6 @@ import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { getOneScooterData } from '../../redux/scootersCatalogReducer'
 import Typography from '@mui/material/Typography'
 import { Comment } from './Comment'
-import { useNavigate } from 'react-router-dom';
 import { ProductPageSkeleton } from '../productPageSkeleton/ProductPageSkeleton'
 import { AddCommentForm } from './AddCommentForm'
 import { addItemToCartLocal, addOneItemToCart } from '../../redux/cartReducer'
@@ -15,7 +14,6 @@ import { addItemToCartLocal, addOneItemToCart } from '../../redux/cartReducer'
 export const ScooterPage: React.FC<{}> = () => {
     const reserveImage = 'https://shop.by/images/mizar_senator_sungate_1.jpg'
     let { id } = useParams<{ id: string }>()
-    let nav = useNavigate()
 
 
     const isAuth = useAppSelector(state => state.auth.isAuth)

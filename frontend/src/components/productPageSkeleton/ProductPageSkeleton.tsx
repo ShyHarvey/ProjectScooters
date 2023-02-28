@@ -1,5 +1,5 @@
 import { Stack, Skeleton, Container, Box } from '@mui/material'
-import { maxWidth } from '@mui/system'
+
 
 export const ProductPageSkeleton: React.FC<{}> = () => {
     return (

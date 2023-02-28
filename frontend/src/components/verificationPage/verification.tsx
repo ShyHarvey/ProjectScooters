@@ -24,7 +24,7 @@ const Verification: React.FC<{}> = () => {
         if (key) {
             dispatch(fetchVerification(key))
         }
-    }, [dispatch])
+    }, [dispatch, key])
 
     if (isAuth) {
         return <Navigate to='/' />

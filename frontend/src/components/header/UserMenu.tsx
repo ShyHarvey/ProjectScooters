@@ -1,10 +1,10 @@
 import React, { memo } from 'react'
-import { Box, Menu, MenuItem, IconButton, Avatar, Link, Typography, Button } from '@mui/material'
+import { Box, Menu, MenuItem, IconButton, Avatar, Link, Typography } from '@mui/material'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { fetchLogout } from '../../redux/authReducer';
 import { useNavigate } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { clearCartOnServer, clearCartState } from '../../redux/cartReducer';
+
 
 export const UserMenu: React.FC<{}> = memo(() => {
 
@@ -28,13 +28,6 @@ export const UserMenu: React.FC<{}> = memo(() => {
         setAnchorElUserMenu(event.currentTarget);
     };
 
-    const clearCartHandler = () => {
-        if (isAuth) {
-            dispatch(clearCartOnServer())
-        } else {
-            dispatch(clearCartState())
-        }
-    }
 
     return (
         <>

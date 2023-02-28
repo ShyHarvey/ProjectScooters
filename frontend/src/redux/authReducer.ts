@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { API_URL, authApi, LoginData, FetchRegistrationData, userApi } from '../http/axios'
+import { API_URL, authApi, LoginData, userApi } from '../http/axios'
 import jwt_decode from "jwt-decode";
 import axios, { AxiosError } from 'axios';
-import { clearCartState, getCartAfterLogin, getCartFromServer } from './cartReducer';
+import { clearCartState, getCartAfterLogin } from './cartReducer';
 import { setLoading } from './adminReducer';
 
 type AuthState = {
@@ -83,7 +83,7 @@ export const fetchLogin = createAsyncThunk<void, LoginData>('auth/fetchLogin',
         }
     })
 export const fetchLogout = createAsyncThunk('auth/fetchLogout',
-    async (data, { dispatch }) => {
+    async (_, { dispatch }) => {
         try {
             await authApi.logout()
             localStorage.removeItem('token')
@@ -139,6 +139,7 @@ export const fetchUpdateProfile = createAsyncThunk<void, FormData>('auth/updateP
             await userApi.updateProfile(data)
         } catch (err: any | unknown) {
             let error: AxiosError<{ message: string, timestamp: number }> = err
+            console.log(error)
             dispatch(setLoading(false))
         }
     })
