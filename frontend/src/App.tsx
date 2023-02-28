@@ -59,32 +59,32 @@ const App: React.FC = () => {
 
 
   return (
-    <>
-      <div className="App">
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Router>
-            <HeaderMUI />
-            <Suspense>
-              <Routes>
-                <Route path='/' element={<Catalog />} />
-                <Route path='/login' element={<LoginFormMUI />} />
-                <Route path='/registration' element={<RegistrationFormMUI />} />
-                <Route path='/cart' element={<Cart />} />
-                <Route path='/admin' element={<Admin />} />
-                <Route path='/catalog/:id' element={<ScooterPage />} />
-                <Route path='/favorites' element={<Favorites />} />
-                <Route path='/verification/:key' element={<Verification />} />
-                <Route path='/profile' element={<Profile />} />
 
-                <Route path='*' element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </Router>
-        </ThemeProvider>
-      </div>
+    <div className="App">
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <HeaderMUI />
+          <Suspense>
+            <Routes>
+              <Route path='/' element={<Catalog />} />
+              <Route path='/login' element={<LoginFormMUI />} />
+              <Route path='/registration' element={<RegistrationFormMUI />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/admin' element={<Admin />} />
+              <Route path='/catalog/:id' element={<ScooterPage />} />
+              <Route path='/favorites' element={<Favorites />} />
+              <Route path='/verification/:key' element={<Verification />} />
+              <Route path='/profile' element={<Profile />} />
+
+              <Route path='*' element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </Router>
+      </ThemeProvider>
       <Analytics />
-    </>
+    </div>
+
 
   );
 }
