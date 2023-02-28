@@ -14,7 +14,7 @@ import { ScooterPage } from './components/scooterPage/ScooterPage';
 import { getCartAfterLogin, getCartFromLocalStorage } from './redux/cartReducer';
 import { getFavoritesFromLocalStorage } from './redux/favoritesReducer';
 import { getThemeFromStorage } from './redux/appReducer';
-import { Analytics } from '@vercel/analytics/react';
+
 
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
@@ -82,7 +82,7 @@ const App: React.FC = () => {
           </Suspense>
         </Router>
       </ThemeProvider>
-      <Analytics />
+
     </div>
 
 
