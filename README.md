@@ -17,6 +17,7 @@
 * shopping car that is synchronized with the server and linked to the account
 * local favorites
 * light and dark themes
+* vercel analytics
 
 
 ## Technologies that I used:
