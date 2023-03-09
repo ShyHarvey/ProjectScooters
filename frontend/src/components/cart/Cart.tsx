@@ -20,7 +20,7 @@ const Cart: React.FC<{}> = () => {
 
     return (
         <Container >
-            <Typography gutterBottom variant='h4'>Корзина</Typography>
+            <Typography sx={{ mt: 3 }} gutterBottom variant='h4'>Cart</Typography>
             <Button sx={{ mb: 2 }} variant='outlined' onClick={clearCartHandler}>Clear cart</Button>
             <Grid container spacing={2}>
                 <Grid item sx={{ mb: 2 }} xs={12} md={9}>

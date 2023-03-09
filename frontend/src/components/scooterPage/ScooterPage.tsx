@@ -1,25 +1,32 @@
 import { useEffect } from 'react'
-import { Container, CardMedia, Rating, Stack, Button, Box, Link } from '@mui/material'
+import { Container, CardMedia, Rating, Stack, Button, Box, Alert } from '@mui/material'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { getOneScooterData } from '../../redux/scootersCatalogReducer'
 import Typography from '@mui/material/Typography'
 import { Comment } from './Comment'
-import { useNavigate } from 'react-router-dom';
 import { ProductPageSkeleton } from '../productPageSkeleton/ProductPageSkeleton'
 import { AddCommentForm } from './AddCommentForm'
+import { addItemToCartLocal, addOneItemToCart } from '../../redux/cartReducer'
 
 
 export const ScooterPage: React.FC<{}> = () => {
     const reserveImage = 'https://shop.by/images/mizar_senator_sungate_1.jpg'
     let { id } = useParams<{ id: string }>()
-    let nav = useNavigate()
 
 
     const isAuth = useAppSelector(state => state.auth.isAuth)
     const loading = useAppSelector(state => state.catalog.loading)
     const scooter = useAppSelector(state => state.catalog.scooters[0])
+
+    let sendToCart = () => {
+        if (isAuth) {
+            dispatch(addOneItemToCart({ productId: scooter.id, amount: 1 }))
+        } else {
+            dispatch(addItemToCartLocal({ product: { ...scooter }, amount: 1 }))
+        }
+    }
 
 
     const dispatch = useAppDispatch()
@@ -62,12 +69,14 @@ export const ScooterPage: React.FC<{}> = () => {
                     </Typography>
                     <Stack spacing={2} justifyContent="center" sx={{ my: 3 }} direction="row">
                         <Button size='large' variant="contained">Buy in one click</Button>
-                        <Button size='large' variant="outlined">Add to cart</Button>
+                        <Button onClick={sendToCart} size='large' variant="outlined">Add to cart</Button>
                     </Stack>
                 </Box>
             </Stack>
             {isAuth === true ? <AddCommentForm id={id ? +id : 1} /> :
-                <Link sx={{ fontSize: '1.5rem', cursor: 'pointer' }} underline="hover" color='inherit' onClick={() => nav('/login')}>Login to leave a review</Link>
+                <Alert variant='outlined' severity='info'>
+                    <Typography variant='h5'>Login to leave a review</Typography>
+                </Alert>
             }
             {scooter.comments && scooter.comments.map((item, index) => <Comment {...item} key={index} productId={id !== undefined ? +id : 0} />)}
         </Container >

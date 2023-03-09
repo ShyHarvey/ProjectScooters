@@ -11,9 +11,10 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { HeaderMUI } from './components/header/HeaderMUI';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ScooterPage } from './components/scooterPage/ScooterPage';
-import { getCartAfterLogin, getCartFromLocalStorage, getCartFromServer } from './redux/cartReducer';
+import { getCartAfterLogin, getCartFromLocalStorage } from './redux/cartReducer';
 import { getFavoritesFromLocalStorage } from './redux/favoritesReducer';
 import { getThemeFromStorage } from './redux/appReducer';
+import { Analytics } from '@vercel/analytics/react';
 
 
 const NotFound = lazy(() => import("./components/notFound/NotFound"));
@@ -23,6 +24,9 @@ const Cart = lazy(() => import("./components/cart/Cart"));
 const Admin = lazy(() => import("./components/admin/admin"));
 const Catalog = lazy(() => import("./components/catalog/Catalog"));
 const Favorites = lazy(() => import("./components/favorites/Favorites"));
+const Verification = lazy(() => import("./components/verificationPage/verification"));
+const Profile = lazy(() => import("./components/profile/Profile"));
+
 
 
 const App: React.FC = () => {
@@ -55,6 +59,7 @@ const App: React.FC = () => {
 
 
   return (
+
     <div className="App">
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -69,13 +74,18 @@ const App: React.FC = () => {
               <Route path='/admin' element={<Admin />} />
               <Route path='/catalog/:id' element={<ScooterPage />} />
               <Route path='/favorites' element={<Favorites />} />
+              <Route path='/verification/:key' element={<Verification />} />
+              <Route path='/profile' element={<Profile />} />
 
               <Route path='*' element={<NotFound />} />
             </Routes>
           </Suspense>
         </Router>
       </ThemeProvider>
+      <Analytics />
     </div>
+
+
   );
 }
 

@@ -77,6 +77,7 @@ export const NewItemAdding: React.FC<{}> = () => {
         let formData = new FormData()
         formData.append('product', productData)
         formData.append('image1', data.image1[0])
+        console.log(formData)
         dispatch(fetchAddNewItem(formData))
     }
 

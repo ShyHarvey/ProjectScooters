@@ -1,15 +1,17 @@
 import React, { memo } from 'react'
-import { Box, Menu, MenuItem, IconButton, Avatar, Link, Typography, Button } from '@mui/material'
+import { Box, Menu, MenuItem, IconButton, Avatar, Link, Typography } from '@mui/material'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { fetchLogout } from '../../redux/authReducer';
 import { useNavigate } from 'react-router-dom';
-import PersonIcon from '@mui/icons-material/Person';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { clearCartOnServer, clearCartState } from '../../redux/cartReducer';
+
 
 export const UserMenu: React.FC<{}> = memo(() => {
 
     const isAuth = useAppSelector(store => store.auth.isAuth)
+    const userData = useAppSelector(store => store.auth)
+    const avatar = `https://shop.javaspringbackend.software/avatar/${userData.id}`
+    console.log(avatar)
 
     const dispatch = useAppDispatch()
     const logout = () => {
@@ -26,20 +28,15 @@ export const UserMenu: React.FC<{}> = memo(() => {
         setAnchorElUserMenu(event.currentTarget);
     };
 
-    const clearCartHandler = () => {
-        if (isAuth) {
-            dispatch(clearCartOnServer())
-        } else {
-            dispatch(clearCartState())
-        }
-    }
 
     return (
         <>
             <IconButton onClick={handleOpenUserMenu}>
-                <Avatar sx={{ ml: 1 }}>
-                    <PersonIcon />
-                </Avatar>
+                {userData.username ?
+                    <Avatar sx={{ ml: 1 }} src={avatar} alt={userData.username}></Avatar>
+                    :
+                    <Avatar sx={{ ml: 1 }} ></Avatar>
+                }
             </IconButton>
             <Menu
                 anchorEl={anchorElUserMenu}
@@ -59,13 +56,21 @@ export const UserMenu: React.FC<{}> = memo(() => {
                     </IconButton>
                 </MenuItem>
                 {isAuth ?
+                    <Box>
+                        <MenuItem onClick={() => {
+                            handleCloseUserMenu()
+                            logout()
+                        }}>
+                            <Link underline="hover" color='inherit'>Logout</Link>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                            handleCloseUserMenu()
+                            nav('/profile')
+                        }}>
+                            <Link underline="hover" color='inherit'>Profile</Link>
+                        </MenuItem>
+                    </Box>
 
-                    <MenuItem onClick={() => {
-                        handleCloseUserMenu()
-                        logout()
-                    }}>
-                        <Link underline="hover" color='inherit'>Выйти</Link>
-                    </MenuItem>
 
                     :
                     <Box>
@@ -90,9 +95,6 @@ export const UserMenu: React.FC<{}> = memo(() => {
                     nav('/admin')
                 }}>
                     <Link underline="hover" color='inherit'>Admin panel</Link>
-                </MenuItem>
-                <MenuItem >
-                    <Button variant='outlined' onClick={clearCartHandler}>Clear cart</Button>
                 </MenuItem>
             </Menu>
         </>

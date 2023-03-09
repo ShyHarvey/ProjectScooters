@@ -1,22 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
-import { Container, TextField } from '@mui/material'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
+import { Container, TextField, Alert, Box, Typography } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { useAppDispatch } from '../../redux/hooks';
 import { useAppSelector } from '../../redux/hooks';
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { RegistrationData } from '../../http/axios';
-import { fetchRegistration } from '../../redux/authReducer';
+import { UserDataForRegistration } from '../../http/axios';
+import { fetchRegistration, setRegistrationError, setRegistrationSuccess } from '../../redux/authReducer';
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem'
-// import Countries from './countries'
+
 
 
 const formSchema = z.object({
@@ -25,15 +23,23 @@ const formSchema = z.object({
     yearOfBirth: z.number().min(1, { message: 'Обязательное поле' }),
     country: z.string().min(1, { message: 'Обязательное поле' }),
     email: z.string().email('Введите корректный email').max(50, { message: 'max length is 50' }),
-    username: z.string().min(1, { message: 'Обязательное поле' }),
     password: z.string().min(1, { message: "Обязательное поле" })
 })
 
 
 const RegistrationFormMUI: React.FC<{}> = () => {
+    useEffect(() => {
+        return () => {
+            dispatch(setRegistrationError(null))
+            dispatch(setRegistrationSuccess(true))
+        }
+    }, [])
 
 
     const isAuth = useAppSelector(state => state.auth.isAuth)
+    const axiosError = useAppSelector(state => state.auth.registrationError)
+    const success = useAppSelector(state => state.auth.registrationSuccess)
+    let loading = useAppSelector(state => state.auth.loading)
     const dispatch = useAppDispatch()
     const {
         control,
@@ -41,11 +47,10 @@ const RegistrationFormMUI: React.FC<{}> = () => {
             errors,
         },
         handleSubmit,
-    } = useForm<RegistrationData>({
+    } = useForm<UserDataForRegistration>({
         defaultValues: {
             name: '',
             surname: '',
-            username: '',
             yearOfBirth: 2022,
             country: "",
             email: '',
@@ -54,9 +59,12 @@ const RegistrationFormMUI: React.FC<{}> = () => {
         resolver: zodResolver(formSchema)
     });
 
-    const onSubmit: SubmitHandler<RegistrationData> = (data) => {
-        console.log(data)
-        dispatch(fetchRegistration(data))
+    const onSubmit: SubmitHandler<UserDataForRegistration> = (data) => {
+
+        let regData = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+        let formData = new FormData()
+        formData.append('register', regData)
+        dispatch(fetchRegistration(formData))
     }
     if (isAuth) {
         return <Navigate to='/' />
@@ -88,18 +96,6 @@ const RegistrationFormMUI: React.FC<{}> = () => {
                         error={!!errors.surname}
                         helperText={errors.surname ? errors.surname?.message : ''}
                         label="Surname" variant='outlined'
-                        fullWidth
-                        margin='dense' />}
-                />
-                <Controller
-                    name="username"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => <TextField {...field}
-                        type="username"
-                        error={!!errors.username}
-                        helperText={errors.username ? errors.username?.message : ''}
-                        label="Username" variant='outlined'
                         fullWidth
                         margin='dense' />}
                 />
@@ -183,8 +179,12 @@ const RegistrationFormMUI: React.FC<{}> = () => {
                 />
 
 
-                <Button type='submit' variant='contained' sx={{ mt: 2 }}>Зарегистрироваться</Button>
+                <LoadingButton loading={loading} type='submit' variant='contained' sx={{ mt: 2 }}>Зарегистрироваться</LoadingButton>
             </Box>
+            {axiosError && <Alert sx={{ mt: 2 }} variant='outlined' severity="error">{axiosError}</Alert>}
+            {success && <Alert sx={{ mt: 2 }} variant='outlined' severity="info">
+                Registration was completed successful, check your email for confirmation
+            </Alert>}
         </Container>
     )
 }

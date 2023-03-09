@@ -27,7 +27,7 @@ const Catalog = () => {
     return (
         <>
             <Container sx={{ mt: 3 }}>
-                <Typography gutterBottom variant='h4'>Каталог</Typography>
+                <Typography gutterBottom variant='h4'>Catalog</Typography>
             </Container>
 
             {pageQty >= 1 && <Pagination
