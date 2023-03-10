@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Box, Button, Container, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Avatar, Box, Button, Container, Stack, TextField, Typography } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { z } from 'zod'
@@ -138,6 +138,13 @@ const Profile: React.FC<{}> = () => {
 
                     <Button type='submit' sx={{ mt: 2 }} variant='contained' >Save</Button>
 
+                    <Alert
+                        sx={{ mt: 2 }}
+                        severity='info'
+                        variant='outlined'>
+                        You can't change name and surname here, because I don't want to allow it :)
+                        But you can change the photo, but it's already perfect
+                    </Alert>
                 </Box>
             </Stack>
         </Container>
