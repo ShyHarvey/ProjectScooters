@@ -98,7 +98,7 @@ const Profile: React.FC<{}> = () => {
                 <Stack>
                     <Avatar
                         sx={{ width: 250, height: 250, m: '0 auto' }}
-                        src={preview ? preview : `https://shop.javaspringbackend.software/avatar/${userData.id}`}
+                        src={preview ? preview : `${process.env.REACT_APP_API_URL}avatar/${userData.id}`}
                         variant='rounded'></Avatar>
                     <Stack alignItems="center">
                         <Button sx={{ mt: 2 }} variant="contained" component="label">

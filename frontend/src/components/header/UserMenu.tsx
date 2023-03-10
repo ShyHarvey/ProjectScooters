@@ -10,7 +10,7 @@ export const UserMenu: React.FC<{}> = memo(() => {
 
     const isAuth = useAppSelector(store => store.auth.isAuth)
     const userData = useAppSelector(store => store.auth)
-    const avatar = `https://shop.javaspringbackend.software/avatar/${userData.id}`
+    const avatar = `${process.env.REACT_APP_API_URL}avatar/${userData.id}`
     console.log(avatar)
 
     const dispatch = useAppDispatch()

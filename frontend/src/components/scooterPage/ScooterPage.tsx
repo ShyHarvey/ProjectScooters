@@ -19,6 +19,7 @@ export const ScooterPage: React.FC<{}> = () => {
     const isAuth = useAppSelector(state => state.auth.isAuth)
     const loading = useAppSelector(state => state.catalog.loading)
     const scooter = useAppSelector(state => state.catalog.scooters[0])
+    const mainImage = `${process.env.REACT_APP_API_URL}image/${scooter.id}`
 
     let sendToCart = () => {
         if (isAuth) {
@@ -53,7 +54,8 @@ export const ScooterPage: React.FC<{}> = () => {
                 <Box sx={{ height: 580, maxWidth: 580, width: '100%' }}>
                     <CardMedia
                         sx={{ height: '100%', maxHeight: 580, maxWidth: 580, borderRadius: 3 }}
-                        image={scooter.images[0] !== undefined ? scooter.images[0].link : reserveImage}
+                        // image={scooter.images[0] !== undefined ? scooter.images[0].link : reserveImage}
+                        image={mainImage}
                     />
                 </Box>
                 <Box sx={{ width: { xs: '100%', sm: 500, md: '100%' } }}>

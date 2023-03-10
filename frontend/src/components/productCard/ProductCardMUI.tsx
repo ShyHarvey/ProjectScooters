@@ -29,6 +29,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export const ProductCardMUI: React.FC<Scooter> = memo((scooterProps) => {
     const reserveImage = 'https://shop.by/images/mizar_senator_sungate_1.jpg'
+    const mainImage = `${process.env.REACT_APP_API_URL}image/${scooterProps.id}`
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector(state => state.auth.isAuth)
     const inFavorites = useAppSelector(store => store.favorites.favoritesItems.findIndex(item => item.id === scooterProps.id))
@@ -48,7 +49,8 @@ export const ProductCardMUI: React.FC<Scooter> = memo((scooterProps) => {
             <NavLink to={`/catalog/${scooterProps.id}`}>
                 <CardMedia
                     sx={{ height: 245 }}
-                    image={scooterProps.images[0] !== undefined ? scooterProps.images[0].link : reserveImage}
+                    // image={scooterProps.images[0] !== undefined ? scooterProps.images[0].link : reserveImage}
+                    image={mainImage}
                     title={`${scooterProps.name}`}
                 />
             </NavLink>

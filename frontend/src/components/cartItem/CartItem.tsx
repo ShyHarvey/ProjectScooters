@@ -13,6 +13,7 @@ import { ScooterForCart } from '../../redux/cartReducer';
 
 export const CartItem: React.FC<ScooterForCart> = (scooterProps) => {
     let isAuth = useAppSelector(state => state.auth.isAuth)
+    const mainImage = `${process.env.REACT_APP_API_URL}image/${scooterProps.product.id}`
     const reserveImage = 'https://shop.by/images/mizar_senator_sungate_1.jpg'
     const dispatch = useAppDispatch()
     const add = () => {
@@ -51,7 +52,8 @@ export const CartItem: React.FC<ScooterForCart> = (scooterProps) => {
             <CardMedia
                 sx={{ height: { xs: 175, sm: 110 }, width: { xs: 245, sm: 110 }, marginRight: 1, cursor: 'pointer' }}
                 onClick={() => nav(`/catalog/${scooterProps.product.id}`)}
-                image={scooterProps.product.images[0] !== undefined ? scooterProps.product.images[0].link : reserveImage}
+                // image={scooterProps.product.images[0] !== undefined ? scooterProps.product.images[0].link : reserveImage}
+                image={mainImage}
                 title="scooter"
             />
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>

@@ -23,7 +23,7 @@ export const Comment: React.FC<CommentProps> = ({ person, text, mark, id, produc
     return (
         <Container sx={{ mt: 2, position: 'relative' }}>
             <Stack direction='row' alignItems='center'>
-                <Avatar sx={{ width: 56, height: 56 }} src={`https://shop.javaspringbackend.software/avatar/${person.id}`}>{person.name[0]}</Avatar>
+                <Avatar sx={{ width: 56, height: 56 }} src={`${process.env.REACT_APP_API_URL}avatar/${person.id}`}>{person.name[0]}</Avatar>
                 <Stack sx={{ ml: 1 }} direction='column'>
                     <Typography variant='body1' component='p'>{person.name + ' ' + person.surname}</Typography>
                     <Rating value={+mark} precision={0.5} readOnly />
